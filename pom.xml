@@ -5,10 +5,10 @@
 	<artifactId>mpeg-audio-streams</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>mpeg-audio-streams</name>
-	<description>Decodes mp3 byte streams into Java code readable frames. Provides InputStream and OutputStream interfaces.</description>
 	<url>https://github.com/addradio/mp3-streams</url>
 	<organization>
 		<name>nacamar GmbH</name>
 		<url>http://www.nacamar.de</url>
 	</organization>
+	<description>Decodes mpeg audio byte streams such as mp3 into Java code readable frames. Provides InputStream and OutputStream interfaces.</description>
 </project>
