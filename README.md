@@ -1,2 +1,3 @@
 # mpeg-audio-streams
-Decodes mp3 byte streams into Java code readable frames. Provides InputStream and OutputStream interfaces.
+Decodes mpeg audio byte streams such as mp3 into Java code readable frames. 
+Provides InputStream and OutputStream interfaces.
