@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import net.addradio.codec.mpeg.audio.codecs.BitMaskFlagCodec;
 import net.addradio.codec.mpeg.audio.codecs.BitRateCodec;
 import net.addradio.codec.mpeg.audio.codecs.MPEGAudioCodecException;
+import net.addradio.codec.mpeg.audio.codecs.ModeExtensionCodec;
 import net.addradio.codec.mpeg.audio.codecs.SamplingRateCodec;
 import net.addradio.codec.mpeg.audio.model.ChannelMode;
 import net.addradio.codec.mpeg.audio.model.Emphasis;
@@ -66,20 +67,14 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
      */
     private void decodeHeader(final MPEGAudioFrame mp3Frame) throws IOException, MPEGAudioCodecException {
         mp3Frame.setVersion((Version) BitMaskFlagCodec.decode(readBits(2), Version.class));
-
         mp3Frame.setLayer((Layer) BitMaskFlagCodec.decode(readBits(2), Layer.class));
         mp3Frame.setProtected(isNextBitTrue());
         mp3Frame.setBitRate(BitRateCodec.decode(mp3Frame, readBits(4)));
         mp3Frame.setSamplingRate(SamplingRateCodec.decode(mp3Frame, readBits(2)));
-
         mp3Frame.setPadding(isNextBitTrue());
         mp3Frame.setPrivate(isNextBitTrue());
         mp3Frame.setChannelMode((ChannelMode) BitMaskFlagCodec.decode(readBits(2), ChannelMode.class));
-
-        // SEBASTIAN implement ModeExtensionCodec.decodeModeExtension(mp3Frame,
-        // readBits(2));
-        readBits(2);
-
+        mp3Frame.setModeExtension(ModeExtensionCodec.decode(mp3Frame, readBits(2)));
         mp3Frame.setCopyright(isNextBitTrue());
         mp3Frame.setOriginal(isNextBitTrue());
         mp3Frame.setEmphasis((Emphasis) BitMaskFlagCodec.decode(readBits(2), Emphasis.class));
