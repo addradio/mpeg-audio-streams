@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import net.addradio.codec.mpeg.audio.codecs.BitMaskFlagCodec;
+import net.addradio.codec.mpeg.audio.codecs.BitRateCodec;
 import net.addradio.codec.mpeg.audio.codecs.MPEGAudioCodecException;
 import net.addradio.codec.mpeg.audio.model.ChannelMode;
 import net.addradio.codec.mpeg.audio.model.Emphasis;
@@ -66,26 +67,33 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
         mp3Frame.setVersion((Version) BitMaskFlagCodec.decode(readBits(2), Version.class));
 
         mp3Frame.setLayer((Layer) BitMaskFlagCodec.decode(readBits(2), Layer.class));
-        mp3Frame.setProtected(readBit() == 0);
-
-        // SEBASTIAN implement BitrateCodec.decodeBitrate(mp3Frame,
-        // readBits(4));
-        readBits(4);
+        mp3Frame.setProtected(isNextBitTrue());
+        mp3Frame.setBitRate(BitRateCodec.decode(mp3Frame, readBits(4)));
         // SEBASTIAN implement SamplingrateCodec.decodeSamplingrate(mp3Frame,
         // readBits(2));
         readBits(2);
 
-        mp3Frame.setPadding(readBit() == 1);
-        mp3Frame.setPrivate(readBit() == 1);
+        mp3Frame.setPadding(isNextBitTrue());
+        mp3Frame.setPrivate(isNextBitTrue());
         mp3Frame.setChannelMode((ChannelMode) BitMaskFlagCodec.decode(readBits(2), ChannelMode.class));
 
         // SEBASTIAN implement ModeExtensionCodec.decodeModeExtension(mp3Frame,
         // readBits(2));
         readBits(2);
 
-        mp3Frame.setCopyright(readBit() == 1);
-        mp3Frame.setOriginal(readBit() == 1);
+        mp3Frame.setCopyright(isNextBitTrue());
+        mp3Frame.setOriginal(isNextBitTrue());
         mp3Frame.setEmphasis((Emphasis) BitMaskFlagCodec.decode(readBits(2), Emphasis.class));
+    }
+
+    /**
+     * isNextBitTrue. Reads just one bit and checks whether it is 0b1 or not.
+     *
+     * @return {@code boolean true} only if the next bit is 0b1.
+     * @throws IOException
+     */
+    private boolean isNextBitTrue() throws IOException {
+        return readBit() == 1;
     }
 
     /**
