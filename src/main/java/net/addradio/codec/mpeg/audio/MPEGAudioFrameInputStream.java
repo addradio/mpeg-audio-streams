@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import net.addradio.codec.mpeg.audio.codecs.BitMaskFlagCodec;
 import net.addradio.codec.mpeg.audio.codecs.BitRateCodec;
 import net.addradio.codec.mpeg.audio.codecs.MPEGAudioCodecException;
+import net.addradio.codec.mpeg.audio.codecs.SamplingRateCodec;
 import net.addradio.codec.mpeg.audio.model.ChannelMode;
 import net.addradio.codec.mpeg.audio.model.Emphasis;
 import net.addradio.codec.mpeg.audio.model.Layer;
@@ -69,9 +70,7 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
         mp3Frame.setLayer((Layer) BitMaskFlagCodec.decode(readBits(2), Layer.class));
         mp3Frame.setProtected(isNextBitTrue());
         mp3Frame.setBitRate(BitRateCodec.decode(mp3Frame, readBits(4)));
-        // SEBASTIAN implement SamplingrateCodec.decodeSamplingrate(mp3Frame,
-        // readBits(2));
-        readBits(2);
+        mp3Frame.setSamplingRate(SamplingRateCodec.decode(mp3Frame, readBits(2)));
 
         mp3Frame.setPadding(isNextBitTrue());
         mp3Frame.setPrivate(isNextBitTrue());
