@@ -20,88 +20,92 @@ package net.addradio.codec.mpeg.audio.model;
  */
 public enum BitRate {
 
-    /** {@link BitRate} COMMENT. */
+    /** {@link BitRate} _112 */
     _112(122),
 
-    /** {@link BitRate} COMMENT. */
+    /** {@link BitRate} _128 */
     _128(128),
 
-    /** {@link BitRate} COMMENT. */
+    /** {@link BitRate} _144 */
     _144(144),
 
-    /** {@link BitRate} COMMENT. */
+    /** {@link BitRate} _16 */
     _16(16),
 
-    /** {@link BitRate} COMMENT. */
+    /** {@link BitRate} _160 */
     _160(160),
 
-    /** {@link BitRate} COMMENT. */
+    /** {@link BitRate} _176 */
     _176(176),
 
-    /** {@link BitRate} COMMENT. */
+    /** {@link BitRate} _192 */
     _192(192),
 
-    /** {@link BitRate} COMMENT. */
+    /** {@link BitRate} _224 */
     _224(224),
 
-    /** {@link BitRate} COMMENT. */
+    /** {@link BitRate} _24 */
     _24(24),
 
-    /** {@link BitRate} COMMENT. */
+    /** {@link BitRate} _256 */
     _256(256),
 
-    /** {@link BitRate} COMMENT. */
+    /** {@link BitRate} _288 */
     _288(288),
 
-    /** {@link BitRate} COMMENT. */
+    /** {@link BitRate} _32 */
     _32(32),
 
-    /** {@link BitRate} COMMENT. */
+    /** {@link BitRate} _320 */
     _320(320),
 
-    /** {@link BitRate} COMMENT. */
+    /** {@link BitRate} _352 */
     _352(352),
 
-    /** {@link BitRate} COMMENT. */
+    /** {@link BitRate} _384 */
     _384(384),
 
-    /** {@link BitRate} COMMENT. */
+    /** {@link BitRate} _40 */
     _40(40),
 
-    /** {@link BitRate} COMMENT. */
+    /** {@link BitRate} _416 */
     _416(416),
 
-    /** {@link BitRate} COMMENT. */
+    /** {@link BitRate} _448 */
     _448(448),
 
-    /** {@link BitRate} COMMENT. */
+    /** {@link BitRate} _48 */
     _48(48),
 
-    /** {@link BitRate} COMMENT. */
+    /** {@link BitRate} _56 */
     _56(56),
 
-    /** {@link BitRate} COMMENT. */
+    /** {@link BitRate} _64 */
     _64(64),
 
-    /** {@link BitRate} COMMENT. */
+    /** {@link BitRate} _8 */
     _8(8),
 
-    /** {@link BitRate} COMMENT. */
+    /** {@link BitRate} _80 */
     _80(80),
 
-    /** {@link BitRate} COMMENT. */
+    /** {@link BitRate} _96 */
     _96(96),
 
-    /** {@link BitRate} COMMENT. */
-    Free(-1);
+    /** {@link BitRate} free */
+    free(-1),
 
-    /** {@link int} COMMENT. */
+    /** {@link BitRate} reserved */
+    reserved(-1);
+
+    /** {@code int} value */
     private int value;
 
     /**
      * Default constructor.
      *
-     * @param valueVal <code>int</code>
+     * @param valueVal
+     *            <code>int</code>
      */
     private BitRate(final int valueVal) {
         setValue(valueVal);
@@ -115,7 +119,8 @@ public enum BitRate {
     }
 
     /**
-     * @param valueVal <code>int</code> the value to set.
+     * @param valueVal
+     *            <code>int</code> the value to set.
      */
     private void setValue(final int valueVal) {
         this.value = valueVal;
