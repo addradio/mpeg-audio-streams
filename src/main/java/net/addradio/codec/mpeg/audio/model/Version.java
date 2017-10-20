@@ -18,18 +18,41 @@ package net.addradio.codec.mpeg.audio.model;
 /**
  * Version.
  */
-public enum Version {
+public enum Version implements BitMaskFlag {
 
     /** {@link Version} MPEG Version 1. */
-    MPEG_1,
+    MPEG_1(0b11),
 
     /** {@link Version} MPEG Version 2. */
-    MPEG_2,
+    MPEG_2(0b10),
 
     /** {@link Version} MPEG Version 2.5. */
-    MPEG_2_5,
+    MPEG_2_5(0b00),
 
     /** {@link Version} reserved. */
-    reserved;
+    reserved(0b01);
+
+    /** {@code int} bitMask. */
+    private int bitMask;
+
+    /**
+     * Version constructor.
+     * 
+     * @param bitmaskVal
+     *            {@code int}
+     */
+    private Version(final int bitmaskVal) {
+        this.bitMask = bitmaskVal;
+    }
+
+    /**
+     * getBitMask.
+     * 
+     * @return the bitMask
+     */
+    @Override
+    public int getBitMask() {
+        return this.bitMask;
+    }
 
 }
