@@ -18,22 +18,46 @@ package net.addradio.codec.mpeg.audio.model;
 /**
  * ChannelMode.
  */
-public enum ChannelMode {
+public enum ChannelMode implements BitMaskFlag {
 
     /** {@link ChannelMode} stereo. */
-    Stereo,
+    Stereo(0b00),
 
-    /** 
+    /**
      * {@link ChannelMode} joint_stereo. In Layer I and II the joint_stereo mode
-     * is intensity_stereo, in Layer III it is intensity_stereo and/or 
-     * ms_stereo. 
+     * is intensity_stereo, in Layer III it is intensity_stereo and/or
+     * ms_stereo.
      */
-    JointStereo,
+    JointStereo(0b01),
 
     /** {@link ChannelMode} dual_channel. */
-    DualChannel,
+    DualChannel(0b10),
 
     /** {@link ChannelMode} single_channel. */
-    SingleChannel;
+    SingleChannel(0b11);
+
+    /** {@code int} bitMask. */
+    private int bitMask;
+
+    /**
+     * ChannelMode constructor.
+     * 
+     * @param bitMaskVal
+     *            {@code int}
+     */
+    private ChannelMode(final int bitMaskVal) {
+        this.bitMask = bitMaskVal;
+    }
+
+    /**
+     * getBitMask.
+     * 
+     * @see net.addradio.codec.mpeg.audio.model.BitMaskFlag#getBitMask()
+     * @return {@code int}
+     */
+    @Override
+    public int getBitMask() {
+        return this.bitMask;
+    }
 
 }

@@ -20,24 +20,24 @@ package net.addradio.codec.mpeg.audio.model;
  */
 public enum Emphasis implements BitMaskFlag {
 
-    /** {@link Emphasis} none. */
-    none(0b00),
-
     /** {@link Emphasis} _50_15ms. */
     _50_15ms(0b01),
 
-    /** {@link Emphasis} reserved. */
-    reserved(0b10),
-
     /** {@link Emphasis} ITU_T_J_17. */
-    ITU_T_J_17(0b11);
+    ITU_T_J_17(0b11),
+
+    /** {@link Emphasis} none. */
+    none(0b00),
+
+    /** {@link Emphasis} reserved. */
+    reserved(0b10);
 
     /** {@code int} bitMask. */
     private int bitMask;
 
     /**
      * Emphasis constructor.
-     * 
+     *
      * @param bitMaskVal
      *            {@code int}
      */
@@ -47,7 +47,7 @@ public enum Emphasis implements BitMaskFlag {
 
     /**
      * getBitMask.
-     * 
+     *
      * @see net.addradio.codec.mpeg.audio.model.BitMaskFlag#getBitMask()
      * @return {@code int}
      */

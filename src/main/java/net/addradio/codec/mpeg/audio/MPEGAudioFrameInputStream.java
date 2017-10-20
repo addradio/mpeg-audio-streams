@@ -24,6 +24,9 @@ import org.slf4j.LoggerFactory;
 
 import net.addradio.codec.mpeg.audio.codecs.BitMaskFlagCodec;
 import net.addradio.codec.mpeg.audio.codecs.MPEGAudioCodecException;
+import net.addradio.codec.mpeg.audio.model.ChannelMode;
+import net.addradio.codec.mpeg.audio.model.Emphasis;
+import net.addradio.codec.mpeg.audio.model.Layer;
 import net.addradio.codec.mpeg.audio.model.MPEGAudioFrame;
 import net.addradio.codec.mpeg.audio.model.Version;
 import net.addradio.streams.BitInputStream;
@@ -60,21 +63,29 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
      *             if an decoding error occurred.
      */
     private void decodeHeader(final MPEGAudioFrame mp3Frame) throws IOException, MPEGAudioCodecException {
-        // SEBASTIAN implement
-
         mp3Frame.setVersion((Version) BitMaskFlagCodec.decode(readBits(2), Version.class));
-        // VersionCodec.decodeVersion(mp3Frame, readBits(2));
-        // LayerCodec.decodeLayer(mp3Frame, readBits(2));
-        // ProtectionCodec.decodeProtected(mp3Frame, readBit());
-        // BitrateCodec.decodeBitrate(mp3Frame, readBits(4));
-        // SamplingrateCodec.decodeSamplingrate(mp3Frame, readBits(2));
-        // PaddingCodec.decodePadding(mp3Frame, readBit());
-        // PrivateCodec.decodePrivate(mp3Frame, readBit());
-        // ChannelModeCodec.decodeChannelMode(mp3Frame, readBits(2));
-        // ModeExtensionCodec.decodeModeExtension(mp3Frame, readBits(2));
-        // CopyrightCodec.decodeCopyright(mp3Frame, readBit());
-        // OriginalCodec.decodeOriginal(mp3Frame, readBit());
-        // EmphasisCodec.decodeEmphasis(mp3Frame, readBits(2));
+
+        mp3Frame.setLayer((Layer) BitMaskFlagCodec.decode(readBits(2), Layer.class));
+        mp3Frame.setProtected(readBit() == 0);
+
+        // SEBASTIAN implement BitrateCodec.decodeBitrate(mp3Frame,
+        // readBits(4));
+        readBits(4);
+        // SEBASTIAN implement SamplingrateCodec.decodeSamplingrate(mp3Frame,
+        // readBits(2));
+        readBits(2);
+
+        mp3Frame.setPadding(readBit() == 1);
+        mp3Frame.setPrivate(readBit() == 1);
+        mp3Frame.setChannelMode((ChannelMode) BitMaskFlagCodec.decode(readBits(2), ChannelMode.class));
+
+        // SEBASTIAN implement ModeExtensionCodec.decodeModeExtension(mp3Frame,
+        // readBits(2));
+        readBits(2);
+
+        mp3Frame.setCopyright(readBit() == 1);
+        mp3Frame.setOriginal(readBit() == 1);
+        mp3Frame.setEmphasis((Emphasis) BitMaskFlagCodec.decode(readBits(2), Emphasis.class));
     }
 
     /**

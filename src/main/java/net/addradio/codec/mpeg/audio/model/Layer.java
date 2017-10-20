@@ -18,17 +18,41 @@ package net.addradio.codec.mpeg.audio.model;
 /**
  * Layer.
  */
-public enum Layer {
+public enum Layer implements BitMaskFlag {
 
     /** {@link Layer} Layer I. */
-    I,
+    I(0b11),
 
     /** {@link Layer} Layer II. */
-    II,
+    II(0b10),
 
     /** {@link Layer} Layer III. */
-    III,
+    III(0b01),
 
     /** {@link Layer} reserved. */
-    reserved;
+    reserved(0b00);
+
+    /** {@code int} bitMask. */
+    private int bitMask;
+
+    /**
+     * Layer constructor.
+     *
+     * @param bitMaskVal
+     *            {@code int}
+     */
+    private Layer(final int bitMaskVal) {
+        this.bitMask = bitMaskVal;
+    }
+
+    /**
+     * getBitMask.
+     *
+     * @see net.addradio.codec.mpeg.audio.model.BitMaskFlag#getBitMask()
+     * @return {@code int}
+     */
+    @Override
+    public int getBitMask() {
+        return this.bitMask;
+    }
 }
