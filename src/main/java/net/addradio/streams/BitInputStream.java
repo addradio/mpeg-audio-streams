@@ -41,7 +41,6 @@ public class BitInputStream extends InputStream {
 
     /**
      * BitInputStream constructor.
-     *
      * @param innerRef
      *            {@link InputStream}
      */
@@ -51,7 +50,6 @@ public class BitInputStream extends InputStream {
 
     /**
      * available.
-     *
      * @see java.io.InputStream#available()
      * @return {@code int}
      * @throws IOException
@@ -64,7 +62,6 @@ public class BitInputStream extends InputStream {
 
     /**
      * close.
-     *
      * @see java.io.InputStream#close()
      * @throws IOException
      *             in case of bad IO situations.
@@ -77,6 +74,7 @@ public class BitInputStream extends InputStream {
     }
 
     /**
+     * getInner.
      * @return {@link InputStream} the inner.
      */
     public InputStream getInner() {
@@ -84,7 +82,8 @@ public class BitInputStream extends InputStream {
     }
 
     /**
-     * @return <code>boolean</code> the byteAligned.
+     * isByteAligned.
+     * @return {@code boolean true} if read pointer is aligned to byte boundaries.
      */
     public boolean isByteAligned() {
         return this.bitInByteOffset < 0;
@@ -92,7 +91,6 @@ public class BitInputStream extends InputStream {
 
     /**
      * read.
-     *
      * @see java.io.InputStream#read()
      * @return {@code int}
      * @throws IOException
@@ -110,10 +108,7 @@ public class BitInputStream extends InputStream {
 
     /**
      * readBit.
-     *
-     * @param numberOfBits
-     *            <code>int</code>
-     * @return <code>int</code> set up on basis of bits read.
+     * @return {@code int} the read bit.
      * @throws IOException
      *             in case of bad IO situations.
      */
@@ -131,7 +126,6 @@ public class BitInputStream extends InputStream {
 
     /**
      * readBits.
-     *
      * @param numberOfBitsToRead
      *            <code>int</code>
      * @return <code>int</code>
@@ -148,7 +142,6 @@ public class BitInputStream extends InputStream {
 
     /**
      * readFully.
-     *
      * @param toFill
      *            <code>byte[]</code>
      * @throws IOException
@@ -162,7 +155,6 @@ public class BitInputStream extends InputStream {
 
     /**
      * setInner.
-     *
      * @param innerRef
      *            {@link InputStream} the inner to set.
      */
