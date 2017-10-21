@@ -45,6 +45,9 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
     /** {@code int} SYNC_PATTERN_0X7FF */
     private static final int SYNC_PATTERN_0X7FF = 0x7FF;
 
+    /** {@code boolean} unalignedSyncAllowed. */
+    private boolean unalignedSyncAllowed = false;
+
     /**
      * MPEGAudioFrameInputStream constructor.
      *
@@ -91,6 +94,14 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
     }
 
     /**
+     * isUnalignedSyncAllowed.
+     * @return {@code boolean true} if sync is allowed even if sync bits are not aligned to byte boundaries.
+     */
+    public boolean isUnalignedSyncAllowed() {
+        return this.unalignedSyncAllowed;
+    }
+
+    /**
      * readCrcIfNeeded.
      *
      * @param mp3Frame
@@ -110,59 +121,64 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
      * @return {@link MPEGAudioFrame}
      * @throws IOException
      *             in case of bad IO situations.
-     * @throws MPEGAudioCodecException
-     *             if a decoding error occurred.
      */
-    public MPEGAudioFrame readFrame() throws IOException, MPEGAudioCodecException {
-        final MPEGAudioFrame mpegFrame = new MPEGAudioFrame();
-        sync();
-        decodeHeader(mpegFrame);
-        readCrcIfNeeded(mpegFrame);
+    public MPEGAudioFrame readFrame() throws IOException {
+        while (true) {
+            try {
+                final MPEGAudioFrame mpegFrame = new MPEGAudioFrame();
+                sync();
+                decodeHeader(mpegFrame);
+                readCrcIfNeeded(mpegFrame);
 
-        switch (mpegFrame.getLayer()) {
-        case I:
-            switch (mpegFrame.getChannelMode()) {
-            case SingleChannel:
-                readLayer1Payload(mpegFrame, 1);
-                break;
-            case Stereo:
-            case DualChannel:
-                readLayer1Payload(mpegFrame, 2);
-                break;
-            case JointStereo:
-                // SEBASTIAN implement
-                break;
-            default:
-                break;
+                switch (mpegFrame.getLayer()) {
+                case I:
+                    switch (mpegFrame.getChannelMode()) {
+                    case SingleChannel:
+                        readLayer1Payload(mpegFrame, 1);
+                        break;
+                    case Stereo:
+                    case DualChannel:
+                        readLayer1Payload(mpegFrame, 2);
+                        break;
+                    case JointStereo:
+                        // SEBASTIAN implement
+                        break;
+                    default:
+                        break;
+                    }
+                    break;
+                case II:
+                    // SEBASTIAN implement
+                case III:
+                    // SEBASTIAN implement
+                case reserved:
+                default:
+                    break;
+                }
+
+                // SEBASTIAN implement ancillary data
+
+                // int frameSize = 144
+                // * mp3Frame.getBitrate().getValue()
+                // * 1000
+                // / mp3Frame.getSamplingrate().getValue()
+                // + (mp3Frame.isPadding() ? (mp3Frame.getLayer() == Layer.I ? 4
+                // : 1) : 0);
+                // if (LOG.isDebugEnabled()) {
+                // LOG.debug("framesize: " + frameSize);
+                // }
+                //
+                // byte[] data = new byte[frameSize - 4
+                // - (mp3Frame.is_protected() ? 2 : 0)];
+                // readFully(data);
+                // mp3Frame.setData(data);
+                return mpegFrame;
+            } catch (MPEGAudioCodecException mace) {
+                if (MPEGAudioFrameInputStream.LOG.isDebugEnabled()) {
+                    MPEGAudioFrameInputStream.LOG.debug(mace.getLocalizedMessage());
+                }
             }
-            break;
-        case II:
-            // SEBASTIAN implement
-        case III:
-            // SEBASTIAN implement
-        case reserved:
-        default:
-            break;
         }
-
-        // SEBASTIAN implement ancillary data
-
-        // int frameSize = 144
-        // * mp3Frame.getBitrate().getValue()
-        // * 1000
-        // / mp3Frame.getSamplingrate().getValue()
-        // + (mp3Frame.isPadding() ? (mp3Frame.getLayer() == Layer.I ? 4
-        // : 1) : 0);
-        // if (LOG.isDebugEnabled()) {
-        // LOG.debug("framesize: " + frameSize);
-        // }
-        //
-        // byte[] data = new byte[frameSize - 4
-        // - (mp3Frame.is_protected() ? 2 : 0)];
-        // readFully(data);
-        // mp3Frame.setData(data);
-
-        return mpegFrame;
     }
 
     /**
@@ -205,22 +221,46 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
     }
 
     /**
+     * setUnalignedSyncAllowed.
+     * @param unalignedSyncAllowed {@code boolean}. If {@code true} sync bits MAY NOT be aligned to byte boundaries.
+     */
+    public void setUnalignedSyncAllowed(final boolean unalignedSyncAllowed) {
+        this.unalignedSyncAllowed = unalignedSyncAllowed;
+    }
+
+    /**
      * sync.
+     * @return {@code int} number of skipped bits.
      *
      * @throws IOException
      *             in case of bad IO situations.
      */
-    private void sync() throws IOException {
-        int syncWord = readBits(11);
-        while (syncWord != MPEGAudioFrameInputStream.SYNC_PATTERN_0X7FF) {
-            if (MPEGAudioFrameInputStream.LOG.isTraceEnabled()) {
-                MPEGAudioFrameInputStream.LOG.trace("Out of sync [syncword: " + syncWord + "]"); //$NON-NLS-1$ //$NON-NLS-2$
+    int sync() throws IOException {
+        int skippedBits = 0;
+        int syncWord = 0;
+        if (isUnalignedSyncAllowed()) {
+            syncWord = readBits(11);
+            while (syncWord != MPEGAudioFrameInputStream.SYNC_PATTERN_0X7FF) {
+                syncWord = ((syncWord << 1) | readBit()) & MPEGAudioFrameInputStream.SYNC_PATTERN_0X7FF;
+                skippedBits++;
             }
-            syncWord = ((syncWord << 1) | readBit()) & MPEGAudioFrameInputStream.SYNC_PATTERN_0X7FF;
+        } else {
+            while (syncWord != MPEGAudioFrameInputStream.SYNC_PATTERN_0X7FF) {
+                while (!isByteAligned()) {
+                    readBit();
+                    skippedBits++;
+                }
+                while (read() != 0xff) {
+                    skippedBits += 8;
+                }
+                if (readBits(3) == 0b111) {
+                    syncWord = SYNC_PATTERN_0X7FF;
+                } else {
+                    skippedBits += 3;
+                }
+            }
         }
-        if (MPEGAudioFrameInputStream.LOG.isTraceEnabled()) {
-            MPEGAudioFrameInputStream.LOG.trace("Stream is byteAligned [" + isByteAligned() + "]."); //$NON-NLS-1$ //$NON-NLS-2$
-        }
+        return skippedBits;
     }
 
 }

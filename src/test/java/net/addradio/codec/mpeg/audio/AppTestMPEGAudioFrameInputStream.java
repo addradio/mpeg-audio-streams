@@ -24,7 +24,6 @@ import org.apache.log4j.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.addradio.codec.mpeg.audio.codecs.MPEGAudioCodecException;
 import net.addradio.codec.mpeg.audio.model.MPEGAudioFrame;
 
 /**
@@ -47,18 +46,18 @@ public class AppTestMPEGAudioFrameInputStream {
 
         try (MPEGAudioFrameInputStream mafis = new MPEGAudioFrameInputStream(
                 new FileInputStream(MP3TestFiles.FILE_NAME_PIANO_MP3))) {
+            mafis.setUnalignedSyncAllowed(false);
+
             MPEGAudioFrame frame = null;
             while ((frame = mafis.readFrame()) != null) {
                 if (LOG.isInfoEnabled()) {
                     LOG.info(frame.toString());
                 }
             }
+
         } catch (IOException e) {
             LOG.error(e.getLocalizedMessage(), e);
-        } catch (MPEGAudioCodecException e) {
-            LOG.error(e.getLocalizedMessage(), e);
         }
-
     }
 
 }

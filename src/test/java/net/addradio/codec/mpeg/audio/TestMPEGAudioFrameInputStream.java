@@ -16,6 +16,7 @@
 
 package net.addradio.codec.mpeg.audio;
 
+import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -30,8 +31,41 @@ import net.addradio.codec.mpeg.audio.model.MPEGAudioFrame;
 public class TestMPEGAudioFrameInputStream extends TestCase {
 
     /**
-     * testSimplyIfBroken.
+     * {@link byte[]} BYTES_WITH_SYNC_BYTES.
      * 
+     * <pre>
+     *     F0       7F       F5        FF       EF
+     * |11110000|01111111|11110101|11111111|11101111|      -&gt; bits in byte boundaries
+     *            \----------/   \-----------/             -&gt; sync bits unaligned
+     *                             \----------/            -&gt; sync bits aligned to byte boundaries
+     * </pre>
+     */
+    static final byte[] BYTES_WITH_SYNC_BYTES = new byte[] { (byte) 0xF0, 0x7F, (byte) 0xF5, (byte) 0xFF, (byte) 0xEF };
+
+    /**
+     * testBitAlignment.
+     * @throws IOException due to IO problems.
+     */
+    @SuppressWarnings("static-method")
+    public void testBitAlignment() throws IOException {
+        MPEGAudioFrameInputStream mafis = new MPEGAudioFrameInputStream(
+                new ByteArrayInputStream(BYTES_WITH_SYNC_BYTES));
+        mafis.setUnalignedSyncAllowed(true);
+
+        assertTrue(mafis.isByteAligned());
+        assertEquals(9, mafis.sync());
+        assertEquals(3, mafis.sync());
+
+        mafis = new MPEGAudioFrameInputStream(new ByteArrayInputStream(BYTES_WITH_SYNC_BYTES));
+        mafis.setUnalignedSyncAllowed(false);
+
+        assertTrue(mafis.isByteAligned());
+        assertEquals(24, mafis.sync());
+    }
+
+    /**
+     * testSimplyIfBroken.
+     *
      * @throws IOException
      *             if file could not be read
      * @throws FileNotFoundException
