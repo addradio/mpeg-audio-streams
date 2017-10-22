@@ -108,7 +108,7 @@ public class BitInputStream extends InputStream {
 
     /**
      * readBit.
-     * @return {@code int} the read bit.
+     * @return {@code int} the read bit or {@code -1} if end of stream has been reached.
      * @throws IOException
      *             in case of bad IO situations.
      */
@@ -117,6 +117,9 @@ public class BitInputStream extends InputStream {
             if (isByteAligned()) {
                 this.bitInByteOffset = BitInputStream.MAX_OFFSET;
                 this.lastByte = this.inner.read();
+                if (this.lastByte == -1) {
+                    return -1;
+                }
             }
             final int returnVal = (this.lastByte & (0x1 << this.bitInByteOffset)) >> this.bitInByteOffset;
             this.bitInByteOffset--;
@@ -128,14 +131,18 @@ public class BitInputStream extends InputStream {
      * readBits.
      * @param numberOfBitsToRead
      *            <code>int</code>
-     * @return <code>int</code>
+     * @return <code>int</code> the value of the read bits or {@code -1} if the end of the stream has been reached;
      * @throws IOException
      *             in case of bad IO situations.
      */
     public int readBits(final int numberOfBitsToRead) throws IOException {
         int returnVal = 0;
         for (int offset = numberOfBitsToRead - 1; offset > -1; offset--) {
-            returnVal |= readBit() << offset;
+            int readBit = readBit();
+            if (readBit == -1) {
+                return -1;
+            }
+            returnVal |= readBit << offset;
         }
         return returnVal;
     }
