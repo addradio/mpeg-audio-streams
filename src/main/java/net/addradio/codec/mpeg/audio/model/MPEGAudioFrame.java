@@ -69,6 +69,9 @@ public class MPEGAudioFrame {
     /** {@code boolean} padding. */
     private boolean padding = false;
 
+    /** {@code byte[]} payload. */
+    private byte[] payload;
+
     /** {@code int[][][]} samples. */
     private int[][][] samples;
 
@@ -135,6 +138,13 @@ public class MPEGAudioFrame {
      */
     public ModeExtension getModeExtension() {
         return this.modeExtension;
+    }
+
+    /**
+     * @return the payload
+     */
+    public byte[] getPayload() {
+        return this.payload;
     }
 
     /**
@@ -295,6 +305,14 @@ public class MPEGAudioFrame {
      */
     public void setPadding(final boolean paddingVal) {
         this.padding = paddingVal;
+    }
+
+    /**
+     * setPayload.
+     * @param payloadRef {@code byte[]} the payload to set.
+     */
+    public void setPayload(final byte[] payloadRef) {
+        this.payload = payloadRef;
     }
 
     /**
