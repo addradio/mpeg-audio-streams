@@ -82,6 +82,20 @@ public class BitInputStream extends InputStream {
     }
 
     /**
+     * innerRead.
+     * @return {@code int} read from inner stream.
+     * @throws IOException due to IO problems or if end of stream has been reached.
+     */
+    private int innerRead() throws IOException {
+        final int read = this.inner.read();
+        //        System.out.println("read byte: 0x" + Integer.toHexString(read));
+        if (read < 0) {
+            throw new EndOfStreamException();
+        }
+        return read;
+    }
+
+    /**
      * isByteAligned.
      * @return {@code boolean true} if read pointer is aligned to byte boundaries.
      */
@@ -100,7 +114,7 @@ public class BitInputStream extends InputStream {
     public int read() throws IOException {
         synchronized (this.lock) {
             if (isByteAligned()) {
-                return this.inner.read();
+                return innerRead();
             }
         }
         return readBits(8);
@@ -108,7 +122,7 @@ public class BitInputStream extends InputStream {
 
     /**
      * readBit.
-     * @return {@code int} the read bit or {@code -1} if end of stream has been reached.
+     * @return {@code int} the read bit.
      * @throws IOException
      *             in case of bad IO situations.
      */
@@ -116,13 +130,11 @@ public class BitInputStream extends InputStream {
         synchronized (this.lock) {
             if (isByteAligned()) {
                 this.bitInByteOffset = BitInputStream.MAX_OFFSET;
-                this.lastByte = this.inner.read();
-                if (this.lastByte == -1) {
-                    return -1;
-                }
+                this.lastByte = innerRead();
             }
             final int returnVal = (this.lastByte & (0x1 << this.bitInByteOffset)) >> this.bitInByteOffset;
             this.bitInByteOffset--;
+            //            System.out.println("read bit: 0b" + Integer.toBinaryString(returnVal));
             return returnVal;
         }
     }
@@ -131,19 +143,16 @@ public class BitInputStream extends InputStream {
      * readBits.
      * @param numberOfBitsToRead
      *            <code>int</code>
-     * @return <code>int</code> the value of the read bits or {@code -1} if the end of the stream has been reached;
+     * @return <code>int</code> the value of the read bits;
      * @throws IOException
      *             in case of bad IO situations.
      */
     public int readBits(final int numberOfBitsToRead) throws IOException {
         int returnVal = 0;
         for (int offset = numberOfBitsToRead - 1; offset > -1; offset--) {
-            int readBit = readBit();
-            if (readBit == -1) {
-                return -1;
-            }
-            returnVal |= readBit << offset;
+            returnVal |= readBit() << offset;
         }
+        //        System.out.println("read bits: 0b" + Integer.toBinaryString(returnVal));
         return returnVal;
     }
 
