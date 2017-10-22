@@ -33,6 +33,7 @@ import net.addradio.codec.mpeg.audio.model.Layer;
 import net.addradio.codec.mpeg.audio.model.MPEGAudioFrame;
 import net.addradio.codec.mpeg.audio.model.Version;
 import net.addradio.streams.BitInputStream;
+import net.addradio.streams.EndOfStreamException;
 
 /**
  * MPEGAudioFrameInputStream
@@ -138,7 +139,7 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
     /**
      * Reads one frame from the inner stream.
      *
-     * @return {@link MPEGAudioFrame}
+     * @return {@link MPEGAudioFrame} or {@code null} if end of stream has been reached.
      * @throws IOException
      *             in case of bad IO situations.
      */
@@ -220,6 +221,11 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
                 if (MPEGAudioFrameInputStream.LOG.isInfoEnabled()) {
                     MPEGAudioFrameInputStream.LOG.info("Dropped Frame."); //$NON-NLS-1$
                 }
+            } catch (final EndOfStreamException eose) {
+                if (MPEGAudioFrameInputStream.LOG.isInfoEnabled()) {
+                    MPEGAudioFrameInputStream.LOG.info("End Of Stream."); //$NON-NLS-1$
+                }
+                return null;
             }
         }
     }
