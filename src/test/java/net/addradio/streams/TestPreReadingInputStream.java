@@ -34,7 +34,7 @@ public class TestPreReadingInputStream extends TestCase {
         final byte[] inputBuffer = new byte[] { 0x4f, (byte) 0xae, 0x32, 0x7b, 0x65, (byte) 0x9a };
         try (PreReadingInputStream pris = new PreReadingInputStream(new ByteArrayInputStream(inputBuffer))) {
             final byte[] toBeFilled = new byte[4];
-            final int bytesRead = pris.preReadFully(toBeFilled);
+            final int bytesRead = pris.preRead(toBeFilled, 0, toBeFilled.length);
             assertEquals(toBeFilled.length, bytesRead);
             for (int i = 0; i < bytesRead; i++) {
                 assertEquals(toBeFilled[i], inputBuffer[i]);

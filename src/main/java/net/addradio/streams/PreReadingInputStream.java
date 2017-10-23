@@ -50,15 +50,17 @@ public class PreReadingInputStream extends InputStream {
     }
 
     /**
-     * preReadFully. Pre-reads bytes from the underlying input stream and fills the given byte array. In further steps
+     * preRead. Pre-reads bytes from the underlying input stream and fills the given byte array. In further steps
      * the pre-read array will be used to fulfill the request to standard InputStream method calls like
      * {@link InputStream#read()} or {@link InputStream#read(byte[], int, int)}.
      *
      * @param toBeFilled {@code byte[]} the byte array to be filled.
+     * @param offset {@code int}
+     * @param length {@code int}
      * @return {@code int}
      * @throws IOException due to IO problems.
      */
-    public int preReadFully(final byte[] toBeFilled) throws IOException {
+    public int preRead(final byte[] toBeFilled, final int offset, final int length) throws IOException {
         synchronized (this.inner) {
             final int numberOfReadBytes = this.inner.read(toBeFilled, 0, toBeFilled.length);
             if (numberOfReadBytes > 0) {
