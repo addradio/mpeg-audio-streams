@@ -161,14 +161,14 @@ public class TestBitInputStream extends TestCase {
         assertEquals(0, this.bitStream.readBit());
     }
 
-    /**
-     * testReadMaxBits.
-     *
-     * @throws IOException
-     *             wont happen.
-     */
-    public void testReadMaxBits() throws IOException {
-        this.bitStream.readBits(128);
-    }
+    //    /**
+    //     * testReadMaxBits.
+    //     *
+    //     * @throws IOException
+    //     *             wont happen.
+    //     */
+    //    public void testReadMaxBits() throws IOException {
+    //        this.bitStream.readBits(128);
+    //    }
 
 }
