@@ -33,6 +33,15 @@ package net.addradio.codec.mpeg.audio.model;
  */
 public class MPEGAudioFrame {
 
+    /** {@code int} SYNC_PATTERN_0X7FF */
+    public static final int SYNC_PATTERN_0X7FF = 0x7FF;
+
+    /** {@code int} HEADER_SIZE_IN_BYTES. */
+    public static final int HEADER_SIZE_IN_BYTES = 4;
+
+    /** {@code int} CRC_SIZE_IN_BYTES. */
+    public static final int CRC_SIZE_IN_BYTES = 2;
+
     /** {@code boolean} _private. */
     private boolean _private = false;
 
@@ -84,15 +93,6 @@ public class MPEGAudioFrame {
     /** {@link Version} version. */
     private Version version;
 
-    /** {@code int} SYNC_PATTERN_0X7FF */
-    public static final int SYNC_PATTERN_0X7FF = 0x7FF;
-
-    /** {@code int} HEADER_SIZE_IN_BYTES. */
-    public static final int HEADER_SIZE_IN_BYTES = 4;
-
-    /** {@code int} CRC_SIZE_IN_BYTES. */
-    public static final int CRC_SIZE_IN_BYTES = 2;
-
     /**
      * getAllocations.
      * @return {@code int[][]} the allocations.
@@ -131,6 +131,14 @@ public class MPEGAudioFrame {
      */
     public Emphasis getEmphasis() {
         return this.emphasis;
+    }
+
+    /**
+     * getFrameLength.
+     * @return {@code int} the frame length incl. header and crc.
+     */
+    public int getFrameLength() {
+        return getPayload().length + HEADER_SIZE_IN_BYTES + (isProtected() ? CRC_SIZE_IN_BYTES : 0);
     }
 
     /**
