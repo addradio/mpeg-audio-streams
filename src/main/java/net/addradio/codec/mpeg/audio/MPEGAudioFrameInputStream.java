@@ -131,7 +131,7 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
      */
     private void readCrcIfNeeded(final MPEGAudioFrame mp3Frame) throws IOException {
         if (mp3Frame.isProtected()) {
-            mp3Frame.setCrc(new byte[CRC_SIZE_IN_BYTES]);
+            mp3Frame.setCrc(new byte[MPEGAudioFrameInputStream.CRC_SIZE_IN_BYTES]);
             readFully(mp3Frame.getCrc());
         }
     }
@@ -177,7 +177,8 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
                 case III:
                     final int frameLengthInBytes = (((144 * mpegFrame.getBitRate().getValue())
                             / mpegFrame.getSamplingRate().getValue()) + (mpegFrame.isPadding() ? 1 : 0))
-                            - HEADER_SIZE_IN_BYTES - (mpegFrame.isProtected() ? CRC_SIZE_IN_BYTES : 0);
+                            - MPEGAudioFrameInputStream.HEADER_SIZE_IN_BYTES
+                            - (mpegFrame.isProtected() ? MPEGAudioFrameInputStream.CRC_SIZE_IN_BYTES : 0);
                     if (MPEGAudioFrameInputStream.LOG.isDebugEnabled()) {
                         MPEGAudioFrameInputStream.LOG.debug("[framelength: " + frameLengthInBytes + "]"); //$NON-NLS-1$ //$NON-NLS-2$
                     }
@@ -271,10 +272,10 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
 
     /**
      * setUnalignedSyncAllowed.
-     * @param unalignedSyncAllowed {@code boolean}. If {@code true} sync bits MAY NOT be aligned to byte boundaries.
+     * @param unalignedSyncAllowedVal {@code boolean}. If {@code true} sync bits MAY NOT be aligned to byte boundaries.
      */
-    public void setUnalignedSyncAllowed(final boolean unalignedSyncAllowed) {
-        this.unalignedSyncAllowed = unalignedSyncAllowed;
+    public void setUnalignedSyncAllowed(final boolean unalignedSyncAllowedVal) {
+        this.unalignedSyncAllowed = unalignedSyncAllowedVal;
     }
 
     /**
@@ -321,7 +322,7 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
                     MPEGAudioFrameInputStream.LOG.debug("three bits read: 0b" + Integer.toBinaryString(readBits)); //$NON-NLS-1$
                 }
                 if (readBits == 0b111) {
-                    syncWord = SYNC_PATTERN_0X7FF;
+                    syncWord = MPEGAudioFrameInputStream.SYNC_PATTERN_0X7FF;
                 } else {
                     skippedBits += 3;
                 }
