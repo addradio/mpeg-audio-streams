@@ -49,8 +49,34 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
     /** {@link Logger} LOG */
     private static final Logger LOG = LoggerFactory.getLogger(MPEGAudioFrameInputStream.class);
 
+    /**
+     * {@link int} MAGIC_144
+     * SEBASTIAN check definitions
+     */
+    private static final int MAGIC_144 = 144;
+
     /** {@code int} SYNC_PATTERN_0X7FF */
     private static final int SYNC_PATTERN_0X7FF = 0x7FF;
+
+    /**
+     * calculateLayer2or3FrameLength.
+     * @param mpegFrame {@link MPEGAudioFrame}
+     * @return {@code int} the overall number of bytes of the frame.
+     */
+    private static final int calculateLayer2or3FrameLength(final MPEGAudioFrame mpegFrame) {
+        return ((MPEGAudioFrameInputStream.MAGIC_144 * mpegFrame.getBitRate().getValue())
+                / mpegFrame.getSamplingRate().getValue()) + (mpegFrame.isPadding() ? 1 : 0);
+    }
+
+    /**
+     * calculateLayer2or3PayloadLength.
+     * @param mpegFrame {@link MPEGAudioFrame}
+     * @return {@code int} number of payload bytes.
+     */
+    private static final int calculateLayer2or3PayloadLength(final MPEGAudioFrame mpegFrame) {
+        return calculateLayer2or3FrameLength(mpegFrame) - MPEGAudioFrameInputStream.HEADER_SIZE_IN_BYTES
+                - (mpegFrame.isProtected() ? MPEGAudioFrameInputStream.CRC_SIZE_IN_BYTES : 0);
+    }
 
     /** {@code boolean} unalignedSyncAllowed. */
     private boolean unalignedSyncAllowed = false;
@@ -87,31 +113,26 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
     private void decodeHeader(final MPEGAudioFrame mp3Frame) throws IOException, MPEGAudioCodecException {
         mp3Frame.setVersion((Version) BitMaskFlagCodec.decode(readBits(2), Version.class));
         mp3Frame.setLayer((Layer) BitMaskFlagCodec.decode(readBits(2), Layer.class));
-        mp3Frame.setProtected(isNextBitTrue());
+        mp3Frame.setProtected(isNextBitOne());
         mp3Frame.setBitRate(BitRateCodec.decode(mp3Frame, readBits(4)));
         mp3Frame.setSamplingRate(SamplingRateCodec.decode(mp3Frame, readBits(2)));
-        mp3Frame.setPadding(isNextBitTrue());
-        mp3Frame.setPrivate(isNextBitTrue());
+        mp3Frame.setPadding(isNextBitOne());
+        mp3Frame.setPrivate(isNextBitOne());
         mp3Frame.setChannelMode((ChannelMode) BitMaskFlagCodec.decode(readBits(2), ChannelMode.class));
         mp3Frame.setModeExtension(ModeExtensionCodec.decode(mp3Frame, readBits(2)));
-        mp3Frame.setCopyright(isNextBitTrue());
-        mp3Frame.setOriginal(isNextBitTrue());
+        mp3Frame.setCopyright(isNextBitOne());
+        mp3Frame.setOriginal(isNextBitOne());
         mp3Frame.setEmphasis((Emphasis) BitMaskFlagCodec.decode(readBits(2), Emphasis.class));
     }
 
     /**
-     * isNextBitTrue. Reads just one bit and checks whether it is 0b1 or not.
+     * isNextBitOne. Reads just one bit and checks whether it is 0b1 or not.
      *
      * @return {@code boolean true} only if the next bit is 0b1.
      * @throws IOException
-     * @throws MPEGAudioCodecException if end of stream has been reached.
      */
-    private boolean isNextBitTrue() throws IOException, MPEGAudioCodecException {
-        final int readBit = readBit();
-        if (readBit == -1) {
-            throw new MPEGAudioCodecException("End of stream has been reached during decoding of frame."); //$NON-NLS-1$
-        }
-        return readBit == 1;
+    private boolean isNextBitOne() throws IOException {
+        return readBit() == 1;
     }
 
     /**
@@ -146,25 +167,25 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
     public MPEGAudioFrame readFrame() throws IOException {
         while (true) {
             try {
-                final MPEGAudioFrame mpegFrame = new MPEGAudioFrame();
+                final MPEGAudioFrame frame = new MPEGAudioFrame();
 
                 assertByteAlignement();
                 sync();
-                decodeHeader(mpegFrame);
+                decodeHeader(frame);
 
                 assertByteAlignement();
-                readCrcIfNeeded(mpegFrame);
+                readCrcIfNeeded(frame);
 
                 assertByteAlignement();
-                switch (mpegFrame.getLayer()) {
+                switch (frame.getLayer()) {
                 case I:
-                    switch (mpegFrame.getChannelMode()) {
+                    switch (frame.getChannelMode()) {
                     case SingleChannel:
-                        readLayer1Payload(mpegFrame, 1);
+                        readLayer1Payload(frame, 1);
                         break;
                     case Stereo:
                     case DualChannel:
-                        readLayer1Payload(mpegFrame, 2);
+                        readLayer1Payload(frame, 2);
                         break;
                     case JointStereo:
                         // SEBASTIAN implement
@@ -175,15 +196,12 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
                     break;
                 case II:
                 case III:
-                    final int frameLengthInBytes = (((144 * mpegFrame.getBitRate().getValue())
-                            / mpegFrame.getSamplingRate().getValue()) + (mpegFrame.isPadding() ? 1 : 0))
-                            - MPEGAudioFrameInputStream.HEADER_SIZE_IN_BYTES
-                            - (mpegFrame.isProtected() ? MPEGAudioFrameInputStream.CRC_SIZE_IN_BYTES : 0);
+                    final int payloadLengthInBytes = calculateLayer2or3PayloadLength(frame);
                     if (MPEGAudioFrameInputStream.LOG.isDebugEnabled()) {
-                        MPEGAudioFrameInputStream.LOG.debug("[framelength: " + frameLengthInBytes + "]"); //$NON-NLS-1$ //$NON-NLS-2$
+                        MPEGAudioFrameInputStream.LOG.debug("[framelength: " + payloadLengthInBytes + "]"); //$NON-NLS-1$ //$NON-NLS-2$
                     }
-                    mpegFrame.setPayload(new byte[frameLengthInBytes]);
-                    readFully(mpegFrame.getPayload());
+                    frame.setPayload(new byte[payloadLengthInBytes]);
+                    readFully(frame.getPayload());
                     //                    for (int i = 0; i < frameLengthInBytes; i++) {
                     //                        final int read = read();
                     //                        if (MPEGAudioFrameInputStream.LOG.isDebugEnabled()) {
@@ -214,7 +232,7 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
                 // - (mp3Frame.is_protected() ? 2 : 0)];
                 // readFully(data);
                 // mp3Frame.setData(data);
-                return mpegFrame;
+                return frame;
             } catch (final MPEGAudioCodecException mace) {
                 if (MPEGAudioFrameInputStream.LOG.isDebugEnabled()) {
                     MPEGAudioFrameInputStream.LOG.debug(mace.getLocalizedMessage());
