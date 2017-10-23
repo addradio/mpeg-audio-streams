@@ -261,7 +261,8 @@ public final class BitRateCodec {
         default:
             break;
         }
-        throw new MPEGAudioCodecException("Could not decode BitRate [valueToBeDecoded: " + value + "]."); //$NON-NLS-1$ //$NON-NLS-2$
+        throw new MPEGAudioCodecException(
+                "Could not decode BitRate [valueToBeDecoded: " + value + ", frameDecodedSoFar: " + frame + "]."); //$NON-NLS-3$  //$NON-NLS-1$//$NON-NLS-2$
     }
 
 }

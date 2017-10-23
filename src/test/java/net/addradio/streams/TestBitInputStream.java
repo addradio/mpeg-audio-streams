@@ -59,11 +59,17 @@ public class TestBitInputStream extends TestCase {
      */
     public void testMixedReadBits() throws IOException {
         // first byte is 0x14 or in binary mode 00010100
+        assertTrue(this.bitStream.isByteAligned());
         assertEquals(0, this.bitStream.readBit());
+        assertTrue(!this.bitStream.isByteAligned());
         assertEquals(0, this.bitStream.readBit());
+        assertTrue(!this.bitStream.isByteAligned());
         assertEquals(0, this.bitStream.readBit());
+        assertTrue(!this.bitStream.isByteAligned());
         assertEquals(1, this.bitStream.readBit());
+        assertTrue(!this.bitStream.isByteAligned());
         assertEquals(0, this.bitStream.readBit());
+        assertTrue(!this.bitStream.isByteAligned());
 
         // assertEquals(1, this.bitStream.readBit());
         // assertEquals(0, this.bitStream.readBit());
@@ -76,6 +82,7 @@ public class TestBitInputStream extends TestCase {
 
         // 1000001 or 65
         assertEquals(65, this.bitStream.readBits(7));
+        assertTrue(!this.bitStream.isByteAligned());
 
         // assertEquals(1, this.bitStream.readBit());
         // assertEquals(1, this.bitStream.readBit());
@@ -86,14 +93,24 @@ public class TestBitInputStream extends TestCase {
 
         // 11010 or 26
         assertEquals(26, this.bitStream.readBits(5));
+        assertTrue(!this.bitStream.isByteAligned());
 
         assertEquals(0, this.bitStream.readBit());
+        assertTrue(!this.bitStream.isByteAligned());
         assertEquals(0, this.bitStream.readBit());
+        assertTrue(!this.bitStream.isByteAligned());
         assertEquals(0, this.bitStream.readBit());
+        assertTrue(!this.bitStream.isByteAligned());
         assertEquals(0, this.bitStream.readBit());
+        assertTrue(!this.bitStream.isByteAligned());
         assertEquals(1, this.bitStream.readBit());
+        assertTrue(!this.bitStream.isByteAligned());
         assertEquals(1, this.bitStream.readBit());
+        assertTrue(!this.bitStream.isByteAligned());
+
         assertEquals(0, this.bitStream.readBit());
+
+        assertTrue(this.bitStream.isByteAligned());
     }
 
     /**

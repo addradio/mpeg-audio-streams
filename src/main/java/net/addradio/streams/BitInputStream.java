@@ -41,7 +41,6 @@ public class BitInputStream extends InputStream {
 
     /**
      * BitInputStream constructor.
-     *
      * @param innerRef
      *            {@link InputStream}
      */
@@ -51,7 +50,6 @@ public class BitInputStream extends InputStream {
 
     /**
      * available.
-     *
      * @see java.io.InputStream#available()
      * @return {@code int}
      * @throws IOException
@@ -64,7 +62,6 @@ public class BitInputStream extends InputStream {
 
     /**
      * close.
-     *
      * @see java.io.InputStream#close()
      * @throws IOException
      *             in case of bad IO situations.
@@ -77,6 +74,7 @@ public class BitInputStream extends InputStream {
     }
 
     /**
+     * getInner.
      * @return {@link InputStream} the inner.
      */
     public InputStream getInner() {
@@ -84,7 +82,22 @@ public class BitInputStream extends InputStream {
     }
 
     /**
-     * @return <code>boolean</code> the byteAligned.
+     * innerRead.
+     * @return {@code int} read from inner stream.
+     * @throws IOException due to IO problems or if end of stream has been reached.
+     */
+    private int innerRead() throws IOException {
+        final int read = this.inner.read();
+        //        System.out.println("read byte: 0x" + Integer.toHexString(read));
+        if (read < 0) {
+            throw new EndOfStreamException();
+        }
+        return read;
+    }
+
+    /**
+     * isByteAligned.
+     * @return {@code boolean true} if read pointer is aligned to byte boundaries.
      */
     public boolean isByteAligned() {
         return this.bitInByteOffset < 0;
@@ -92,7 +105,6 @@ public class BitInputStream extends InputStream {
 
     /**
      * read.
-     *
      * @see java.io.InputStream#read()
      * @return {@code int}
      * @throws IOException
@@ -102,7 +114,7 @@ public class BitInputStream extends InputStream {
     public int read() throws IOException {
         synchronized (this.lock) {
             if (isByteAligned()) {
-                return this.inner.read();
+                return innerRead();
             }
         }
         return readBits(8);
@@ -110,10 +122,7 @@ public class BitInputStream extends InputStream {
 
     /**
      * readBit.
-     *
-     * @param numberOfBits
-     *            <code>int</code>
-     * @return <code>int</code> set up on basis of bits read.
+     * @return {@code int} the read bit.
      * @throws IOException
      *             in case of bad IO situations.
      */
@@ -121,20 +130,20 @@ public class BitInputStream extends InputStream {
         synchronized (this.lock) {
             if (isByteAligned()) {
                 this.bitInByteOffset = BitInputStream.MAX_OFFSET;
-                this.lastByte = this.inner.read();
+                this.lastByte = innerRead();
             }
             final int returnVal = (this.lastByte & (0x1 << this.bitInByteOffset)) >> this.bitInByteOffset;
             this.bitInByteOffset--;
+            //            System.out.println("read bit: 0b" + Integer.toBinaryString(returnVal));
             return returnVal;
         }
     }
 
     /**
      * readBits.
-     *
      * @param numberOfBitsToRead
      *            <code>int</code>
-     * @return <code>int</code>
+     * @return <code>int</code> the value of the read bits;
      * @throws IOException
      *             in case of bad IO situations.
      */
@@ -143,12 +152,12 @@ public class BitInputStream extends InputStream {
         for (int offset = numberOfBitsToRead - 1; offset > -1; offset--) {
             returnVal |= readBit() << offset;
         }
+        //        System.out.println("read bits: 0b" + Integer.toBinaryString(returnVal));
         return returnVal;
     }
 
     /**
      * readFully.
-     *
      * @param toFill
      *            <code>byte[]</code>
      * @throws IOException
@@ -162,7 +171,6 @@ public class BitInputStream extends InputStream {
 
     /**
      * setInner.
-     *
      * @param innerRef
      *            {@link InputStream} the inner to set.
      */
