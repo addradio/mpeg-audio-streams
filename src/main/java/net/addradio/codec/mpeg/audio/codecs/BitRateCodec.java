@@ -263,10 +263,181 @@ public final class BitRateCodec {
      * encode.
      * @param frame {@link MPEGAudioFrame}
      * @return {@code int}
+     * @throws MPEGAudioCodecException if model is ill-formed.
      */
-    public static int encode(final MPEGAudioFrame frame) {
-        // SEBASTIAN implement
-        return 0;
+    public static int encode(final MPEGAudioFrame frame) throws MPEGAudioCodecException {
+        switch (frame.getLayer()) {
+        case I:
+            switch (frame.getBitRate()) {
+            case free:
+                return 0b0000;
+            case _32:
+                return 0b0001;
+            case _64:
+                return 0b0010;
+            case _96:
+                return 0b0011;
+            case _128:
+                return 0b0100;
+            case _160:
+                return 0b0101;
+            case _192:
+                return 0b0110;
+            case _224:
+                return 0b0111;
+            case _256:
+                return 0b1000;
+            case _288:
+                return 0b1001;
+            case _320:
+                return 0b1010;
+            case _352:
+                return 0b1011;
+            case _384:
+                return 0b1100;
+            case _416:
+                return 0b1101;
+            case _448:
+                return 0b1110;
+            case reserved:
+                return 0b1111;
+            //$CASES-OMITTED$
+            default:
+                break;
+            }
+            break;
+        case II:
+            switch (frame.getBitRate()) {
+            case free:
+                return 0b0000;
+            case _32:
+                return 0b0001;
+            case _48:
+                return 0b0010;
+            case _56:
+                return 0b0011;
+            case _64:
+                return 0b0100;
+            case _80:
+                return 0b0101;
+            case _96:
+                return 0b0110;
+            case _112:
+                return 0b0111;
+            case _128:
+                return 0b1000;
+            case _160:
+                return 0b1001;
+            case _192:
+                return 0b1010;
+            case _224:
+                return 0b1011;
+            case _256:
+                return 0b1100;
+            case _320:
+                return 0b1101;
+            case _384:
+                return 0b1110;
+            case reserved:
+                return 0b1111;
+            //$CASES-OMITTED$
+            default:
+                break;
+            }
+            break;
+        case III:
+            switch (frame.getVersion()) {
+            case MPEG_1:
+                switch (frame.getBitRate()) {
+                case free:
+                    return 0b0000;
+                case _32:
+                    return 0b0001;
+                case _40:
+                    return 0b0010;
+                case _48:
+                    return 0b0011;
+                case _56:
+                    return 0b0100;
+                case _64:
+                    return 0b0101;
+                case _80:
+                    return 0b0110;
+                case _96:
+                    return 0b0111;
+                case _112:
+                    return 0b1000;
+                case _128:
+                    return 0b1001;
+                case _160:
+                    return 0b1010;
+                case _192:
+                    return 0b1011;
+                case _224:
+                    return 0b1100;
+                case _256:
+                    return 0b1101;
+                case _320:
+                    return 0b1110;
+                case reserved:
+                    return 0b1111;
+                //$CASES-OMITTED$
+                default:
+                    break;
+                }
+                break;
+            case MPEG_2:
+            case MPEG_2_5:
+                // SEBASTIAN take care of this, table for mpeg2 can be
+                // absolutely wrong
+                switch (frame.getBitRate()) {
+                case free:
+                    return 0b0000;
+                case _8:
+                    return 0b0001;
+                case _16:
+                    return 0b0010;
+                case _24:
+                    return 0b0011;
+                case _32:
+                    return 0b0100;
+                case _40:
+                    return 0b0101;
+                case _48:
+                    return 0b0110;
+                case _56:
+                    return 0b0111;
+                case _64:
+                    return 0b1000;
+                case _80:
+                    return 0b1001;
+                case _96:
+                    return 0b1010;
+                case _112:
+                    return 0b1011;
+                case _128:
+                    return 0b1100;
+                case _144:
+                    return 0b1101;
+                case _160:
+                    return 0b1110;
+                case reserved:
+                    return 0b1111;
+                //$CASES-OMITTED$
+                default:
+                    break;
+                }
+                break;
+            case reserved:
+            default:
+                break;
+            }
+            break;
+        case reserved:
+        default:
+            break;
+        }
+        throw new MPEGAudioCodecException("Could not encode frame [frame: " + frame + "]."); //$NON-NLS-1$//$NON-NLS-2$
     }
 
     /**

@@ -82,10 +82,55 @@ public final class ModeExtensionCodec {
      * encode.
      * @param frame {@link MPEGAudioFrame}
      * @return {@code int}
+     * @throws MPEGAudioCodecException if model is ill-formed.
      */
-    public static int encode(final MPEGAudioFrame frame) {
-        // SEBASTIAN implement
-        return 0;
+    public static int encode(final MPEGAudioFrame frame) throws MPEGAudioCodecException {
+        switch (frame.getChannelMode()) {
+        case JointStereo:
+            switch (frame.getLayer()) {
+            case I:
+            case II:
+                switch (frame.getModeExtension()) {
+                case SubBands4To31:
+                    return 0b00;
+                case SubBands8To31:
+                    return 0b01;
+                case SubBands12To31:
+                    return 0b10;
+                case SubBands16To31:
+                    return 0b11;
+                //$CASES-OMITTED$
+                default:
+                    break;
+                }
+                break;
+            case III:
+                switch (frame.getModeExtension()) {
+                case IntensityStereo_Off__MSStereo_Off:
+                    return 0b00;
+                case IntensityStereo_On__MSStereo_Off:
+                    return 0b01;
+                case IntensityStereo_Off__MSStereo_On:
+                    return 0b10;
+                case IntensityStereo_On__MSStereo_On:
+                    return 0b11;
+                //$CASES-OMITTED$
+                default:
+                    break;
+                }
+                break;
+            case reserved:
+            default:
+                break;
+            }
+            //$FALL-THROUGH$
+        case DualChannel:
+        case SingleChannel:
+        case Stereo:
+        default:
+            break;
+        }
+        throw new MPEGAudioCodecException("Could not encode ModeExtension [frame: " + frame + "]."); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
 }

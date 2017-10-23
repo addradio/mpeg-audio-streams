@@ -93,10 +93,62 @@ public final class SamplingRateCodec {
      * encode.
      * @param frame {@link MPEGAudioFrame}
      * @return {@code int}
+     * @throws MPEGAudioCodecException if model is ill-formed.
      */
-    public static int encode(final MPEGAudioFrame frame) {
-        // SEBASTIAN implement
-        return 0;
+    public static int encode(final MPEGAudioFrame frame) throws MPEGAudioCodecException {
+        switch (frame.getVersion()) {
+        case MPEG_1:
+            switch (frame.getSamplingRate()) {
+            case _44100:
+                return 0b00;
+            case _48000:
+                return 0b01;
+            case _32000:
+                return 0b10;
+            case reserved:
+                return 0b11;
+            //$CASES-OMITTED$
+            default:
+                break;
+            }
+            break;
+        case MPEG_2:
+            switch (frame.getSamplingRate()) {
+            case _22050:
+                return 0b00;
+            case _24000:
+                return 0b01;
+            case _16000:
+                return 0b10;
+            case reserved:
+                return 0b11;
+            //$CASES-OMITTED$
+            default:
+                break;
+            }
+            break;
+        case MPEG_2_5:
+            switch (frame.getSamplingRate()) {
+            case _11025:
+                return 0b00;
+            case _12000:
+                return 0b01;
+            case _8000:
+                return 0b10;
+            case reserved:
+                return 0b11;
+            //$CASES-OMITTED$
+            default:
+                break;
+            }
+            break;
+        case reserved:
+        default:
+            break;
+
+        }
+        throw new MPEGAudioCodecException("Could not encode frame [frame: " + frame //$NON-NLS-1$
+                + "]."); //$NON-NLS-1$
     }
 
     /**
