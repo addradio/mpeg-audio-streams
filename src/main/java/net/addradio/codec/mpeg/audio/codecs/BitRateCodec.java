@@ -21,7 +21,7 @@ import net.addradio.codec.mpeg.audio.model.MPEGAudioFrame;
 
 /**
  * BitRateCodec.
- * 
+ *
  * <pre>
  *  ---------------------------------------------------------------------------
  * | Bitrate | MPEG-1, | MPEG-1,  | MPEG-1,   | MPEG-2, | MPEG-2,  | MPEG-2,   |
@@ -73,14 +73,8 @@ import net.addradio.codec.mpeg.audio.model.MPEGAudioFrame;
 public final class BitRateCodec {
 
     /**
-     * BitRateCodec constructor.
-     */
-    private BitRateCodec() {
-    }
-
-    /**
      * decode.
-     * 
+     *
      * @param frame
      *            {@link MPEGAudioFrame}
      * @param value
@@ -89,7 +83,7 @@ public final class BitRateCodec {
      * @throws MPEGAudioCodecException
      *             if bit rate could not be decoded.
      */
-    public static final BitRate decode(MPEGAudioFrame frame, final int value) throws MPEGAudioCodecException {
+    public static final BitRate decode(final MPEGAudioFrame frame, final int value) throws MPEGAudioCodecException {
         if (value > 15) {
             throw new MPEGAudioCodecException("bitrate has to be a flag value between 0 and 15 (incl.) but was [" //$NON-NLS-1$
                     + value + "]"); //$NON-NLS-1$
@@ -263,6 +257,22 @@ public final class BitRateCodec {
         }
         throw new MPEGAudioCodecException(
                 "Could not decode BitRate [valueToBeDecoded: " + value + ", frameDecodedSoFar: " + frame + "]."); //$NON-NLS-3$  //$NON-NLS-1$//$NON-NLS-2$
+    }
+
+    /**
+     * encode.
+     * @param frame {@link MPEGAudioFrame}
+     * @return {@code int}
+     */
+    public static int encode(final MPEGAudioFrame frame) {
+        // SEBASTIAN implement
+        return 0;
+    }
+
+    /**
+     * BitRateCodec constructor.
+     */
+    private BitRateCodec() {
     }
 
 }

@@ -78,4 +78,14 @@ public final class ModeExtensionCodec {
         return null;
     }
 
+    /**
+     * encode.
+     * @param frame {@link MPEGAudioFrame}
+     * @return {@code int}
+     */
+    public static int encode(final MPEGAudioFrame frame) {
+        // SEBASTIAN implement
+        return 0;
+    }
+
 }

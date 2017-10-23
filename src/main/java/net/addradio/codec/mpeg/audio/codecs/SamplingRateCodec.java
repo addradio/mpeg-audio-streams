@@ -25,14 +25,8 @@ import net.addradio.codec.mpeg.audio.model.SamplingRate;
 public final class SamplingRateCodec {
 
     /**
-     * SamplingRateCodec constructor.
-     */
-    private SamplingRateCodec() {
-    }
-
-    /**
      * decode.
-     * 
+     *
      * @param frame
      *            {@link MPEGAudioFrame}
      * @param value
@@ -41,7 +35,8 @@ public final class SamplingRateCodec {
      * @throws MPEGAudioCodecException
      *             if value could not be decoded.
      */
-    public static final SamplingRate decode(MPEGAudioFrame frame, final int value) throws MPEGAudioCodecException {
+    public static final SamplingRate decode(final MPEGAudioFrame frame, final int value)
+            throws MPEGAudioCodecException {
         switch (frame.getVersion()) {
         case MPEG_1:
             switch (value) {
@@ -92,6 +87,22 @@ public final class SamplingRateCodec {
         }
         throw new MPEGAudioCodecException("Could not decode SamplingRate [valueToBeDecoded: " + value //$NON-NLS-1$
                 + "]."); //$NON-NLS-1$
+    }
+
+    /**
+     * encode.
+     * @param frame {@link MPEGAudioFrame}
+     * @return {@code int}
+     */
+    public static int encode(final MPEGAudioFrame frame) {
+        // SEBASTIAN implement
+        return 0;
+    }
+
+    /**
+     * SamplingRateCodec constructor.
+     */
+    private SamplingRateCodec() {
     }
 
 }
