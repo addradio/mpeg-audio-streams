@@ -84,6 +84,15 @@ public class MPEGAudioFrame {
     /** {@link Version} version. */
     private Version version;
 
+    /** {@code int} SYNC_PATTERN_0X7FF */
+    public static final int SYNC_PATTERN_0X7FF = 0x7FF;
+
+    /** {@code int} HEADER_SIZE_IN_BYTES. */
+    public static final int HEADER_SIZE_IN_BYTES = 4;
+
+    /** {@code int} CRC_SIZE_IN_BYTES. */
+    public static final int CRC_SIZE_IN_BYTES = 2;
+
     /**
      * getAllocations.
      * @return {@code int[][]} the allocations.

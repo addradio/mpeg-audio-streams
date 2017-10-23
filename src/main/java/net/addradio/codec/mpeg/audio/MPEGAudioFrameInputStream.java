@@ -40,12 +40,6 @@ import net.addradio.streams.EndOfStreamException;
  */
 public class MPEGAudioFrameInputStream extends BitInputStream {
 
-    /** {@link int} CRC_SIZE_IN_BYTES. */
-    private static final int CRC_SIZE_IN_BYTES = 2;
-
-    /** {@link int} HEADER_SIZE_IN_BYTES. */
-    private static final int HEADER_SIZE_IN_BYTES = 4;
-
     /** {@link Logger} LOG */
     private static final Logger LOG = LoggerFactory.getLogger(MPEGAudioFrameInputStream.class);
 
@@ -54,9 +48,6 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
      * SEBASTIAN check definitions
      */
     private static final int MAGIC_144 = 144;
-
-    /** {@code int} SYNC_PATTERN_0X7FF */
-    private static final int SYNC_PATTERN_0X7FF = 0x7FF;
 
     /**
      * calculateLayer2or3FrameLength.
@@ -74,8 +65,8 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
      * @return {@code int} number of payload bytes.
      */
     private static final int calculateLayer2or3PayloadLength(final MPEGAudioFrame mpegFrame) {
-        return calculateLayer2or3FrameLength(mpegFrame) - MPEGAudioFrameInputStream.HEADER_SIZE_IN_BYTES
-                - (mpegFrame.isProtected() ? MPEGAudioFrameInputStream.CRC_SIZE_IN_BYTES : 0);
+        return calculateLayer2or3FrameLength(mpegFrame) - MPEGAudioFrame.HEADER_SIZE_IN_BYTES
+                - (mpegFrame.isProtected() ? MPEGAudioFrame.CRC_SIZE_IN_BYTES : 0);
     }
 
     /** {@code boolean} unalignedSyncAllowed. */
@@ -152,7 +143,7 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
      */
     private void readCrcIfNeeded(final MPEGAudioFrame mp3Frame) throws IOException {
         if (mp3Frame.isProtected()) {
-            mp3Frame.setCrc(new byte[MPEGAudioFrameInputStream.CRC_SIZE_IN_BYTES]);
+            mp3Frame.setCrc(new byte[MPEGAudioFrame.CRC_SIZE_IN_BYTES]);
             readFully(mp3Frame.getCrc());
         }
     }
@@ -309,12 +300,12 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
         int syncWord = 0;
         if (isUnalignedSyncAllowed()) {
             syncWord = readBits(11);
-            while (syncWord != MPEGAudioFrameInputStream.SYNC_PATTERN_0X7FF) {
-                syncWord = ((syncWord << 1) | readBit()) & MPEGAudioFrameInputStream.SYNC_PATTERN_0X7FF;
+            while (syncWord != MPEGAudioFrame.SYNC_PATTERN_0X7FF) {
+                syncWord = ((syncWord << 1) | readBit()) & MPEGAudioFrame.SYNC_PATTERN_0X7FF;
                 skippedBits++;
             }
         } else {
-            while (syncWord != MPEGAudioFrameInputStream.SYNC_PATTERN_0X7FF) {
+            while (syncWord != MPEGAudioFrame.SYNC_PATTERN_0X7FF) {
                 while (!isByteAligned()) {
                     if (MPEGAudioFrameInputStream.LOG.isDebugEnabled()) {
                         MPEGAudioFrameInputStream.LOG.debug("sync start wasn't byte aligned..."); //$NON-NLS-1$
@@ -340,7 +331,7 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
                     MPEGAudioFrameInputStream.LOG.debug("three bits read: 0b" + Integer.toBinaryString(readBits)); //$NON-NLS-1$
                 }
                 if (readBits == 0b111) {
-                    syncWord = MPEGAudioFrameInputStream.SYNC_PATTERN_0X7FF;
+                    syncWord = MPEGAudioFrame.SYNC_PATTERN_0X7FF;
                 } else {
                     skippedBits += 3;
                 }
