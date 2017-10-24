@@ -71,7 +71,7 @@ public class MPEGAudioFrameOutputStream extends BitOutputStream {
         writeBits(frame.getEmphasis().getBitMask(), 2);
 
         if (frame.isProtected()) {
-            if ((frame.getCrc() != null) && (frame.getCrc().length == MPEGAudioFrame.HEADER_SIZE_IN_BYTES)) {
+            if ((frame.getCrc() != null) && (frame.getCrc().length == MPEGAudioFrame.CRC_SIZE_IN_BYTES)) {
                 write(frame.getCrc());
             } else {
                 throw new MPEGAudioCodecException("Invalid CRC in frame [" //$NON-NLS-1$
