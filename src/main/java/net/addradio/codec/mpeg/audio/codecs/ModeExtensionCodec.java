@@ -123,6 +123,7 @@ public final class ModeExtensionCodec {
             default:
                 break;
             }
+            throw new MPEGAudioCodecException("Could not encode ModeExtension [frame: " + frame + "]."); //$NON-NLS-1$ //$NON-NLS-2$
             //$FALL-THROUGH$
         case DualChannel:
         case SingleChannel:
@@ -130,7 +131,7 @@ public final class ModeExtensionCodec {
         default:
             break;
         }
-        throw new MPEGAudioCodecException("Could not encode ModeExtension [frame: " + frame + "]."); //$NON-NLS-1$ //$NON-NLS-2$
+        return 0;
     }
 
 }
