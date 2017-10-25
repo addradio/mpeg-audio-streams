@@ -1,8 +1,8 @@
 /**
- * Class:    ChannelMode<br/>
+ * Class:    Mode<br/>
  * <br/>
  * Created:  19.10.2017<br/>
- * Filename: ChannelMode.java<br/>
+ * Filename: Mode.java<br/>
  * Version:  $Revision$<br/>
  * <br/>
  * last modified on $Date$<br/>
@@ -16,11 +16,11 @@
 package net.addradio.codec.mpeg.audio.model;
 
 /**
- * ChannelMode.
+ * Mode.
  */
-public enum ChannelMode implements BitMaskFlag {
+public enum Mode implements BitMaskFlag {
 
-    /** {@link ChannelMode} stereo. */
+    /** {@link Mode} stereo. */
     Stereo(0b00),
 
     /**
@@ -45,7 +45,7 @@ public enum ChannelMode implements BitMaskFlag {
      * @param bitMaskVal
      *            {@code int}
      */
-    private ChannelMode(final int bitMaskVal) {
+    private Mode(final int bitMaskVal) {
         this.bitMask = bitMaskVal;
     }
 

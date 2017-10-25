@@ -27,7 +27,7 @@ import net.addradio.codec.mpeg.audio.codecs.BitRateCodec;
 import net.addradio.codec.mpeg.audio.codecs.MPEGAudioCodecException;
 import net.addradio.codec.mpeg.audio.codecs.ModeExtensionCodec;
 import net.addradio.codec.mpeg.audio.codecs.SamplingRateCodec;
-import net.addradio.codec.mpeg.audio.model.ChannelMode;
+import net.addradio.codec.mpeg.audio.model.Mode;
 import net.addradio.codec.mpeg.audio.model.Emphasis;
 import net.addradio.codec.mpeg.audio.model.Layer;
 import net.addradio.codec.mpeg.audio.model.MPEGAudioFrame;
@@ -66,7 +66,7 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
      */
     private static final int calculateLayer2or3PayloadLength(final MPEGAudioFrame mpegFrame) {
         return calculateLayer2or3FrameLength(mpegFrame) - MPEGAudioFrame.HEADER_SIZE_IN_BYTES
-                - (mpegFrame.isProtected() ? MPEGAudioFrame.CRC_SIZE_IN_BYTES : 0);
+                - (mpegFrame.isErrorProtected() ? MPEGAudioFrame.CRC_SIZE_IN_BYTES : 0);
     }
 
     /** {@code boolean} unalignedSyncAllowed. */
@@ -104,12 +104,12 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
     private void decodeHeader(final MPEGAudioFrame mp3Frame) throws IOException, MPEGAudioCodecException {
         mp3Frame.setVersion((Version) BitMaskFlagCodec.decode(readBits(2), Version.class));
         mp3Frame.setLayer((Layer) BitMaskFlagCodec.decode(readBits(2), Layer.class));
-        mp3Frame.setProtected(isNextBitOne());
+        mp3Frame.setErrorProtected(isNextBitOne());
         mp3Frame.setBitRate(BitRateCodec.decode(mp3Frame, readBits(4)));
         mp3Frame.setSamplingRate(SamplingRateCodec.decode(mp3Frame, readBits(2)));
         mp3Frame.setPadding(isNextBitOne());
         mp3Frame.setPrivate(isNextBitOne());
-        mp3Frame.setChannelMode((ChannelMode) BitMaskFlagCodec.decode(readBits(2), ChannelMode.class));
+        mp3Frame.setMode((Mode) BitMaskFlagCodec.decode(readBits(2), Mode.class));
         mp3Frame.setModeExtension(ModeExtensionCodec.decode(mp3Frame, readBits(2)));
         mp3Frame.setCopyright(isNextBitOne());
         mp3Frame.setOriginal(isNextBitOne());
@@ -142,7 +142,7 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
      * @throws IOException
      */
     private void readCrcIfNeeded(final MPEGAudioFrame mp3Frame) throws IOException {
-        if (mp3Frame.isProtected()) {
+        if (mp3Frame.isErrorProtected()) {
             mp3Frame.setCrc(new byte[MPEGAudioFrame.CRC_SIZE_IN_BYTES]);
             readFully(mp3Frame.getCrc());
         }
@@ -170,7 +170,7 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
                 assertByteAlignement();
                 switch (frame.getLayer()) {
                 case I:
-                    switch (frame.getChannelMode()) {
+                    switch (frame.getMode()) {
                     case SingleChannel:
                         readLayer1Payload(frame, 1);
                         break;

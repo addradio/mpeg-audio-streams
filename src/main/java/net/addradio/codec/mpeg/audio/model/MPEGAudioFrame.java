@@ -18,44 +18,40 @@ package net.addradio.codec.mpeg.audio.model;
 /**
  * MPEGAudioFrame.
  *
- * The frame header scheme is as follows:
+ * The frame header scheme is as follows (compatible with MPEG 2.5):
  *
+ * <pre>
  * |     1st byte   |     2nd byte         |      3rd byte         |       4th byte          |
  * | 1 1 1 1 1 1 1 1 1 1 1 | 0 0 | 0 0 | 0 | 0 0 0 0 | 0 0 | 0 | 0 | 0 0 | 0 0 | 0 | 0 | 0 0 |
  *  \__________ __________/ \_ _/ \_ _/ \ / \___ ___/ \_ _/ \ / \ / \_ _/ \_ _/ \ / \ / \_ _/
  *             V              V     V    V      V       V    V   V    V     V    V   V    V
- *         sync bits          ID  Layer Pro  Bitrate   SR   Pad Pri  CM    ME   Cop Org  Emph
+ *         syncword          ID   layer  | bitrate_index|    | private|     |    | org/cop|
+ *                                error_protection      | padding   mode    | copyright emphasis
+ *                                             sampling_frequency     mode_extension
+ * </pre>
  *
- * If protected flag is set to 1, header is followed by a two byte CRC.
- *
- * That means the header's size may be 4 or 6 bytes in total.
+ * If error_protection flag is set to 1, header is followed by a two byte CRC.
  *
  */
 public class MPEGAudioFrame {
 
-    /** {@code int} SYNC_PATTERN_0X7FF */
-    public static final int SYNC_PATTERN_0X7FF = 0x7FF;
+    /** {@code int} CRC_SIZE_IN_BYTES. */
+    public static final int CRC_SIZE_IN_BYTES = 2;
 
     /** {@code int} HEADER_SIZE_IN_BYTES. */
     public static final int HEADER_SIZE_IN_BYTES = 4;
 
-    /** {@code int} CRC_SIZE_IN_BYTES. */
-    public static final int CRC_SIZE_IN_BYTES = 2;
+    /** {@code int} SYNC_PATTERN_0X7FF */
+    public static final int SYNC_PATTERN_0X7FF = 0x7FF;
 
     /** {@code boolean} _private. */
     private boolean _private = false;
-
-    /** {@code boolean} _protected. */
-    private boolean _protected = false;
 
     /** {@code int[][]} allocations. */
     private int[][] allocations;
 
     /** {@link BitRate} bitRate. */
     private BitRate bitRate;
-
-    /** {@link ChannelMode} channelMode. */
-    private ChannelMode channelMode;
 
     /** {@link boolean} copyright. */
     private boolean copyright = false;
@@ -66,8 +62,14 @@ public class MPEGAudioFrame {
     /** {@link Emphasis} emphasis. */
     private Emphasis emphasis;
 
+    /** {@code boolean} errorProtected. */
+    private boolean errorProtected = false;
+
     /** {@link Layer} layer. */
     private Layer layer;
+
+    /** {@link Mode} mode. */
+    private Mode mode;
 
     /** {@link ModeExtension} modeExtension. */
     private ModeExtension modeExtension;
@@ -110,14 +112,6 @@ public class MPEGAudioFrame {
     }
 
     /**
-     * getChannelMode.
-     * @return {@link ChannelMode} the channelMode.
-     */
-    public ChannelMode getChannelMode() {
-        return this.channelMode;
-    }
-
-    /**
      * getCrc.
      * @return {@code byte[]} the crc.
      */
@@ -138,7 +132,8 @@ public class MPEGAudioFrame {
      * @return {@code int} the frame length incl. header and crc.
      */
     public int getFrameLength() {
-        return getPayload().length + HEADER_SIZE_IN_BYTES + (isProtected() ? CRC_SIZE_IN_BYTES : 0);
+        return getPayload().length + MPEGAudioFrame.HEADER_SIZE_IN_BYTES
+                + (isErrorProtected() ? MPEGAudioFrame.CRC_SIZE_IN_BYTES : 0);
     }
 
     /**
@@ -147,6 +142,14 @@ public class MPEGAudioFrame {
      */
     public Layer getLayer() {
         return this.layer;
+    }
+
+    /**
+     * getChannelMode.
+     * @return {@link Mode} the mode.
+     */
+    public Mode getMode() {
+        return this.mode;
     }
 
     /**
@@ -205,6 +208,14 @@ public class MPEGAudioFrame {
     }
 
     /**
+     * isErrorProtected.
+     * @return {@code boolean} the errorProtected.
+     */
+    public boolean isErrorProtected() {
+        return this.errorProtected;
+    }
+
+    /**
      * isOriginal.
      * @return {@code boolean} the original.
      */
@@ -229,14 +240,6 @@ public class MPEGAudioFrame {
     }
 
     /**
-     * isProtected.
-     * @return {@code boolean} the _protected.
-     */
-    public boolean isProtected() {
-        return this._protected;
-    }
-
-    /**
      * setAllocations.
      * @param allocationsRef {@code int[][]} the allocations to set.
      */
@@ -251,15 +254,6 @@ public class MPEGAudioFrame {
      */
     public void setBitRate(final BitRate bitrateRef) {
         this.bitRate = bitrateRef;
-    }
-
-    /**
-     * setChannelMode.
-     * @param channelModeRef
-     *            {@link ChannelMode} the channelMode to set.
-     */
-    public void setChannelMode(final ChannelMode channelModeRef) {
-        this.channelMode = channelModeRef;
     }
 
     /**
@@ -289,12 +283,30 @@ public class MPEGAudioFrame {
     }
 
     /**
+     * setErrorProtected.
+     * @param errorProtectedVal
+     *            {@code boolean} the errorProtected to set.
+     */
+    public void setErrorProtected(final boolean errorProtectedVal) {
+        this.errorProtected = errorProtectedVal;
+    }
+
+    /**
      * setLayer.
      * @param layerRef
      *            {@link Layer} the layer to set.
      */
     public void setLayer(final Layer layerRef) {
         this.layer = layerRef;
+    }
+
+    /**
+     * setChannelMode.
+     * @param channelModeRef
+     *            {@link Mode} the mode to set.
+     */
+    public void setMode(final Mode channelModeRef) {
+        this.mode = channelModeRef;
     }
 
     /**
@@ -339,15 +351,6 @@ public class MPEGAudioFrame {
      */
     public void setPrivate(final boolean privateVal) {
         this._private = privateVal;
-    }
-
-    /**
-     * setProtected.
-     * @param protectedVal
-     *            {@code boolean} the _protected to set.
-     */
-    public void setProtected(final boolean protectedVal) {
-        this._protected = protectedVal;
     }
 
     /**
@@ -396,8 +399,8 @@ public class MPEGAudioFrame {
         builder.append(this.version);
         builder.append(", layer="); //$NON-NLS-1$
         builder.append(this.layer);
-        builder.append(", _protected="); //$NON-NLS-1$
-        builder.append(this._protected);
+        builder.append(", errorProtected="); //$NON-NLS-1$
+        builder.append(this.errorProtected);
         builder.append(", bitRate="); //$NON-NLS-1$
         builder.append(this.bitRate);
         builder.append(", samplingRate="); //$NON-NLS-1$
@@ -406,8 +409,8 @@ public class MPEGAudioFrame {
         builder.append(this.padding);
         builder.append(", _private="); //$NON-NLS-1$
         builder.append(this._private);
-        builder.append(", channelMode="); //$NON-NLS-1$
-        builder.append(this.channelMode);
+        builder.append(", mode="); //$NON-NLS-1$
+        builder.append(this.mode);
         builder.append(", modeExtension="); //$NON-NLS-1$
         builder.append(this.modeExtension);
         builder.append(", copyright="); //$NON-NLS-1$

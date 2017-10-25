@@ -24,7 +24,7 @@ public enum Version implements BitMaskFlag {
     MPEG_1(0b11),
 
     /** {@link Version} MPEG Version 2. */
-    MPEG_2(0b10),
+    MPEG_2_LSF(0b10),
 
     /** {@link Version} MPEG Version 2.5. */
     MPEG_2_5(0b00),

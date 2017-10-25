@@ -32,7 +32,7 @@ public final class ModeExtensionCodec {
      */
     public static final ModeExtension decode(final MPEGAudioFrame frame, final int value)
             throws MPEGAudioCodecException {
-        switch (frame.getChannelMode()) {
+        switch (frame.getMode()) {
         case JointStereo:
             switch (frame.getLayer()) {
             case I:
@@ -85,7 +85,7 @@ public final class ModeExtensionCodec {
      * @throws MPEGAudioCodecException if model is ill-formed.
      */
     public static int encode(final MPEGAudioFrame frame) throws MPEGAudioCodecException {
-        switch (frame.getChannelMode()) {
+        switch (frame.getMode()) {
         case JointStereo:
             switch (frame.getLayer()) {
             case I:

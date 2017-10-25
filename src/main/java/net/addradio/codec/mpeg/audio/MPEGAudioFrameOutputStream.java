@@ -59,18 +59,18 @@ public class MPEGAudioFrameOutputStream extends BitOutputStream {
         writeBits(MPEGAudioFrame.SYNC_PATTERN_0X7FF, 11);
         writeBits(frame.getVersion().getBitMask(), 2);
         writeBits(frame.getLayer().getBitMask(), 2);
-        writeBit(frame.isProtected() ? 1 : 0);
+        writeBit(frame.isErrorProtected() ? 1 : 0);
         writeBits(BitRateCodec.encode(frame), 4);
         writeBits(SamplingRateCodec.encode(frame), 2);
         writeBit(frame.isPadding() ? 1 : 0);
         writeBit(frame.isPrivate() ? 1 : 0);
-        writeBits(frame.getChannelMode().getBitMask(), 2);
+        writeBits(frame.getMode().getBitMask(), 2);
         writeBits(ModeExtensionCodec.encode(frame), 2);
         writeBit(frame.isCopyright() ? 1 : 0);
         writeBit(frame.isOriginal() ? 1 : 0);
         writeBits(frame.getEmphasis().getBitMask(), 2);
 
-        if (frame.isProtected()) {
+        if (frame.isErrorProtected()) {
             if ((frame.getCrc() != null) && (frame.getCrc().length == MPEGAudioFrame.CRC_SIZE_IN_BYTES)) {
                 write(frame.getCrc());
             } else {

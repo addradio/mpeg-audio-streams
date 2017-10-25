@@ -52,7 +52,7 @@ public final class SamplingRateCodec {
                 break;
             }
             break;
-        case MPEG_2:
+        case MPEG_2_LSF:
             switch (value) {
             case 0b00:
                 return SamplingRate._22050;
@@ -112,7 +112,7 @@ public final class SamplingRateCodec {
                 break;
             }
             break;
-        case MPEG_2:
+        case MPEG_2_LSF:
             switch (frame.getSamplingRate()) {
             case _22050:
                 return 0b00;

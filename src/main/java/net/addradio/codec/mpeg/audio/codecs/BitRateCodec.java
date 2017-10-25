@@ -205,7 +205,7 @@ public final class BitRateCodec {
                     break;
                 }
                 break;
-            case MPEG_2:
+            case MPEG_2_LSF:
             case MPEG_2_5:
                 // SEBASTIAN take care of this, table for mpeg2 can be
                 // absolutely wrong
@@ -386,7 +386,7 @@ public final class BitRateCodec {
                     break;
                 }
                 break;
-            case MPEG_2:
+            case MPEG_2_LSF:
             case MPEG_2_5:
                 // SEBASTIAN take care of this, table for mpeg2 can be
                 // absolutely wrong
