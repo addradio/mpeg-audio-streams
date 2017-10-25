@@ -24,16 +24,16 @@ public enum Mode implements BitMaskFlag {
     Stereo(0b00),
 
     /**
-     * {@link ChannelMode} joint_stereo. In Layer I and II the joint_stereo mode
+     * {@link Mode} joint_stereo. In Layer I and II the joint_stereo mode
      * is intensity_stereo, in Layer III it is intensity_stereo and/or
      * ms_stereo.
      */
     JointStereo(0b01),
 
-    /** {@link ChannelMode} dual_channel. */
+    /** {@link Mode} dual_channel. */
     DualChannel(0b10),
 
-    /** {@link ChannelMode} single_channel. */
+    /** {@link Mode} single_channel. */
     SingleChannel(0b11);
 
     /** {@code int} bitMask. */
