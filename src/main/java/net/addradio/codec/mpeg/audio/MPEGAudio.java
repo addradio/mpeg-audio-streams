@@ -61,7 +61,16 @@ public class MPEGAudio {
      * @return {@link MPEGAudioFrame} or {@code null} if nothing could be decoded.
      */
     public static MPEGAudioFrame decodeFirstFrame(final byte[] buffer) {
-        try (final MPEGAudioFrameInputStream mafis = new MPEGAudioFrameInputStream(new ByteArrayInputStream(buffer))) {
+        return decodeFirstFrame(new ByteArrayInputStream(buffer));
+    }
+
+    /**
+     * decodeFirstFrame.
+     * @param is {@link InputStream}
+     * @return {@link MPEGAudioFrame}
+     */
+    public static MPEGAudioFrame decodeFirstFrame(final InputStream is) {
+        try (final MPEGAudioFrameInputStream mafis = new MPEGAudioFrameInputStream(is)) {
             return mafis.readFrame();
         } catch (final IOException e) {
             LOG.error(e.getLocalizedMessage(), e);
