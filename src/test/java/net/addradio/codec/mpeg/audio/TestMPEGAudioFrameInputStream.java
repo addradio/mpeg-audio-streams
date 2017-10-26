@@ -21,6 +21,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import org.apache.log4j.BasicConfigurator;
+
 import junit.framework.TestCase;
 import net.addradio.codec.mpeg.audio.codecs.MPEGAudioCodecException;
 import net.addradio.codec.mpeg.audio.model.MPEGAudioFrame;
@@ -32,7 +34,7 @@ public class TestMPEGAudioFrameInputStream extends TestCase {
 
     /**
      * {@link byte[]} BYTES_WITH_SYNC_BYTES.
-     * 
+     *
      * <pre>
      *     F0       7F       F5        FF       EF
      * |11110000|01111111|11110101|11111111|11101111|      -&gt; bits in byte boundaries
@@ -41,6 +43,13 @@ public class TestMPEGAudioFrameInputStream extends TestCase {
      * </pre>
      */
     static final byte[] BYTES_WITH_SYNC_BYTES = new byte[] { (byte) 0xF0, 0x7F, (byte) 0xF5, (byte) 0xFF, (byte) 0xEF };
+
+    /**
+     * TestMPEGAudioFrameInputStream constructor.
+     */
+    public TestMPEGAudioFrameInputStream() {
+        BasicConfigurator.configure();
+    }
 
     /**
      * testBitAlignment.
@@ -81,6 +90,19 @@ public class TestMPEGAudioFrameInputStream extends TestCase {
             MPEGAudioFrame frame = null;
             while ((frame = mafis.readFrame()) != null) {
             }
+        }
+    }
+
+    /**
+     * testSync.
+     * @throws IOException due to file errors.
+     */
+    @SuppressWarnings("static-method")
+    public void testSync() throws IOException {
+        try (MPEGAudioFrameInputStream mafis = new MPEGAudioFrameInputStream(
+                new FileInputStream(MP3TestFiles.FILE_NAME_1000HZ_MP3))) {
+            final int skippedBits = mafis.sync();
+            assertEquals(272, skippedBits);
         }
     }
 
