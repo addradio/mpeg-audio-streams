@@ -27,10 +27,10 @@ import net.addradio.codec.mpeg.audio.codecs.BitRateCodec;
 import net.addradio.codec.mpeg.audio.codecs.MPEGAudioCodecException;
 import net.addradio.codec.mpeg.audio.codecs.ModeExtensionCodec;
 import net.addradio.codec.mpeg.audio.codecs.SamplingRateCodec;
-import net.addradio.codec.mpeg.audio.model.Mode;
 import net.addradio.codec.mpeg.audio.model.Emphasis;
 import net.addradio.codec.mpeg.audio.model.Layer;
 import net.addradio.codec.mpeg.audio.model.MPEGAudioFrame;
+import net.addradio.codec.mpeg.audio.model.Mode;
 import net.addradio.codec.mpeg.audio.model.Version;
 import net.addradio.streams.BitInputStream;
 import net.addradio.streams.EndOfStreamException;
@@ -295,17 +295,17 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
      *             in case of bad IO situations.
      * @throws MPEGAudioCodecException if the end of the stream has been reached.
      */
-    int sync() throws IOException {
+    SyncResult sync() throws IOException {
         int skippedBits = 0;
-        int syncWord = 0;
+        int mpegSyncWord = 0;
         if (isUnalignedSyncAllowed()) {
-            syncWord = readBits(11);
-            while (syncWord != MPEGAudioFrame.SYNC_PATTERN_0X7FF) {
-                syncWord = ((syncWord << 1) | readBit()) & MPEGAudioFrame.SYNC_PATTERN_0X7FF;
+            mpegSyncWord = readBits(11);
+            while (mpegSyncWord != MPEGAudioFrame.SYNC_WORD_PATTERN) {
+                mpegSyncWord = ((mpegSyncWord << 1) | readBit()) & MPEGAudioFrame.SYNC_WORD_PATTERN;
                 skippedBits++;
             }
         } else {
-            while (syncWord != MPEGAudioFrame.SYNC_PATTERN_0X7FF) {
+            while (true) {
                 while (!isByteAligned()) {
                     if (MPEGAudioFrameInputStream.LOG.isDebugEnabled()) {
                         MPEGAudioFrameInputStream.LOG.debug("sync start wasn't byte aligned..."); //$NON-NLS-1$
@@ -317,31 +317,46 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
                     MPEGAudioFrameInputStream.LOG.debug("Aligend to byte boundaries.."); //$NON-NLS-1$
                 }
                 int read = 0;
-                while ((read = read()) != 0xff) {
+                while (true) {
+                    read = read();
                     if (MPEGAudioFrameInputStream.LOG.isDebugEnabled()) {
                         MPEGAudioFrameInputStream.LOG.debug("byte read: 0b" + Integer.toBinaryString(read)); //$NON-NLS-1$
                     }
-                    skippedBits += 8;
+                    if (read == 0xff) {
+                        if (MPEGAudioFrameInputStream.LOG.isDebugEnabled()) {
+                            MPEGAudioFrameInputStream.LOG.debug("byte read 0b11111111."); //$NON-NLS-1$
+                        }
+                        final int readBits = readBits(3);
+                        if (MPEGAudioFrameInputStream.LOG.isDebugEnabled()) {
+                            MPEGAudioFrameInputStream.LOG
+                                    .debug("three bits read: 0b" + Integer.toBinaryString(readBits)); //$NON-NLS-1$
+                        }
+                        if (readBits == 0b111) {
+                            return new SyncResult(SyncMode.mpeg_aligned, skippedBits);
+                        }
+                        skippedBits += 3;
+                    } else if (read == 'T') {
+                        read = read();
+                        if (read == 'A') {
+                            read = read();
+                            if (read == 'G') {
+                                if (MPEGAudioFrameInputStream.LOG.isDebugEnabled()) {
+                                    MPEGAudioFrameInputStream.LOG.debug("bytes read TAG."); //$NON-NLS-1$
+                                }
+                                return new SyncResult(SyncMode.id3v1_aligned, skippedBits);
+                            }
+                            skippedBits += 24;
+                        } else {
+                            skippedBits += 16;
+                        }
+                    } else {
+                        skippedBits += 8;
+                    }
                 }
-                if (MPEGAudioFrameInputStream.LOG.isDebugEnabled()) {
-                    MPEGAudioFrameInputStream.LOG.debug("byte read 0b11111111."); //$NON-NLS-1$
-                }
-                final int readBits = readBits(3);
-                if (MPEGAudioFrameInputStream.LOG.isDebugEnabled()) {
-                    MPEGAudioFrameInputStream.LOG.debug("three bits read: 0b" + Integer.toBinaryString(readBits)); //$NON-NLS-1$
-                }
-                if (readBits == 0b111) {
-                    syncWord = MPEGAudioFrame.SYNC_PATTERN_0X7FF;
-                } else {
-                    skippedBits += 3;
-                }
+
             }
         }
-        if (MPEGAudioFrameInputStream.LOG.isDebugEnabled()) {
-            MPEGAudioFrameInputStream.LOG.debug("[skippedBits: " + skippedBits //$NON-NLS-1$
-                    + "]"); //$NON-NLS-1$
-        }
-        return skippedBits;
+        return new SyncResult(SyncMode.unaligned, skippedBits);
     }
 
 }
