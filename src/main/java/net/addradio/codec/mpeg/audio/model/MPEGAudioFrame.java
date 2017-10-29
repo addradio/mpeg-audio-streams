@@ -41,8 +41,8 @@ public class MPEGAudioFrame {
     /** {@code int} HEADER_SIZE_IN_BYTES. */
     public static final int HEADER_SIZE_IN_BYTES = 4;
 
-    /** {@code int} SYNC_PATTERN_0X7FF */
-    public static final int SYNC_PATTERN_0X7FF = 0x7FF;
+    /** {@code int} SYNC_WORD_PATTERN */
+    public static final int SYNC_WORD_PATTERN = 0x7FF;
 
     /** {@code boolean} _private. */
     private boolean _private = false;

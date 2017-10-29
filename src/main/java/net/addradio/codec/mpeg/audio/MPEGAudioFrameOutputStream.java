@@ -56,7 +56,7 @@ public class MPEGAudioFrameOutputStream extends BitOutputStream {
      * @throws MPEGAudioCodecException if encoding encountered a bad model state.
      */
     public void writeFrame(final MPEGAudioFrame frame) throws IOException, MPEGAudioCodecException {
-        writeBits(MPEGAudioFrame.SYNC_PATTERN_0X7FF, 11);
+        writeBits(MPEGAudioFrame.SYNC_WORD_PATTERN, 11);
         writeBits(frame.getVersion().getBitMask(), 2);
         writeBits(frame.getLayer().getBitMask(), 2);
         writeBit(frame.isErrorProtected() ? 1 : 0);
