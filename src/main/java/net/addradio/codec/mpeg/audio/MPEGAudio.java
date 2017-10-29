@@ -89,7 +89,7 @@ public class MPEGAudio {
      * @param frames {@link List}{@code <}{@link MPEGAudioContent}{@code >}
      * @return {@code byte[]} or  {@code null} if an error occurred.
      */
-    public static byte[] encode(final List<MPEGAudioContent> frames) {
+    public static byte[] encode(final List<? extends MPEGAudioContent> frames) {
         try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
             encode(frames, baos);
             return baos.toByteArray();
@@ -105,7 +105,7 @@ public class MPEGAudio {
      * @param os {@link OutputStream}
      * @throws IOException due to IO problems.
      */
-    public static void encode(final List<MPEGAudioContent> frames, final OutputStream os) throws IOException {
+    public static void encode(final List<? extends MPEGAudioContent> frames, final OutputStream os) throws IOException {
         try (MPEGAudioFrameOutputStream mafos = new MPEGAudioFrameOutputStream(os)) {
             for (final MPEGAudioContent mpegAudioFrame : frames) {
                 try {
