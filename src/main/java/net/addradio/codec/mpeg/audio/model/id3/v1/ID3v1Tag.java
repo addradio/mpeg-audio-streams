@@ -15,6 +15,8 @@
  */
 package net.addradio.codec.mpeg.audio.model.id3.v1;
 
+import net.addradio.codec.mpeg.audio.model.MPEGAudioContent;
+
 /**
  * ID3v1Tag.
  * 
@@ -24,7 +26,7 @@ package net.addradio.codec.mpeg.audio.model.id3.v1;
  * 0x55   0x41   0x47 
  * </pre>
  */
-public class ID3v1Tag {
+public class ID3v1Tag implements MPEGAudioContent {
 
     /** {@link String} title. */
     private String title;

@@ -18,6 +18,7 @@ package net.addradio.codec.mpeg.audio;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +34,8 @@ import net.addradio.codec.mpeg.audio.model.MPEGAudioContent;
 import net.addradio.codec.mpeg.audio.model.MPEGAudioFrame;
 import net.addradio.codec.mpeg.audio.model.Mode;
 import net.addradio.codec.mpeg.audio.model.Version;
+import net.addradio.codec.mpeg.audio.model.id3.v1.Genre;
+import net.addradio.codec.mpeg.audio.model.id3.v1.ID3v1Tag;
 import net.addradio.streams.BitInputStream;
 import net.addradio.streams.EndOfStreamException;
 
@@ -118,75 +121,22 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
     }
 
     /**
-     * isNextBitOne. Reads just one bit and checks whether it is 0b1 or not.
-     *
-     * @return {@code boolean true} only if the next bit is 0b1.
+     * decodeID3v1Tag.
+     * @return {@link ID3v1Tag}
      * @throws IOException
+     * @throws UnsupportedEncodingException
+     * @throws MPEGAudioCodecException
      */
-    private boolean isNextBitOne() throws IOException {
-        return readBit() == 1;
-    }
-
-    /**
-     * isUnalignedSyncAllowed.
-     * @return {@code boolean true} if sync is allowed even if sync bits are not aligned to byte boundaries.
-     */
-    public boolean isUnalignedSyncAllowed() {
-        return this.unalignedSyncAllowed;
-    }
-
-    /**
-     * readCrcIfNeeded.
-     *
-     * @param mp3Frame
-     *            {@link MPEGAudioFrame}
-     * @throws IOException
-     */
-    private void readCrcIfNeeded(final MPEGAudioFrame mp3Frame) throws IOException {
-        if (mp3Frame.isErrorProtected()) {
-            mp3Frame.setCrc(new byte[MPEGAudioFrame.CRC_SIZE_IN_BYTES]);
-            readFully(mp3Frame.getCrc());
-        }
-    }
-
-    /**
-     * Reads one frame from the inner stream.
-     *
-     * @return {@link MPEGAudioContent} or {@code null} if end of stream has been reached.
-     * @throws IOException
-     *             in case of bad IO situations.
-     */
-    public MPEGAudioContent readFrame() throws IOException {
-        while (true) {
-            try {
-                assertByteAlignement();
-                SyncResult syncResult = sync();
-                switch (syncResult.getMode()) {
-                case id3v1_aligned:
-                    break;
-                case mpeg_aligned:
-                    try {
-                        return decodeMPEGFrame();
-                    } catch (final MPEGAudioCodecException mace) {
-                        if (MPEGAudioFrameInputStream.LOG.isDebugEnabled()) {
-                            MPEGAudioFrameInputStream.LOG.debug(mace.getLocalizedMessage());
-                        }
-                        if (MPEGAudioFrameInputStream.LOG.isInfoEnabled()) {
-                            MPEGAudioFrameInputStream.LOG.info("Dropped Frame."); //$NON-NLS-1$
-                        }
-                    }
-                    //$FALL-THROUGH$
-                case unaligned:
-                default:
-                    return null;
-                }
-            } catch (final EndOfStreamException eose) {
-                if (MPEGAudioFrameInputStream.LOG.isInfoEnabled()) {
-                    MPEGAudioFrameInputStream.LOG.info("End Of Stream."); //$NON-NLS-1$
-                }
-                return null;
-            }
-        }
+    private ID3v1Tag decodeID3v1Tag() throws IOException, UnsupportedEncodingException, MPEGAudioCodecException {
+        final ID3v1Tag tag = new ID3v1Tag();
+        tag.setTitle(readStringFromStream(30));
+        tag.setArtist(readStringFromStream(30));
+        tag.setAlbum(readStringFromStream(30));
+        tag.setTitle(readStringFromStream(30));
+        tag.setYear(Integer.parseInt(readStringFromStream(4)));
+        tag.setComment(readStringFromStream(30));
+        tag.setGenre((Genre) BitMaskFlagCodec.decode(read(), Genre.class));
+        return tag;
     }
 
     /**
@@ -261,6 +211,75 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
     }
 
     /**
+     * isNextBitOne. Reads just one bit and checks whether it is 0b1 or not.
+     *
+     * @return {@code boolean true} only if the next bit is 0b1.
+     * @throws IOException
+     */
+    private boolean isNextBitOne() throws IOException {
+        return readBit() == 1;
+    }
+
+    /**
+     * isUnalignedSyncAllowed.
+     * @return {@code boolean true} if sync is allowed even if sync bits are not aligned to byte boundaries.
+     */
+    public boolean isUnalignedSyncAllowed() {
+        return this.unalignedSyncAllowed;
+    }
+
+    /**
+     * readCrcIfNeeded.
+     *
+     * @param mp3Frame
+     *            {@link MPEGAudioFrame}
+     * @throws IOException
+     */
+    private void readCrcIfNeeded(final MPEGAudioFrame mp3Frame) throws IOException {
+        if (mp3Frame.isErrorProtected()) {
+            mp3Frame.setCrc(new byte[MPEGAudioFrame.CRC_SIZE_IN_BYTES]);
+            readFully(mp3Frame.getCrc());
+        }
+    }
+
+    /**
+     * Reads one frame from the inner stream.
+     *
+     * @return {@link MPEGAudioContent} or {@code null} if end of stream has been reached.
+     * @throws IOException
+     *             in case of bad IO situations.
+     */
+    public MPEGAudioContent readFrame() throws IOException {
+        while (true) {
+            try {
+                assertByteAlignement();
+                final SyncResult syncResult = sync();
+                switch (syncResult.getMode()) {
+                case id3v1_aligned:
+                    return decodeID3v1Tag();
+                case mpeg_aligned:
+                    return decodeMPEGFrame();
+                case unaligned:
+                default:
+                    return null;
+                }
+            } catch (final MPEGAudioCodecException mace) {
+                if (MPEGAudioFrameInputStream.LOG.isDebugEnabled()) {
+                    MPEGAudioFrameInputStream.LOG.debug(mace.getLocalizedMessage());
+                }
+                if (MPEGAudioFrameInputStream.LOG.isInfoEnabled()) {
+                    MPEGAudioFrameInputStream.LOG.info("Dropped Frame."); //$NON-NLS-1$
+                }
+            } catch (final EndOfStreamException eose) {
+                if (MPEGAudioFrameInputStream.LOG.isInfoEnabled()) {
+                    MPEGAudioFrameInputStream.LOG.info("End Of Stream."); //$NON-NLS-1$
+                }
+                return null;
+            }
+        }
+    }
+
+    /**
      * readLayer1Payload.
      *
      * @param mp3Frame
@@ -297,6 +316,19 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
                 }
             }
         }
+    }
+
+    /**
+     * readStringFromStream.
+     * @param length {@code int}
+     * @return {@link String}
+     * @throws IOException
+     * @throws UnsupportedEncodingException
+     */
+    private String readStringFromStream(final int length) throws IOException, UnsupportedEncodingException {
+        final byte[] buffer = new byte[length];
+        readFully(buffer);
+        return new String(buffer, "UTF-8").trim(); //$NON-NLS-1$
     }
 
     /**
