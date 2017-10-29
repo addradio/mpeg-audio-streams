@@ -29,6 +29,7 @@ import net.addradio.codec.mpeg.audio.codecs.ModeExtensionCodec;
 import net.addradio.codec.mpeg.audio.codecs.SamplingRateCodec;
 import net.addradio.codec.mpeg.audio.model.Emphasis;
 import net.addradio.codec.mpeg.audio.model.Layer;
+import net.addradio.codec.mpeg.audio.model.MPEGAudioContent;
 import net.addradio.codec.mpeg.audio.model.MPEGAudioFrame;
 import net.addradio.codec.mpeg.audio.model.Mode;
 import net.addradio.codec.mpeg.audio.model.Version;
@@ -151,85 +152,33 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
     /**
      * Reads one frame from the inner stream.
      *
-     * @return {@link MPEGAudioFrame} or {@code null} if end of stream has been reached.
+     * @return {@link MPEGAudioContent} or {@code null} if end of stream has been reached.
      * @throws IOException
      *             in case of bad IO situations.
      */
-    public MPEGAudioFrame readFrame() throws IOException {
+    public MPEGAudioContent readFrame() throws IOException {
         while (true) {
             try {
-                final MPEGAudioFrame frame = new MPEGAudioFrame();
-
                 assertByteAlignement();
-                sync();
-                decodeHeader(frame);
-
-                assertByteAlignement();
-                readCrcIfNeeded(frame);
-
-                assertByteAlignement();
-                switch (frame.getLayer()) {
-                case I:
-                    switch (frame.getMode()) {
-                    case SingleChannel:
-                        readLayer1Payload(frame, 1);
-                        break;
-                    case Stereo:
-                    case DualChannel:
-                        readLayer1Payload(frame, 2);
-                        break;
-                    case JointStereo:
-                        // SEBASTIAN implement
-                        break;
-                    default:
-                        break;
-                    }
+                SyncResult syncResult = sync();
+                switch (syncResult.getMode()) {
+                case id3v1_aligned:
                     break;
-                case II:
-                case III:
-                    final int payloadLengthInBytes = calculateLayer2or3PayloadLength(frame);
-                    if (MPEGAudioFrameInputStream.LOG.isDebugEnabled()) {
-                        MPEGAudioFrameInputStream.LOG.debug("[framelength: " + payloadLengthInBytes + "]"); //$NON-NLS-1$ //$NON-NLS-2$
+                case mpeg_aligned:
+                    try {
+                        return decodeMPEGFrame();
+                    } catch (final MPEGAudioCodecException mace) {
+                        if (MPEGAudioFrameInputStream.LOG.isDebugEnabled()) {
+                            MPEGAudioFrameInputStream.LOG.debug(mace.getLocalizedMessage());
+                        }
+                        if (MPEGAudioFrameInputStream.LOG.isInfoEnabled()) {
+                            MPEGAudioFrameInputStream.LOG.info("Dropped Frame."); //$NON-NLS-1$
+                        }
                     }
-                    frame.setPayload(new byte[payloadLengthInBytes]);
-                    readFully(frame.getPayload());
-                    //                    for (int i = 0; i < frameLengthInBytes; i++) {
-                    //                        final int read = read();
-                    //                        if (MPEGAudioFrameInputStream.LOG.isDebugEnabled()) {
-                    //                            MPEGAudioFrameInputStream.LOG.debug(
-                    //                                    "payload byte read [index: " + i + ", byte: 0b" + Integer.toBinaryString(read)); //$NON-NLS-1$//$NON-NLS-2$
-                    //                        }
-                    //                    }
-                    break;
-                case reserved:
+                    //$FALL-THROUGH$
+                case unaligned:
                 default:
-                    break;
-                }
-                assertByteAlignement();
-
-                // SEBASTIAN implement ancillary data
-
-                // int frameSize = 144
-                // * mp3Frame.getBitrate().getValue()
-                // * 1000
-                // / mp3Frame.getSamplingrate().getValue()
-                // + (mp3Frame.isPadding() ? (mp3Frame.getLayer() == Layer.I ? 4
-                // : 1) : 0);
-                // if (LOG.isDebugEnabled()) {
-                // LOG.debug("framesize: " + frameSize);
-                // }
-                //
-                // byte[] data = new byte[frameSize - 4
-                // - (mp3Frame.is_protected() ? 2 : 0)];
-                // readFully(data);
-                // mp3Frame.setData(data);
-                return frame;
-            } catch (final MPEGAudioCodecException mace) {
-                if (MPEGAudioFrameInputStream.LOG.isDebugEnabled()) {
-                    MPEGAudioFrameInputStream.LOG.debug(mace.getLocalizedMessage());
-                }
-                if (MPEGAudioFrameInputStream.LOG.isInfoEnabled()) {
-                    MPEGAudioFrameInputStream.LOG.info("Dropped Frame."); //$NON-NLS-1$
+                    return null;
                 }
             } catch (final EndOfStreamException eose) {
                 if (MPEGAudioFrameInputStream.LOG.isInfoEnabled()) {
@@ -238,6 +187,77 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
                 return null;
             }
         }
+    }
+
+    /**
+     * decodeMPEGFrame.
+     * @return {@link MPEGAudioFrame}
+     * @throws IOException
+     * @throws MPEGAudioCodecException
+     */
+    private MPEGAudioFrame decodeMPEGFrame() throws IOException, MPEGAudioCodecException {
+        final MPEGAudioFrame frame = new MPEGAudioFrame();
+        decodeHeader(frame);
+        assertByteAlignement();
+        readCrcIfNeeded(frame);
+
+        assertByteAlignement();
+        switch (frame.getLayer()) {
+        case I:
+            switch (frame.getMode()) {
+            case SingleChannel:
+                readLayer1Payload(frame, 1);
+                break;
+            case Stereo:
+            case DualChannel:
+                readLayer1Payload(frame, 2);
+                break;
+            case JointStereo:
+                // SEBASTIAN implement
+                break;
+            default:
+                break;
+            }
+            break;
+        case II:
+        case III:
+            final int payloadLengthInBytes = calculateLayer2or3PayloadLength(frame);
+            if (MPEGAudioFrameInputStream.LOG.isDebugEnabled()) {
+                MPEGAudioFrameInputStream.LOG.debug("[framelength: " + payloadLengthInBytes + "]"); //$NON-NLS-1$ //$NON-NLS-2$
+            }
+            frame.setPayload(new byte[payloadLengthInBytes]);
+            readFully(frame.getPayload());
+            //                    for (int i = 0; i < frameLengthInBytes; i++) {
+            //                        final int read = read();
+            //                        if (MPEGAudioFrameInputStream.LOG.isDebugEnabled()) {
+            //                            MPEGAudioFrameInputStream.LOG.debug(
+            //                                    "payload byte read [index: " + i + ", byte: 0b" + Integer.toBinaryString(read)); //$NON-NLS-1$//$NON-NLS-2$
+            //                        }
+            //                    }
+            break;
+        case reserved:
+        default:
+            break;
+        }
+        assertByteAlignement();
+
+        // SEBASTIAN implement ancillary data
+
+        // int frameSize = 144
+        // * mp3Frame.getBitrate().getValue()
+        // * 1000
+        // / mp3Frame.getSamplingrate().getValue()
+        // + (mp3Frame.isPadding() ? (mp3Frame.getLayer() == Layer.I ? 4
+        // : 1) : 0);
+        // if (LOG.isDebugEnabled()) {
+        // LOG.debug("framesize: " + frameSize);
+        // }
+        //
+        // byte[] data = new byte[frameSize - 4
+        // - (mp3Frame.is_protected() ? 2 : 0)];
+        // readFully(data);
+        // mp3Frame.setData(data);
+        return frame;
     }
 
     /**

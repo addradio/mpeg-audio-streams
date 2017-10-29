@@ -33,7 +33,7 @@ package net.addradio.codec.mpeg.audio.model;
  * If error_protection flag is set to 1, header is followed by a two byte CRC.
  *
  */
-public class MPEGAudioFrame {
+public class MPEGAudioFrame implements MPEGAudioContent {
 
     /** {@code int} CRC_SIZE_IN_BYTES. */
     public static final int CRC_SIZE_IN_BYTES = 2;

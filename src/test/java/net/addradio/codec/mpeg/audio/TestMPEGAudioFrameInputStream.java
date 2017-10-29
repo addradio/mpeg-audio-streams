@@ -25,7 +25,7 @@ import org.apache.log4j.BasicConfigurator;
 
 import junit.framework.TestCase;
 import net.addradio.codec.mpeg.audio.codecs.MPEGAudioCodecException;
-import net.addradio.codec.mpeg.audio.model.MPEGAudioFrame;
+import net.addradio.codec.mpeg.audio.model.MPEGAudioContent;
 
 /**
  * TestMPEGAudioFrameInputStream
@@ -87,7 +87,7 @@ public class TestMPEGAudioFrameInputStream extends TestCase {
         try (MPEGAudioFrameInputStream mafis = new MPEGAudioFrameInputStream(
                 new FileInputStream(MP3TestFiles.FILE_NAME_PIANO_MP3))) {
             @SuppressWarnings("unused")
-            MPEGAudioFrame frame = null;
+            MPEGAudioContent frame = null;
             while ((frame = mafis.readFrame()) != null) {
             }
         }

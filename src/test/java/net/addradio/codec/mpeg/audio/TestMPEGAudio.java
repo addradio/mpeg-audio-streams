@@ -24,6 +24,7 @@ import org.apache.log4j.BasicConfigurator;
 import junit.framework.TestCase;
 import net.addradio.codec.mpeg.audio.model.BitRate;
 import net.addradio.codec.mpeg.audio.model.Layer;
+import net.addradio.codec.mpeg.audio.model.MPEGAudioContent;
 import net.addradio.codec.mpeg.audio.model.MPEGAudioFrame;
 import net.addradio.codec.mpeg.audio.model.SamplingRate;
 import net.addradio.codec.mpeg.audio.model.Version;
@@ -62,15 +63,17 @@ public class TestMPEGAudio extends TestCase {
     private static final void assertMPEGFileIntegrity(final String fileName, final int numberOfFrames)
             throws IOException {
         try (FileInputStream fis = new FileInputStream(fileName)) {
-            final List<MPEGAudioFrame> decode = MPEGAudio.decode(fis);
+            final List<MPEGAudioContent> decode = MPEGAudio.decode(fis);
             assertEquals(numberOfFrames, decode.size());
             MPEGAudioFrame firstFrame = null;
-            for (final MPEGAudioFrame frame : decode) {
-                if (firstFrame == null) {
-                    firstFrame = frame;
-                    continue;
+            for (final MPEGAudioContent frame : decode) {
+                if (frame instanceof MPEGAudioFrame) {
+                    if (firstFrame == null) {
+                        firstFrame = (MPEGAudioFrame) frame;
+                        continue;
+                    }
+                    assertCommonFramesProperties(firstFrame, (MPEGAudioFrame) frame);
                 }
-                assertCommonFramesProperties(firstFrame, frame);
             }
         }
     }

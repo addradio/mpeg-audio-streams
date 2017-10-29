@@ -26,9 +26,6 @@ package net.addradio.codec.mpeg.audio.model.id3.v1;
  */
 public class ID3v1Tag {
 
-    /** {@code int} ID3v1_SYNC_WORD_PATTERN. */
-    public static final int ID3v1_SYNC_WORD_PATTERN = 0x554147;
-
     /** {@link String} title. */
     private String title;
 
