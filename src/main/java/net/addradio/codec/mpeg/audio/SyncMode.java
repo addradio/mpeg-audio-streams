@@ -26,6 +26,9 @@ public enum SyncMode {
     /** {@link SyncMode} id3v1_aligned. */
     id3v1_aligned,
 
+    /** {@link SyncMode} id3v2_aligned. */
+    id3v2_aligned,
+
     /** {@link SyncMode} unaligned. */
     unaligned;
 

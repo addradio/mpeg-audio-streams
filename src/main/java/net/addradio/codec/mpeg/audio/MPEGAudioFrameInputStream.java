@@ -36,6 +36,7 @@ import net.addradio.codec.mpeg.audio.model.Mode;
 import net.addradio.codec.mpeg.audio.model.Version;
 import net.addradio.codec.mpeg.audio.model.id3.v1.Genre;
 import net.addradio.codec.mpeg.audio.model.id3.v1.ID3v1Tag;
+import net.addradio.codec.mpeg.audio.model.id3.v2.ID3v2Tag;
 import net.addradio.streams.BitInputStream;
 import net.addradio.streams.EndOfStreamException;
 
@@ -255,6 +256,36 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
                 assertByteAlignement();
                 final SyncResult syncResult = sync();
                 switch (syncResult.getMode()) {
+                case id3v2_aligned:
+                    ID3v2Tag id3v2Tag = new ID3v2Tag();
+                    id3v2Tag.setMajorVersion(read());
+                    id3v2Tag.setRevisionNumber(read());
+                    id3v2Tag.setUnsynchronisation(isNextBitOne());
+                    id3v2Tag.setExtendedHeader(isNextBitOne());
+                    id3v2Tag.setExperimental(isNextBitOne());
+                    id3v2Tag.setFooter(isNextBitOne());
+                    // next 4 bit should be zeros, otherwise we could not decode this tag
+                    boolean maybeUnreadable = false;
+                    for (int i = 0; i < 4; i++) {
+                        if (isNextBitOne()) {
+                            maybeUnreadable = true;
+                            break;
+                        }
+                    }
+                    if (maybeUnreadable && MPEGAudioFrameInputStream.LOG.isDebugEnabled()) {
+                        MPEGAudioFrameInputStream.LOG.debug("id3v2 tag is maybe unreadable!"); //$NON-NLS-1$
+                    }
+                    int size = 0;
+                    readBit();
+                    size |= readBits(7) << 21;
+                    readBit();
+                    size |= readBits(7) << 14;
+                    readBit();
+                    size |= readBits(7) << 7;
+                    readBit();
+                    size |= readBits(7);
+                    id3v2Tag.setTagSize(size);
+                    return id3v2Tag;
                 case id3v1_aligned:
                     return decodeID3v1Tag();
                 case mpeg_aligned:
@@ -396,6 +427,20 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
                                     MPEGAudioFrameInputStream.LOG.debug("bytes read TAG."); //$NON-NLS-1$
                                 }
                                 return new SyncResult(SyncMode.id3v1_aligned, skippedBits);
+                            }
+                            skippedBits += 24;
+                        } else {
+                            skippedBits += 16;
+                        }
+                    } else if (read == 'I') {
+                        read = read();
+                        if (read == 'D') {
+                            read = read();
+                            if (read == '3') {
+                                if (MPEGAudioFrameInputStream.LOG.isDebugEnabled()) {
+                                    MPEGAudioFrameInputStream.LOG.debug("bytes read ID3."); //$NON-NLS-1$
+                                }
+                                return new SyncResult(SyncMode.id3v2_aligned, skippedBits);
                             }
                             skippedBits += 24;
                         } else {
