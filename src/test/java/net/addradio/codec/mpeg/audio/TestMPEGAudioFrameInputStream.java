@@ -102,8 +102,8 @@ public class TestMPEGAudioFrameInputStream extends TestCase {
         try (MPEGAudioFrameInputStream mafis = new MPEGAudioFrameInputStream(
                 new FileInputStream(MP3TestFiles.FILE_NAME_1000HZ_MP3))) {
             SyncResult syncResult = mafis.sync();
-            assertEquals(272, syncResult.getSkippedBits());
-            assertEquals(SyncMode.mpeg_aligned, syncResult.getMode());
+            assertEquals(0, syncResult.getSkippedBits());
+            assertEquals(SyncMode.id3v2_aligned, syncResult.getMode());
         }
     }
 

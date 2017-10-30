@@ -15,6 +15,9 @@
  */
 package net.addradio.codec.mpeg.audio.model.id3.v2;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import net.addradio.codec.mpeg.audio.model.MPEGAudioContent;
 
 /**
@@ -50,9 +53,6 @@ public class ID3v2Tag implements MPEGAudioContent {
     /** {@link boolean} unsynchronisation. */
     private boolean unsynchronisation;
 
-    /** {@link boolean} extendedHeader. */
-    private boolean extendedHeader;
-
     /** {@link boolean} experimental. */
     private boolean experimental;
 
@@ -61,6 +61,35 @@ public class ID3v2Tag implements MPEGAudioContent {
 
     /** {@link int} tagSize. */
     private int tagSize;
+
+    /** {@link List}{@code <Frame>} frames. */
+    private List<Frame> frames;
+
+    /** {@link ExtendedHeader} extendedHeader. */
+    private ExtendedHeader extendedHeader;
+
+    /**
+     * ID3v2Tag constructor.
+     */
+    public ID3v2Tag() {
+        this.frames = new LinkedList<>();
+    }
+
+    /**
+     * getExtendedHeader.
+     * @return ExtendedHeader the extendedHeader
+     */
+    public ExtendedHeader getExtendedHeader() {
+        return this.extendedHeader;
+    }
+
+    /**
+     * getFrames.
+     * @return List<Frame> the frames
+     */
+    public List<Frame> getFrames() {
+        return this.frames;
+    }
 
     /**
      * getMajorVersion.
@@ -95,14 +124,6 @@ public class ID3v2Tag implements MPEGAudioContent {
     }
 
     /**
-     * isExtendedHeader.
-     * @return boolean the extendedHeader
-     */
-    public boolean isExtendedHeader() {
-        return this.extendedHeader;
-    }
-
-    /**
      * isFooter.
      * @return boolean the footer
      */
@@ -128,9 +149,9 @@ public class ID3v2Tag implements MPEGAudioContent {
 
     /**
      * setExtendedHeader.
-     * @param extendedHeader boolean the extendedHeader to set
+     * @param extendedHeader ExtendedHeader the extendedHeader to set
      */
-    public void setExtendedHeader(final boolean extendedHeader) {
+    public void setExtendedHeader(final ExtendedHeader extendedHeader) {
         this.extendedHeader = extendedHeader;
     }
 
@@ -140,6 +161,14 @@ public class ID3v2Tag implements MPEGAudioContent {
      */
     public void setFooter(final boolean footer) {
         this.footer = footer;
+    }
+
+    /**
+     * setFrames.
+     * @param frames List<Frame> the frames to set
+     */
+    public void setFrames(final List<Frame> frames) {
+        this.frames = frames;
     }
 
     /**
@@ -188,14 +217,16 @@ public class ID3v2Tag implements MPEGAudioContent {
         builder.append(this.revisionNumber);
         builder.append(", unsynchronisation=");
         builder.append(this.unsynchronisation);
-        builder.append(", extendedHeader=");
-        builder.append(this.extendedHeader);
         builder.append(", experimental=");
         builder.append(this.experimental);
         builder.append(", footer=");
         builder.append(this.footer);
         builder.append(", tagSize=");
         builder.append(this.tagSize);
+        builder.append(", frames=");
+        builder.append(this.frames);
+        builder.append(", extendedHeader=");
+        builder.append(this.extendedHeader);
         builder.append("]");
         return builder.toString();
     }
