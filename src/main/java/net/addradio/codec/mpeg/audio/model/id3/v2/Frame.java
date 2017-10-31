@@ -26,12 +26,23 @@ public class Frame {
     /** {@link int} size. */
     private int size;
 
+    /** {@link String} payload. */
+    private String payload;
+
     /**
      * getFrameId.
      * @return String the frameId
      */
     public String getFrameId() {
         return this.frameId;
+    }
+
+    /**
+     * getPayload.
+     * @return String the payload
+     */
+    public String getPayload() {
+        return this.payload;
     }
 
     /**
@@ -51,6 +62,14 @@ public class Frame {
     }
 
     /**
+     * setPayload.
+     * @param payload String the payload to set
+     */
+    public void setPayload(final String payload) {
+        this.payload = payload;
+    }
+
+    /**
      * setSize.
      * @param size int the size to set
      */
@@ -66,11 +85,13 @@ public class Frame {
     @Override
     public String toString() {
         final StringBuilder builder = new StringBuilder();
-        builder.append("Frame [frameId=");
+        builder.append("Frame [frameId="); //$NON-NLS-1$
         builder.append(this.frameId);
-        builder.append(", size=");
+        builder.append(", size="); //$NON-NLS-1$
         builder.append(this.size);
-        builder.append("]");
+        builder.append(", payload="); //$NON-NLS-1$
+        builder.append(this.payload);
+        builder.append("]"); //$NON-NLS-1$
         return builder.toString();
     }
 

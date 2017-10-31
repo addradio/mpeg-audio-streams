@@ -36,10 +36,12 @@ import net.addradio.codec.mpeg.audio.model.Mode;
 import net.addradio.codec.mpeg.audio.model.Version;
 import net.addradio.codec.mpeg.audio.model.id3.v1.Genre;
 import net.addradio.codec.mpeg.audio.model.id3.v1.ID3v1Tag;
-import net.addradio.codec.mpeg.audio.model.id3.v2.ExtendedHeader;
 import net.addradio.codec.mpeg.audio.model.id3.v2.Frame;
 import net.addradio.codec.mpeg.audio.model.id3.v2.ID3v2Tag;
-import net.addradio.codec.mpeg.audio.model.id3.v2.TagRestrictions;
+import net.addradio.codec.mpeg.audio.model.id3.v2.v220.ID3v220Tag;
+import net.addradio.codec.mpeg.audio.model.id3.v2.v240.ExtendedHeader;
+import net.addradio.codec.mpeg.audio.model.id3.v2.v240.ID3v240Tag;
+import net.addradio.codec.mpeg.audio.model.id3.v2.v240.TagRestrictions;
 import net.addradio.streams.BitInputStream;
 import net.addradio.streams.EndOfStreamException;
 
@@ -141,6 +143,170 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
         tag.setComment(readStringFromStream(30));
         tag.setGenre((Genre) BitMaskFlagCodec.decode(read(), Genre.class));
         return tag;
+    }
+
+    private ID3v220Tag decodeID3v220Tag() throws IOException, UnsupportedEncodingException {
+        final ID3v220Tag id3v220Tag = new ID3v220Tag();
+        id3v220Tag.setCompressed(isNextBitOne());
+        // next 6 bit should be zeros, otherwise we could not decode this tag
+        boolean maybeUnreadable = false;
+        for (int i = 0; i < 6; i++) {
+            if (isNextBitOne()) {
+                maybeUnreadable = true;
+                break;
+            }
+        }
+        if (maybeUnreadable && MPEGAudioFrameInputStream.LOG.isDebugEnabled()) {
+            MPEGAudioFrameInputStream.LOG.debug("id3v220 tag is maybe unreadable!"); //$NON-NLS-1$
+        }
+        id3v220Tag.setTagSize(readSyncSafeInt());
+
+        int bytesLeft = id3v220Tag.getTagSize();
+        while (bytesLeft > 0) {
+            final Frame e = new Frame();
+            e.setFrameId(readStringFromStream(3));
+            bytesLeft -= 3;
+            e.setSize(readInt(3));
+            bytesLeft -= 3;
+            // SEBASTIAN decode payload
+            e.setPayload(readStringFromStream(e.getSize()));
+            bytesLeft -= e.getSize();
+            id3v220Tag.getFrames().add(e);
+        }
+        return id3v220Tag;
+    }
+
+    private ID3v240Tag decodeID3v240Tag() throws IOException, UnsupportedEncodingException {
+        final ID3v240Tag id3v240Tag = new ID3v240Tag();
+        if (isNextBitOne()) {
+            id3v240Tag.setExtendedHeader(new ExtendedHeader());
+        }
+        id3v240Tag.setExperimental(isNextBitOne());
+        id3v240Tag.setFooter(isNextBitOne());
+        // next 4 bit should be zeros, otherwise we could not decode this tag
+        boolean maybeUnreadable = false;
+        for (int i = 0; i < 4; i++) {
+            if (isNextBitOne()) {
+                maybeUnreadable = true;
+                break;
+            }
+        }
+        if (maybeUnreadable && MPEGAudioFrameInputStream.LOG.isDebugEnabled()) {
+            MPEGAudioFrameInputStream.LOG.debug("id3v2 tag is maybe unreadable!"); //$NON-NLS-1$
+        }
+        id3v240Tag.setTagSize(readSyncSafeInt());
+
+        int bytesLeft = id3v240Tag.getTagSize();
+        if (id3v240Tag.getExtendedHeader() != null) {
+            id3v240Tag.getExtendedHeader().setSize(readSyncSafeInt());
+            final int numberOfFlagBytes = read();
+            bytesLeft--;
+            if ((numberOfFlagBytes != 1) && MPEGAudioFrameInputStream.LOG.isDebugEnabled()) {
+                MPEGAudioFrameInputStream.LOG.debug("unknown extended header flagbytes!"); //$NON-NLS-1$
+            }
+            int numberOfAdditionalFlags = 0;
+            if (numberOfFlagBytes > 0) {
+                readBit();
+                id3v240Tag.getExtendedHeader().setTagIsAnUpdate(isNextBitOne());
+                id3v240Tag.getExtendedHeader().setCrcDataIsPresent(isNextBitOne());
+                if (isNextBitOne()) {
+                    id3v240Tag.getExtendedHeader().setTagRestrictions(new TagRestrictions());
+                }
+                for (int i = 4; i > 0; i--) {
+                    if (isNextBitOne()) {
+                        numberOfAdditionalFlags++;
+                    }
+                }
+                bytesLeft--;
+                for (int i = numberOfFlagBytes - 1; i > 0; i--) {
+                    for (int j = 8; j > 0; j--) {
+                        if (isNextBitOne()) {
+                            numberOfAdditionalFlags++;
+                        }
+                    }
+                    bytesLeft--;
+                }
+            }
+            if (id3v240Tag.getExtendedHeader().isTagIsAnUpdate()) {
+                read();
+                bytesLeft--;
+            }
+            if (id3v240Tag.getExtendedHeader().isCrcDataIsPresent()) {
+                final int crcSize = read();
+                bytesLeft--;
+                if (crcSize != 5) {
+                    // SEBASTIAN error handling
+                }
+                id3v240Tag.getExtendedHeader().setCrc32((int) readSyncSave5ByteInteger());
+                bytesLeft -= 5;
+            }
+            if (id3v240Tag.getExtendedHeader().getTagRestrictions() != null) {
+                final int length = read();
+                bytesLeft--;
+                if (length != 1) {
+                    // SEBASTIAN error handling
+                }
+                read();
+                bytesLeft--;
+                // SEBASTIAN do something with restrictions
+            }
+            for (int i = numberOfAdditionalFlags; i > 0; i--) {
+                final int length = read();
+                bytesLeft--;
+                for (int j = length; j > 0; j--) {
+                    read();
+                    bytesLeft--;
+                }
+            }
+        }
+        while (bytesLeft > 0) {
+            final Frame e = new Frame();
+            e.setFrameId(readStringFromStream(4));
+            bytesLeft -= 4;
+            e.setSize(readSyncSafeInt());
+            bytesLeft -= 4;
+            // SEBASTIAN decode flags
+            read();
+            bytesLeft--;
+            read();
+            bytesLeft--;
+            // SEBASTIAN decode payload
+            for (int i = e.getSize(); i > 0; i--) {
+                read();
+                bytesLeft--;
+            }
+            id3v240Tag.getFrames().add(e);
+        }
+        return id3v240Tag;
+    }
+
+    /**
+     * decodeID3v2Tag.
+     * @return {@link ID3v2Tag}
+     * @throws IOException
+     * @throws UnsupportedEncodingException
+     */
+    private ID3v2Tag decodeID3v2Tag() throws IOException, UnsupportedEncodingException {
+        final int majorVersion = read();
+        final int revision = read();
+        final boolean unsynchronized = isNextBitOne();
+        ID3v2Tag id3v2Tag = null;
+        switch (majorVersion) {
+        case 2:
+            id3v2Tag = decodeID3v220Tag();
+            break;
+        case 3:
+        case 4:
+            id3v2Tag = decodeID3v240Tag();
+            break;
+        default:
+            throw new UnsupportedEncodingException("Do not support ID3v2 version [major: " + majorVersion //$NON-NLS-1$
+                    + ", revision: " + revision + "]"); //$NON-NLS-1$ //$NON-NLS-2$
+        }
+        id3v2Tag.setMajorVersion(majorVersion);
+        id3v2Tag.setRevisionNumber(revision);
+        id3v2Tag.setUnsynchronisation(unsynchronized);
+        return id3v2Tag;
     }
 
     /**
@@ -260,109 +426,7 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
                 final SyncResult syncResult = sync();
                 switch (syncResult.getMode()) {
                 case id3v2_aligned:
-                    ID3v2Tag id3v2Tag = new ID3v2Tag();
-                    id3v2Tag.setMajorVersion(read());
-                    id3v2Tag.setRevisionNumber(read());
-                    id3v2Tag.setUnsynchronisation(isNextBitOne());
-                    if (isNextBitOne()) {
-                        id3v2Tag.setExtendedHeader(new ExtendedHeader());
-                    }
-                    id3v2Tag.setExperimental(isNextBitOne());
-                    id3v2Tag.setFooter(isNextBitOne());
-                    // next 4 bit should be zeros, otherwise we could not decode this tag
-                    boolean maybeUnreadable = false;
-                    for (int i = 0; i < 4; i++) {
-                        if (isNextBitOne()) {
-                            maybeUnreadable = true;
-                            break;
-                        }
-                    }
-                    if (maybeUnreadable && MPEGAudioFrameInputStream.LOG.isDebugEnabled()) {
-                        MPEGAudioFrameInputStream.LOG.debug("id3v2 tag is maybe unreadable!"); //$NON-NLS-1$
-                    }
-                    id3v2Tag.setTagSize(readSyncSafeInt());
-                    int bytesLeft = id3v2Tag.getTagSize();
-                    if (id3v2Tag.getExtendedHeader() != null) {
-                        id3v2Tag.getExtendedHeader().setSize(readSyncSafeInt());
-                        int numberOfFlagBytes = read();
-                        bytesLeft--;
-                        if (numberOfFlagBytes != 1 && MPEGAudioFrameInputStream.LOG.isDebugEnabled()) {
-                            MPEGAudioFrameInputStream.LOG.debug("unknown extended header flagbytes!"); //$NON-NLS-1$
-                        }
-                        int numberOfAdditionalFlags = 0;
-                        if (numberOfFlagBytes > 0) {
-                            readBit();
-                            id3v2Tag.getExtendedHeader().setTagIsAnUpdate(isNextBitOne());
-                            id3v2Tag.getExtendedHeader().setCrcDataIsPresent(isNextBitOne());
-                            if (isNextBitOne()) {
-                                id3v2Tag.getExtendedHeader().setTagRestrictions(new TagRestrictions());
-                            }
-                            for (int i = 4; i > 0; i--) {
-                                if (isNextBitOne()) {
-                                    numberOfAdditionalFlags++;
-                                }
-                            }
-                            bytesLeft--;
-                            for (int i = numberOfFlagBytes - 1; i > 0; i--) {
-                                for (int j = 8; j > 0; j--) {
-                                    if (isNextBitOne()) {
-                                        numberOfAdditionalFlags++;
-                                    }
-                                }
-                                bytesLeft--;
-                            }
-                        }
-                        if (id3v2Tag.getExtendedHeader().isTagIsAnUpdate()) {
-                            read();
-                            bytesLeft--;
-                        }
-                        if (id3v2Tag.getExtendedHeader().isCrcDataIsPresent()) {
-                            int crcSize = read();
-                            bytesLeft--;
-                            if (crcSize != 5) {
-                                // SEBASTIAN error handling
-                            }
-                            id3v2Tag.getExtendedHeader().setCrc32((int) readSyncSave5ByteInteger());
-                            bytesLeft -= 5;
-                        }
-                        if (id3v2Tag.getExtendedHeader().getTagRestrictions() != null) {
-                            int length = read();
-                            bytesLeft--;
-                            if (length != 1) {
-                                // SEBASTIAN error handling
-                            }
-                            read();
-                            bytesLeft--;
-                            // SEBASTIAN do something with restrictions
-                        }
-                        for (int i = numberOfAdditionalFlags; i > 0; i--) {
-                            int length = read();
-                            bytesLeft--;
-                            for (int j = length; j > 0; j--) {
-                                read();
-                                bytesLeft--;
-                            }
-                        }
-                        while (bytesLeft > 0) {
-                            Frame e = new Frame();
-                            e.setFrameId(readStringFromStream(4));
-                            bytesLeft -= 4;
-                            e.setSize(readSyncSafeInt());
-                            bytesLeft -= 4;
-                            // SEBASTIAN decode flags
-                            read();
-                            bytesLeft--;
-                            read();
-                            bytesLeft--;
-                            // SEBASTIAN decode payload
-                            for (int i = e.getSize(); i > 0; i--) {
-                                read();
-                                bytesLeft--;
-                            }
-                            id3v2Tag.getFrames().add(e);
-                        }
-                    }
-                    return id3v2Tag;
+                    return decodeID3v2Tag();
                 case id3v1_aligned:
                     return decodeID3v1Tag();
                 case mpeg_aligned:
@@ -387,32 +451,12 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
         }
     }
 
-    private long readSyncSave5ByteInteger() throws IOException {
-        long size = 0;
-        readBit();
-        size |= readBits(7) << 28;
-        readBit();
-        size |= readBits(7) << 21;
-        readBit();
-        size |= readBits(7) << 14;
-        readBit();
-        size |= readBits(7) << 7;
-        readBit();
-        size |= readBits(7);
-        return size;
-    }
-
-    private int readSyncSafeInt() throws IOException {
-        int size = 0;
-        readBit();
-        size |= readBits(7) << 21;
-        readBit();
-        size |= readBits(7) << 14;
-        readBit();
-        size |= readBits(7) << 7;
-        readBit();
-        size |= readBits(7);
-        return size;
+    private int readInt(final int numOfBytes) throws IOException {
+        int value = 0;
+        for (int i = numOfBytes - 1; i > -1; i--) {
+            value |= (read() << (i * 8));
+        }
+        return value;
     }
 
     /**
@@ -465,6 +509,34 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
         final byte[] buffer = new byte[length];
         readFully(buffer);
         return new String(buffer, "UTF-8").trim(); //$NON-NLS-1$
+    }
+
+    private int readSyncSafeInt() throws IOException {
+        int size = 0;
+        readBit();
+        size |= readBits(7) << 21;
+        readBit();
+        size |= readBits(7) << 14;
+        readBit();
+        size |= readBits(7) << 7;
+        readBit();
+        size |= readBits(7);
+        return size;
+    }
+
+    private long readSyncSave5ByteInteger() throws IOException {
+        long size = 0;
+        readBit();
+        size |= readBits(7) << 28;
+        readBit();
+        size |= readBits(7) << 21;
+        readBit();
+        size |= readBits(7) << 14;
+        readBit();
+        size |= readBits(7) << 7;
+        readBit();
+        size |= readBits(7);
+        return size;
     }
 
     /**

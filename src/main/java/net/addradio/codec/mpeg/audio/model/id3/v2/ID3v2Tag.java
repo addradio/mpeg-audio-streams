@@ -1,7 +1,7 @@
 /**
  * Class:    ID3v2Tag<br/>
  * <br/>
- * Created:  30.10.2017<br/>
+ * Created:  31.10.2017<br/>
  * Filename: ID3v2Tag.java<br/>
  * Version:  $Revision$<br/>
  * <br/>
@@ -22,25 +22,6 @@ import net.addradio.codec.mpeg.audio.model.MPEGAudioContent;
 
 /**
  * ID3v2Tag.
- *
- * <pre>
- *    Overall tag structure:
- *
- *    +-----------------------------+
- *    |      Header (10 bytes)      |
- *    +-----------------------------+
- *    |       Extended Header       |
- *    | (variable length, OPTIONAL) |
- *    +-----------------------------+
- *    |   Frames (variable length)  |
- *    +-----------------------------+
- *    |           Padding           |
- *    | (variable length, OPTIONAL) |
- *    +-----------------------------+
- *    | Footer (10 bytes, OPTIONAL) |
- *    +-----------------------------+
- *
- * </pre>
  */
 public class ID3v2Tag implements MPEGAudioContent {
 
@@ -53,20 +34,11 @@ public class ID3v2Tag implements MPEGAudioContent {
     /** {@link boolean} unsynchronisation. */
     private boolean unsynchronisation;
 
-    /** {@link boolean} experimental. */
-    private boolean experimental;
-
-    /** {@link boolean} footer. */
-    private boolean footer;
-
     /** {@link int} tagSize. */
     private int tagSize;
 
     /** {@link List}{@code <Frame>} frames. */
     private List<Frame> frames;
-
-    /** {@link ExtendedHeader} extendedHeader. */
-    private ExtendedHeader extendedHeader;
 
     /**
      * ID3v2Tag constructor.
@@ -76,11 +48,43 @@ public class ID3v2Tag implements MPEGAudioContent {
     }
 
     /**
-     * getExtendedHeader.
-     * @return ExtendedHeader the extendedHeader
+     * equals.
+     * @see java.lang.Object#equals(java.lang.Object)
+     * @param obj {@link Object}
+     * @return {@code boolean}
      */
-    public ExtendedHeader getExtendedHeader() {
-        return this.extendedHeader;
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ID3v2Tag other = (ID3v2Tag) obj;
+        if (this.frames == null) {
+            if (other.frames != null) {
+                return false;
+            }
+        } else if (!this.frames.equals(other.frames)) {
+            return false;
+        }
+        if (this.majorVersion != other.majorVersion) {
+            return false;
+        }
+        if (this.revisionNumber != other.revisionNumber) {
+            return false;
+        }
+        if (this.tagSize != other.tagSize) {
+            return false;
+        }
+        if (this.unsynchronisation != other.unsynchronisation) {
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -116,19 +120,20 @@ public class ID3v2Tag implements MPEGAudioContent {
     }
 
     /**
-     * isExperimental.
-     * @return boolean the experimental
+     * hashCode.
+     * @see java.lang.Object#hashCode()
+     * @return {@code int}
      */
-    public boolean isExperimental() {
-        return this.experimental;
-    }
-
-    /**
-     * isFooter.
-     * @return boolean the footer
-     */
-    public boolean isFooter() {
-        return this.footer;
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = (prime * result) + ((this.frames == null) ? 0 : this.frames.hashCode());
+        result = (prime * result) + this.majorVersion;
+        result = (prime * result) + this.revisionNumber;
+        result = (prime * result) + this.tagSize;
+        result = (prime * result) + (this.unsynchronisation ? 1231 : 1237);
+        return result;
     }
 
     /**
@@ -137,30 +142,6 @@ public class ID3v2Tag implements MPEGAudioContent {
      */
     public boolean isUnsynchronisation() {
         return this.unsynchronisation;
-    }
-
-    /**
-     * setExperimental.
-     * @param experimental boolean the experimental to set
-     */
-    public void setExperimental(final boolean experimental) {
-        this.experimental = experimental;
-    }
-
-    /**
-     * setExtendedHeader.
-     * @param extendedHeader ExtendedHeader the extendedHeader to set
-     */
-    public void setExtendedHeader(final ExtendedHeader extendedHeader) {
-        this.extendedHeader = extendedHeader;
-    }
-
-    /**
-     * setFooter.
-     * @param footer boolean the footer to set
-     */
-    public void setFooter(final boolean footer) {
-        this.footer = footer;
     }
 
     /**
@@ -203,31 +184,4 @@ public class ID3v2Tag implements MPEGAudioContent {
         this.unsynchronisation = unsynchronisation;
     }
 
-    /**
-     * toString.
-     * @see java.lang.Object#toString()
-     * @return {@link String}
-     */
-    @Override
-    public String toString() {
-        final StringBuilder builder = new StringBuilder();
-        builder.append("ID3v2Tag [majorVersion=");
-        builder.append(this.majorVersion);
-        builder.append(", revisionNumber=");
-        builder.append(this.revisionNumber);
-        builder.append(", unsynchronisation=");
-        builder.append(this.unsynchronisation);
-        builder.append(", experimental=");
-        builder.append(this.experimental);
-        builder.append(", footer=");
-        builder.append(this.footer);
-        builder.append(", tagSize=");
-        builder.append(this.tagSize);
-        builder.append(", frames=");
-        builder.append(this.frames);
-        builder.append(", extendedHeader=");
-        builder.append(this.extendedHeader);
-        builder.append("]");
-        return builder.toString();
-    }
 }
