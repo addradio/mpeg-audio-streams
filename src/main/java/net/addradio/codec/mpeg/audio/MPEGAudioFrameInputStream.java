@@ -145,6 +145,12 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
         return tag;
     }
 
+    /**
+     * decodeID3v220Tag.
+     * @return {@link ID3v220Tag}
+     * @throws IOException
+     * @throws UnsupportedEncodingException
+     */
     private ID3v220Tag decodeID3v220Tag() throws IOException, UnsupportedEncodingException {
         final ID3v220Tag id3v220Tag = new ID3v220Tag();
         id3v220Tag.setCompressed(isNextBitOne());
@@ -176,6 +182,12 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
         return id3v220Tag;
     }
 
+    /**
+     * decodeID3v240Tag.
+     * @return {@link ID3v240Tag}
+     * @throws IOException
+     * @throws UnsupportedEncodingException
+     */
     private ID3v240Tag decodeID3v240Tag() throws IOException, UnsupportedEncodingException {
         final ID3v240Tag id3v240Tag = new ID3v240Tag();
         if (isNextBitOne()) {
@@ -451,6 +463,12 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
         }
     }
 
+    /**
+     * readInt.
+     * @param numOfBytes
+     * @return {@code int}
+     * @throws IOException
+     */
     private int readInt(final int numOfBytes) throws IOException {
         int value = 0;
         for (int i = numOfBytes - 1; i > -1; i--) {
@@ -511,6 +529,11 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
         return new String(buffer, "UTF-8").trim(); //$NON-NLS-1$
     }
 
+    /**
+     * readSyncSafeInt.
+     * @return {@code int}
+     * @throws IOException
+     */
     private int readSyncSafeInt() throws IOException {
         int size = 0;
         readBit();
@@ -524,6 +547,11 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
         return size;
     }
 
+    /**
+     * readSyncSave5ByteInteger.
+     * @return {@code long}
+     * @throws IOException
+     */
     private long readSyncSave5ByteInteger() throws IOException {
         long size = 0;
         readBit();
