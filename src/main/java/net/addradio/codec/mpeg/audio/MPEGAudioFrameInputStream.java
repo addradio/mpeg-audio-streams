@@ -145,13 +145,6 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
         return tag;
     }
 
-<<<<<<< HEAD
-    /**
-     * decodeID3v220Tag.
-     * @return {@link ID3v220Tag}
-     * @throws IOException
-     * @throws UnsupportedEncodingException
-     */
     private ID3v220Tag decodeID3v220Tag() throws IOException, UnsupportedEncodingException {
         final ID3v220Tag id3v220Tag = new ID3v220Tag();
         id3v220Tag.setCompressed(isNextBitOne());
@@ -183,45 +176,6 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
         return id3v220Tag;
     }
 
-    /**
-     * decodeID3v240Tag.
-     * @return {@link ID3v240Tag}
-     * @throws IOException
-     * @throws UnsupportedEncodingException
-     */
-=======
-    private ID3v220Tag decodeID3v220Tag() throws IOException, UnsupportedEncodingException {
-        final ID3v220Tag id3v220Tag = new ID3v220Tag();
-        id3v220Tag.setCompressed(isNextBitOne());
-        // next 6 bit should be zeros, otherwise we could not decode this tag
-        boolean maybeUnreadable = false;
-        for (int i = 0; i < 6; i++) {
-            if (isNextBitOne()) {
-                maybeUnreadable = true;
-                break;
-            }
-        }
-        if (maybeUnreadable && MPEGAudioFrameInputStream.LOG.isDebugEnabled()) {
-            MPEGAudioFrameInputStream.LOG.debug("id3v220 tag is maybe unreadable!"); //$NON-NLS-1$
-        }
-        id3v220Tag.setTagSize(readSyncSafeInt());
-
-        int bytesLeft = id3v220Tag.getTagSize();
-        while (bytesLeft > 0) {
-            final Frame e = new Frame();
-            e.setFrameId(readStringFromStream(3));
-            bytesLeft -= 3;
-            e.setSize(readInt(3));
-            bytesLeft -= 3;
-            // SEBASTIAN decode payload
-            e.setPayload(readStringFromStream(e.getSize()));
-            bytesLeft -= e.getSize();
-            id3v220Tag.getFrames().add(e);
-        }
-        return id3v220Tag;
-    }
-
->>>>>>> branch 'master' of git@github.com:addradio/mpeg-audio-streams.git
     private ID3v240Tag decodeID3v240Tag() throws IOException, UnsupportedEncodingException {
         final ID3v240Tag id3v240Tag = new ID3v240Tag();
         if (isNextBitOne()) {
@@ -497,15 +451,6 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
         }
     }
 
-<<<<<<< HEAD
-    /**
-     * readInt.
-     * @param numOfBytes
-     * @return {@code int}
-     * @throws IOException
-     */
-=======
->>>>>>> branch 'master' of git@github.com:addradio/mpeg-audio-streams.git
     private int readInt(final int numOfBytes) throws IOException {
         int value = 0;
         for (int i = numOfBytes - 1; i > -1; i--) {
@@ -566,12 +511,6 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
         return new String(buffer, "UTF-8").trim(); //$NON-NLS-1$
     }
 
-<<<<<<< HEAD
-    /**
-     * readSyncSafeInt.
-     * @return {@code int}
-     * @throws IOException
-     */
     private int readSyncSafeInt() throws IOException {
         int size = 0;
         readBit();
@@ -585,26 +524,6 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
         return size;
     }
 
-    /**
-     * readSyncSave5ByteInteger.
-     * @return {@code long}
-     * @throws IOException
-     */
-=======
-    private int readSyncSafeInt() throws IOException {
-        int size = 0;
-        readBit();
-        size |= readBits(7) << 21;
-        readBit();
-        size |= readBits(7) << 14;
-        readBit();
-        size |= readBits(7) << 7;
-        readBit();
-        size |= readBits(7);
-        return size;
-    }
-
->>>>>>> branch 'master' of git@github.com:addradio/mpeg-audio-streams.git
     private long readSyncSave5ByteInteger() throws IOException {
         long size = 0;
         readBit();
