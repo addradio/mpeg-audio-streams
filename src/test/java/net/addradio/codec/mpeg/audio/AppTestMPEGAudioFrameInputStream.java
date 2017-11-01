@@ -17,7 +17,6 @@
 package net.addradio.codec.mpeg.audio;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.IOException;
 
@@ -26,63 +25,58 @@ import org.apache.log4j.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.addradio.codec.mpeg.audio.model.MPEGAudioFrame;
+import net.addradio.codec.mpeg.audio.MP3TestFiles.FileHandler;
+import net.addradio.codec.mpeg.audio.model.MPEGAudioContent;
 
 /**
  * AppTestMPEGAudioFrameInputStream
  */
 public class AppTestMPEGAudioFrameInputStream {
 
-    /** {@link String} MP3_SUFFIX. */
-    private static final String MP3_SUFFIX = ".mp3"; //$NON-NLS-1$
-
     /** {@link Logger} LOG */
-    private static final Logger LOG = LoggerFactory.getLogger(AppTestMPEGAudioFrameInputStream.class);
-
-    /**
-     * main.
-     * 
-     * @param args
-     *            {@link String}{@code []}
-     */
-    public static void main(String[] args) {
-        BasicConfigurator.configure();
-        org.apache.log4j.Logger.getRootLogger().setLevel(Level.INFO);
-
-        File[] files = new File(MP3TestFiles.MP3_TEST_FILE_DIRECTORY).listFiles(new FileFilter() {
-            @Override
-            public boolean accept(File pathname) {
-                return pathname.isFile() && pathname.canRead() && pathname.getName().toLowerCase().endsWith(MP3_SUFFIX);
-            }
-        });
-        for (File file : files) {
-            if (AppTestMPEGAudioFrameInputStream.LOG.isInfoEnabled()) {
-                AppTestMPEGAudioFrameInputStream.LOG
-                        .info("######## Try to decode new file [" + file.getAbsolutePath() + "]."); //$NON-NLS-1$ //$NON-NLS-2$
-            }
-            decodeMpegAudioFile(MP3TestFiles.MP3_TEST_FILE_DIRECTORY + File.separator + file.getName());
-        }
-
-    }
+    static final Logger LOG = LoggerFactory.getLogger(AppTestMPEGAudioFrameInputStream.class);
 
     /**
      * decodeMpegAudioFile.
      * @param fileName {@link String}
      */
-    private static void decodeMpegAudioFile(String fileName) {
+    static void decodeMpegAudioFile(final String fileName) {
         try (MPEGAudioFrameInputStream mafis = new MPEGAudioFrameInputStream(new FileInputStream(fileName))) {
             mafis.setUnalignedSyncAllowed(false);
 
-            MPEGAudioFrame frame = null;
+            MPEGAudioContent frame = null;
             while ((frame = mafis.readFrame()) != null) {
-                if (LOG.isInfoEnabled()) {
-                    LOG.info(frame.toString());
+                if (AppTestMPEGAudioFrameInputStream.LOG.isInfoEnabled()) {
+                    AppTestMPEGAudioFrameInputStream.LOG.info(frame.toString());
                 }
             }
 
-        } catch (IOException e) {
-            LOG.error(e.getLocalizedMessage(), e);
+        } catch (final IOException e) {
+            AppTestMPEGAudioFrameInputStream.LOG.error(e.getLocalizedMessage(), e);
         }
+    }
+
+    /**
+     * main.
+     *
+     * @param args
+     *            {@link String}{@code []}
+     */
+    public static void main(final String[] args) {
+        BasicConfigurator.configure();
+        org.apache.log4j.Logger.getRootLogger().setLevel(Level.INFO);
+
+        MP3TestFiles.iterateOverTestFiles(new FileHandler() {
+            @Override
+            public void handle(final File file) {
+                if (AppTestMPEGAudioFrameInputStream.LOG.isInfoEnabled()) {
+                    AppTestMPEGAudioFrameInputStream.LOG
+                            .info("######## Try to decode new file [" + file.getAbsolutePath() + "]."); //$NON-NLS-1$ //$NON-NLS-2$
+                }
+                decodeMpegAudioFile(MP3TestFiles._MP3_TEST_FILE_DIRECTORY + File.separator + file.getName());
+            }
+        });
+
     }
 
 }

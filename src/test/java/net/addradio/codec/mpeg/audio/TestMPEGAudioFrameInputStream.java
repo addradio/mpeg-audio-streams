@@ -25,7 +25,7 @@ import org.apache.log4j.BasicConfigurator;
 
 import junit.framework.TestCase;
 import net.addradio.codec.mpeg.audio.codecs.MPEGAudioCodecException;
-import net.addradio.codec.mpeg.audio.model.MPEGAudioFrame;
+import net.addradio.codec.mpeg.audio.model.MPEGAudioContent;
 
 /**
  * TestMPEGAudioFrameInputStream
@@ -62,14 +62,14 @@ public class TestMPEGAudioFrameInputStream extends TestCase {
         mafis.setUnalignedSyncAllowed(true);
 
         assertTrue(mafis.isByteAligned());
-        assertEquals(9, mafis.sync());
-        assertEquals(3, mafis.sync());
+        assertEquals(9, mafis.sync().getSkippedBits());
+        assertEquals(3, mafis.sync().getSkippedBits());
 
         mafis = new MPEGAudioFrameInputStream(new ByteArrayInputStream(BYTES_WITH_SYNC_BYTES));
         mafis.setUnalignedSyncAllowed(false);
 
         assertTrue(mafis.isByteAligned());
-        assertEquals(24, mafis.sync());
+        assertEquals(24, mafis.sync().getSkippedBits());
     }
 
     /**
@@ -87,7 +87,7 @@ public class TestMPEGAudioFrameInputStream extends TestCase {
         try (MPEGAudioFrameInputStream mafis = new MPEGAudioFrameInputStream(
                 new FileInputStream(MP3TestFiles.FILE_NAME_PIANO_MP3))) {
             @SuppressWarnings("unused")
-            MPEGAudioFrame frame = null;
+            MPEGAudioContent frame = null;
             while ((frame = mafis.readFrame()) != null) {
             }
         }
@@ -101,8 +101,9 @@ public class TestMPEGAudioFrameInputStream extends TestCase {
     public void testSync() throws IOException {
         try (MPEGAudioFrameInputStream mafis = new MPEGAudioFrameInputStream(
                 new FileInputStream(MP3TestFiles.FILE_NAME_1000HZ_MP3))) {
-            final int skippedBits = mafis.sync();
-            assertEquals(272, skippedBits);
+            SyncResult syncResult = mafis.sync();
+            assertEquals(0, syncResult.getSkippedBits());
+            assertEquals(SyncMode.id3v2_aligned, syncResult.getMode());
         }
     }
 

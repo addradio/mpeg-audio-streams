@@ -24,6 +24,7 @@ import org.apache.log4j.BasicConfigurator;
 import junit.framework.TestCase;
 import net.addradio.codec.mpeg.audio.model.BitRate;
 import net.addradio.codec.mpeg.audio.model.Layer;
+import net.addradio.codec.mpeg.audio.model.MPEGAudioContent;
 import net.addradio.codec.mpeg.audio.model.MPEGAudioFrame;
 import net.addradio.codec.mpeg.audio.model.SamplingRate;
 import net.addradio.codec.mpeg.audio.model.Version;
@@ -62,15 +63,17 @@ public class TestMPEGAudio extends TestCase {
     private static final void assertMPEGFileIntegrity(final String fileName, final int numberOfFrames)
             throws IOException {
         try (FileInputStream fis = new FileInputStream(fileName)) {
-            final List<MPEGAudioFrame> decode = MPEGAudio.decode(fis);
+            final List<MPEGAudioContent> decode = MPEGAudio.decode(fis);
             assertEquals(numberOfFrames, decode.size());
             MPEGAudioFrame firstFrame = null;
-            for (final MPEGAudioFrame frame : decode) {
-                if (firstFrame == null) {
-                    firstFrame = frame;
-                    continue;
+            for (final MPEGAudioContent frame : decode) {
+                if (frame instanceof MPEGAudioFrame) {
+                    if (firstFrame == null) {
+                        firstFrame = (MPEGAudioFrame) frame;
+                        continue;
+                    }
+                    assertCommonFramesProperties(firstFrame, (MPEGAudioFrame) frame);
                 }
-                assertCommonFramesProperties(firstFrame, frame);
             }
         }
     }
@@ -88,12 +91,13 @@ public class TestMPEGAudio extends TestCase {
      */
     @SuppressWarnings("static-method")
     public void testDecode() throws IOException {
-        assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME_1000HZ_MP3, 194);
-        assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME_440HZ_MP3, 194);
+        assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME_1000HZ_MP3, 195);
+        assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME_440HZ_MP3, 195);
         assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME_CLICK_MP3, 1228);
         assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME_ORGAN_MP3, 501);
         assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME_PIANO_MP3, 265);
-        assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME_SWEEP_MP3, 386);
+        assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME_SWEEP_MP3, 387);
+        //        assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME_MUSIC_MP3, 386);
     }
 
     /**

@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import net.addradio.codec.mpeg.audio.codecs.MPEGAudioCodecException;
+import net.addradio.codec.mpeg.audio.model.MPEGAudioContent;
 import net.addradio.codec.mpeg.audio.model.MPEGAudioFrame;
 
 /**
@@ -40,12 +41,12 @@ public class MPEGAudio {
     /**
      * decode.
      * @param is {@link InputStream}
-     * @return {@link List}{@code <}{@link MPEGAudioFrame}{@code >}
+     * @return {@link List}{@code <}{@link MPEGAudioContent}{@code >}
      */
-    public static final List<MPEGAudioFrame> decode(final InputStream is) {
-        final LinkedList<MPEGAudioFrame> chunks = new LinkedList<>();
+    public static final List<MPEGAudioContent> decode(final InputStream is) {
+        final LinkedList<MPEGAudioContent> chunks = new LinkedList<>();
         try (final MPEGAudioFrameInputStream mafis = new MPEGAudioFrameInputStream(is)) {
-            MPEGAudioFrame frame = null;
+            MPEGAudioContent frame = null;
             while ((frame = mafis.readFrame()) != null) {
                 chunks.add(frame);
             }
@@ -71,7 +72,12 @@ public class MPEGAudio {
      */
     public static MPEGAudioFrame decodeFirstFrame(final InputStream is) {
         try (final MPEGAudioFrameInputStream mafis = new MPEGAudioFrameInputStream(is)) {
-            return mafis.readFrame();
+            MPEGAudioContent content = null;
+            while ((content = mafis.readFrame()) != null) {
+                if (content instanceof MPEGAudioFrame) {
+                    return (MPEGAudioFrame) content;
+                }
+            }
         } catch (final IOException e) {
             LOG.error(e.getLocalizedMessage(), e);
         }
@@ -80,10 +86,10 @@ public class MPEGAudio {
 
     /**
      * encode.
-     * @param frames {@link List}{@code <}{@link MPEGAudioFrame}{@code >}
+     * @param frames {@link List}{@code <}{@link MPEGAudioContent}{@code >}
      * @return {@code byte[]} or  {@code null} if an error occurred.
      */
-    public static byte[] encode(final List<MPEGAudioFrame> frames) {
+    public static byte[] encode(final List<? extends MPEGAudioContent> frames) {
         try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
             encode(frames, baos);
             return baos.toByteArray();
@@ -95,13 +101,13 @@ public class MPEGAudio {
 
     /**
      * encode.
-     * @param frames {@link List}{@code <}{@link MPEGAudioFrame}{@code >}
+     * @param frames {@link List}{@code <}{@link MPEGAudioContent}{@code >}
      * @param os {@link OutputStream}
      * @throws IOException due to IO problems.
      */
-    public static void encode(final List<MPEGAudioFrame> frames, final OutputStream os) throws IOException {
+    public static void encode(final List<? extends MPEGAudioContent> frames, final OutputStream os) throws IOException {
         try (MPEGAudioFrameOutputStream mafos = new MPEGAudioFrameOutputStream(os)) {
-            for (final MPEGAudioFrame mpegAudioFrame : frames) {
+            for (final MPEGAudioContent mpegAudioFrame : frames) {
                 try {
                     mafos.writeFrame(mpegAudioFrame);
                 } catch (final MPEGAudioCodecException e) {
