@@ -27,6 +27,8 @@ import org.slf4j.LoggerFactory;
 
 import net.addradio.codec.mpeg.audio.MP3TestFiles.FileHandler;
 import net.addradio.codec.mpeg.audio.model.MPEGAudioContent;
+import net.addradio.codec.mpeg.audio.model.MPEGAudioFrame;
+import net.addradio.codec.mpeg.audio.model.id3.ID3Tag;
 
 /**
  * AppTestMPEGAudioFrameInputStream
@@ -46,8 +48,11 @@ public class AppTestMPEGAudioFrameInputStream {
 
             MPEGAudioContent frame = null;
             while ((frame = mafis.readFrame()) != null) {
-                if (AppTestMPEGAudioFrameInputStream.LOG.isInfoEnabled()) {
+                if (ID3Tag.class.isAssignableFrom(frame.getClass())
+                        && AppTestMPEGAudioFrameInputStream.LOG.isInfoEnabled()) {
                     AppTestMPEGAudioFrameInputStream.LOG.info(frame.toString());
+                } else if (frame instanceof MPEGAudioFrame && AppTestMPEGAudioFrameInputStream.LOG.isDebugEnabled()) {
+                    AppTestMPEGAudioFrameInputStream.LOG.debug(frame.toString());
                 }
             }
 

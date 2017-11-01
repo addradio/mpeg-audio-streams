@@ -19,11 +19,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 import net.addradio.codec.mpeg.audio.model.MPEGAudioContent;
+import net.addradio.codec.mpeg.audio.model.id3.ID3Tag;
 
 /**
  * ID3v2Tag.
  */
-public class ID3v2Tag implements MPEGAudioContent {
+public class ID3v2Tag implements MPEGAudioContent, ID3Tag {
 
     /** {@code int} majorVersion. */
     private int majorVersion;
