@@ -25,7 +25,10 @@ import org.apache.log4j.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+<<<<<<< HEAD
 import net.addradio.codec.mpeg.audio.MP3TestFiles.FileHandler;
+=======
+>>>>>>> branch 'master' of git@github.com:addradio/mpeg-audio-streams.git
 import net.addradio.codec.mpeg.audio.model.MPEGAudioContent;
 
 /**

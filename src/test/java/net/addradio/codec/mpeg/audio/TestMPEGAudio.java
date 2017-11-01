@@ -97,7 +97,10 @@ public class TestMPEGAudio extends TestCase {
         assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME_ORGAN_MP3, 501);
         assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME_PIANO_MP3, 265);
         assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME_SWEEP_MP3, 387);
+<<<<<<< HEAD
         //        assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME_MUSIC_MP3, 386);
+=======
+>>>>>>> branch 'master' of git@github.com:addradio/mpeg-audio-streams.git
     }
 
     /**
