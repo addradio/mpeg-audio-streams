@@ -39,6 +39,7 @@ import net.addradio.codec.mpeg.audio.model.id3.v1.ID3v1Tag;
 import net.addradio.codec.mpeg.audio.model.id3.v2.Frame;
 import net.addradio.codec.mpeg.audio.model.id3.v2.ID3v2Tag;
 import net.addradio.codec.mpeg.audio.model.id3.v2.v220.ID3v220Tag;
+import net.addradio.codec.mpeg.audio.model.id3.v2.v230.ID3v230Tag;
 import net.addradio.codec.mpeg.audio.model.id3.v2.v240.ExtendedHeader;
 import net.addradio.codec.mpeg.audio.model.id3.v2.v240.ID3v240Tag;
 import net.addradio.codec.mpeg.audio.model.id3.v2.v240.TagRestrictions;
@@ -183,6 +184,62 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
     }
 
     /**
+     * decodeID3v230Tag.
+     * @return {@link ID3v230Tag}
+     * @throws IOException
+     * @throws UnsupportedEncodingException
+     */
+    private ID3v230Tag decodeID3v230Tag() throws IOException, UnsupportedEncodingException {
+        final ID3v230Tag id3v230Tag = new ID3v230Tag();
+        if (isNextBitOne()) {
+            id3v230Tag.setExtendedHeader(new net.addradio.codec.mpeg.audio.model.id3.v2.v230.ExtendedHeader());
+        }
+        id3v230Tag.setExperimental(isNextBitOne());
+        // next 5 bit should be zeros, otherwise we could not decode this tag
+        boolean maybeUnreadable = false;
+        for (int i = 0; i < 5; i++) {
+            if (isNextBitOne()) {
+                maybeUnreadable = true;
+                break;
+            }
+        }
+        if (maybeUnreadable && MPEGAudioFrameInputStream.LOG.isDebugEnabled()) {
+            MPEGAudioFrameInputStream.LOG.debug("id3v2 tag is maybe unreadable!"); //$NON-NLS-1$
+        }
+        id3v230Tag.setTagSize(readSyncSafeInt());
+
+        int bytesLeft = id3v230Tag.getTagSize();
+        if (id3v230Tag.getExtendedHeader() != null) {
+            id3v230Tag.getExtendedHeader().setSize(readInt(4));
+            bytesLeft -= 4;
+            id3v230Tag.getExtendedHeader().setCrcDataIsPresent(isNextBitOne());
+            ;
+            readBits(7);
+            bytesLeft--;
+            if (id3v230Tag.getExtendedHeader().isCrcDataIsPresent()) {
+                id3v230Tag.getExtendedHeader().setCrc32(readInt(4));
+                bytesLeft -= 4;
+            }
+        }
+        while (bytesLeft > 0) {
+            final Frame e = new Frame();
+            e.setFrameId(readStringFromStream(4));
+            bytesLeft -= 4;
+            e.setSize(readInt(4));
+            bytesLeft -= 4;
+            // SEBASTIAN decode flags
+            read();
+            bytesLeft--;
+            read();
+            bytesLeft--;
+            e.setPayload(readStringFromStream(e.getSize()));
+            bytesLeft -= e.getSize();
+            id3v230Tag.getFrames().add(e);
+        }
+        return id3v230Tag;
+    }
+
+    /**
      * decodeID3v240Tag.
      * @return {@link ID3v240Tag}
      * @throws IOException
@@ -308,6 +365,8 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
             id3v2Tag = decodeID3v220Tag();
             break;
         case 3:
+            id3v2Tag = decodeID3v230Tag();
+            break;
         case 4:
             id3v2Tag = decodeID3v240Tag();
             break;
