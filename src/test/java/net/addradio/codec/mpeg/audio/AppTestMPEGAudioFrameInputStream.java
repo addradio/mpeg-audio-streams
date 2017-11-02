@@ -25,10 +25,10 @@ import org.apache.log4j.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import net.addradio.codec.id3.model.ID3Tag;
 import net.addradio.codec.mpeg.audio.MP3TestFiles.FileHandler;
 import net.addradio.codec.mpeg.audio.model.MPEGAudioContent;
 import net.addradio.codec.mpeg.audio.model.MPEGAudioFrame;
-import net.addradio.codec.mpeg.audio.model.id3.ID3Tag;
 
 /**
  * AppTestMPEGAudioFrameInputStream

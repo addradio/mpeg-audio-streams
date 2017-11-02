@@ -13,10 +13,10 @@
  * <br/>
  * (c) Sebastian A. Weiss, nacamar GmbH 2017 - All rights reserved.
  */
-package net.addradio.codec.mpeg.audio.model.id3.v1;
+package net.addradio.codec.id3.model.v1;
 
+import net.addradio.codec.id3.model.ID3Tag;
 import net.addradio.codec.mpeg.audio.model.MPEGAudioContent;
-import net.addradio.codec.mpeg.audio.model.id3.ID3Tag;
 
 /**
  * ID3v1Tag.

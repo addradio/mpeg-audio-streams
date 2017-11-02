@@ -14,7 +14,7 @@
  * (c) Sebastian A. Weiss, nacamar GmbH 2012 - All rights reserved.
  */
 
-package net.addradio.codec.mpeg.audio.model.id3;
+package net.addradio.codec.id3.model;
 
 /**
  * ID3Tag

@@ -13,7 +13,7 @@
  * <br/>
  * (c) Sebastian A. Weiss, nacamar GmbH 2017 - All rights reserved.
  */
-package net.addradio.codec.mpeg.audio.model.id3.v2.v230;
+package net.addradio.codec.id3.model.v2.v230;
 
 /**
  * ExtendedHeader.

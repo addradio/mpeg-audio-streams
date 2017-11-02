@@ -23,6 +23,15 @@ import java.io.UnsupportedEncodingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import net.addradio.codec.id3.model.v1.Genre;
+import net.addradio.codec.id3.model.v1.ID3v1Tag;
+import net.addradio.codec.id3.model.v2.Frame;
+import net.addradio.codec.id3.model.v2.ID3v2Tag;
+import net.addradio.codec.id3.model.v2.v220.ID3v220Tag;
+import net.addradio.codec.id3.model.v2.v230.ID3v230Tag;
+import net.addradio.codec.id3.model.v2.v240.ExtendedHeader;
+import net.addradio.codec.id3.model.v2.v240.ID3v240Tag;
+import net.addradio.codec.id3.model.v2.v240.TagRestrictions;
 import net.addradio.codec.mpeg.audio.codecs.BitMaskFlagCodec;
 import net.addradio.codec.mpeg.audio.codecs.BitRateCodec;
 import net.addradio.codec.mpeg.audio.codecs.MPEGAudioCodecException;
@@ -34,15 +43,6 @@ import net.addradio.codec.mpeg.audio.model.MPEGAudioContent;
 import net.addradio.codec.mpeg.audio.model.MPEGAudioFrame;
 import net.addradio.codec.mpeg.audio.model.Mode;
 import net.addradio.codec.mpeg.audio.model.Version;
-import net.addradio.codec.mpeg.audio.model.id3.v1.Genre;
-import net.addradio.codec.mpeg.audio.model.id3.v1.ID3v1Tag;
-import net.addradio.codec.mpeg.audio.model.id3.v2.Frame;
-import net.addradio.codec.mpeg.audio.model.id3.v2.ID3v2Tag;
-import net.addradio.codec.mpeg.audio.model.id3.v2.v220.ID3v220Tag;
-import net.addradio.codec.mpeg.audio.model.id3.v2.v230.ID3v230Tag;
-import net.addradio.codec.mpeg.audio.model.id3.v2.v240.ExtendedHeader;
-import net.addradio.codec.mpeg.audio.model.id3.v2.v240.ID3v240Tag;
-import net.addradio.codec.mpeg.audio.model.id3.v2.v240.TagRestrictions;
 import net.addradio.streams.BitInputStream;
 import net.addradio.streams.EndOfStreamException;
 
@@ -192,7 +192,7 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
     private ID3v230Tag decodeID3v230Tag() throws IOException, UnsupportedEncodingException {
         final ID3v230Tag id3v230Tag = new ID3v230Tag();
         if (isNextBitOne()) {
-            id3v230Tag.setExtendedHeader(new net.addradio.codec.mpeg.audio.model.id3.v2.v230.ExtendedHeader());
+            id3v230Tag.setExtendedHeader(new net.addradio.codec.id3.model.v2.v230.ExtendedHeader());
         }
         id3v230Tag.setExperimental(isNextBitOne());
         // next 5 bit should be zeros, otherwise we could not decode this tag
@@ -268,6 +268,7 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
         int bytesLeft = id3v240Tag.getTagSize();
         if (id3v240Tag.getExtendedHeader() != null) {
             id3v240Tag.getExtendedHeader().setSize(readSyncSafeInt());
+            bytesLeft -= 4;
             final int numberOfFlagBytes = read();
             bytesLeft--;
             if ((numberOfFlagBytes != 1) && MPEGAudioFrameInputStream.LOG.isDebugEnabled()) {
