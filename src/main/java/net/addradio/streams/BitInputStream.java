@@ -104,6 +104,16 @@ public class BitInputStream extends InputStream {
     }
 
     /**
+     * isNextBitOne. Reads just one bit and checks whether it is 0b1 or not.
+     *
+     * @return {@code boolean true} only if the next bit is 0b1.
+     * @throws IOException due to IO problems.
+     */
+    public boolean isNextBitOne() throws IOException {
+        return readBit() == 1;
+    }
+
+    /**
      * read.
      * @see java.io.InputStream#read()
      * @return {@code int}
@@ -167,6 +177,21 @@ public class BitInputStream extends InputStream {
         for (int i = 0; i < toFill.length; i++) {
             toFill[i] = (byte) read();
         }
+    }
+
+    /**
+     * readInt.
+     * @param  numOfBytes {@code int} to be read.
+     * @return {@code int}
+     * @throws IOException due to IO problems.
+     */
+    public int readInt(final int numOfBytes) throws IOException {
+        // SEBASTIAN check for max bytes
+        int value = 0;
+        for (int i = numOfBytes - 1; i > -1; i--) {
+            value |= (read() << (i * 8));
+        }
+        return value;
     }
 
     /**
