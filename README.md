@@ -1,5 +1,6 @@
 # mpeg-audio-streams
 [![Build Status](https://travis-ci.org/addradio/mpeg-audio-streams.svg?branch=master)](https://travis-ci.org/addradio/mpeg-audio-streams)
+[![Coverage Status](https://coveralls.io/repos/github/addradio/mpeg-audio-streams/badge.svg?branch=master)](https://coveralls.io/github/addradio/mpeg-audio-streams?branch=master)
 
 Decodes mpeg audio byte streams such as mp3 into Java code readable frames. 
 Encodes these frames back to byte streams also. Provides InputStream and OutputStream interfaces.
