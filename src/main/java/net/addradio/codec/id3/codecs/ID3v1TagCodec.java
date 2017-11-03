@@ -45,10 +45,29 @@ public final class ID3v1TagCodec {
         tag.setArtist(ID3CodecTools.readStringFromStream(bis, 30));
         tag.setAlbum(ID3CodecTools.readStringFromStream(bis, 30));
         tag.setTitle(ID3CodecTools.readStringFromStream(bis, 30));
-        tag.setYear(Integer.parseInt(ID3CodecTools.readStringFromStream(bis, 4)));
+        final String readStringFromStream = ID3CodecTools.readStringFromStream(bis, 4);
+        tag.setYear(saveParseInt(readStringFromStream));
         tag.setComment(ID3CodecTools.readStringFromStream(bis, 30));
         tag.setGenre((Genre) BitMaskFlagCodec.decode(bis.read(), Genre.class));
         return tag;
+    }
+
+    /**
+     * saveParseInt.
+     * @param readStringFromStream {@link String}
+     * @return {@code int}
+     */
+    private static int saveParseInt(final String readStringFromStream) {
+        // SEBASTIAN maybe throw ID3 encoding exception
+
+        if (readStringFromStream == null || readStringFromStream.trim().isEmpty()) {
+            return 0;
+        }
+        try {
+            return Integer.parseInt(readStringFromStream);
+        } catch (NumberFormatException nfe) {
+            return 0;
+        }
     }
 
     /**
