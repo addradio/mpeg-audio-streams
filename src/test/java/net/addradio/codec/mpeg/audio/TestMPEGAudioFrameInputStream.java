@@ -22,6 +22,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 
 import junit.framework.TestCase;
 import net.addradio.codec.mpeg.audio.codecs.MPEGAudioCodecException;
@@ -49,6 +51,7 @@ public class TestMPEGAudioFrameInputStream extends TestCase {
      */
     public TestMPEGAudioFrameInputStream() {
         BasicConfigurator.configure();
+        Logger.getRootLogger().setLevel(Level.INFO);
     }
 
     /**
