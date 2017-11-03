@@ -17,6 +17,8 @@ package net.addradio.codec.mpeg.audio;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -41,6 +43,20 @@ public class MPEGAudio {
 
     /** {@link Logger} LOG. */
     private final static Logger LOG = LoggerFactory.getLogger(MPEGAudio.class);
+
+    /**
+     * decode.
+     * @param file {@link File}
+     * @return {@link List}{@code <}{@link MPEGAudioContent}{@code >} or {@code null} if file could not be opened.
+     */
+    public static final List<MPEGAudioContent> decode(final File file) {
+        try (final InputStream is = new FileInputStream(file)) {
+            return decode(is);
+        } catch (final IOException e1) {
+            MPEGAudio.LOG.error(e1.getLocalizedMessage(), e1);
+        }
+        return null;
+    }
 
     /**
      * decode.
@@ -74,6 +90,15 @@ public class MPEGAudio {
         } catch (final IOException e) {
             MPEGAudio.LOG.error(e.getLocalizedMessage(), e);
         }
+    }
+
+    /**
+     * decode.
+     * @param fileName {@link String}
+     * @return {@link List}{@code <}{@link MPEGAudioContent}{@code >} or {@code null} if file could not be opened.
+     */
+    public static final List<MPEGAudioContent> decode(final String fileName) {
+        return decode(fileName != null ? new File(fileName) : null);
     }
 
     /**
