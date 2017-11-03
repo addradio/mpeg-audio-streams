@@ -28,6 +28,7 @@ import org.apache.log4j.Logger;
 import junit.framework.TestCase;
 import net.addradio.codec.mpeg.audio.codecs.MPEGAudioCodecException;
 import net.addradio.codec.mpeg.audio.model.MPEGAudioContent;
+import net.addradio.codec.mpeg.audio.tools.MP3TestFiles;
 
 /**
  * TestMPEGAudioFrameInputStream

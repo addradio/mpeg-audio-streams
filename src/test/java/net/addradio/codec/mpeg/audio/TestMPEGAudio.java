@@ -28,6 +28,7 @@ import net.addradio.codec.mpeg.audio.model.MPEGAudioContent;
 import net.addradio.codec.mpeg.audio.model.MPEGAudioFrame;
 import net.addradio.codec.mpeg.audio.model.SamplingRate;
 import net.addradio.codec.mpeg.audio.model.Version;
+import net.addradio.codec.mpeg.audio.tools.MP3TestFiles;
 
 /**
  * TestMPEGAudio.

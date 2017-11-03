@@ -14,7 +14,7 @@
  * (c) Sebastian A. Weiss, nacamar GmbH 2012 - All rights reserved.
  */
 
-package net.addradio.codec.mpeg.audio;
+package net.addradio.codec.mpeg.audio.tools;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -36,9 +36,9 @@ public class MP3TestFiles {
         void handle(File file);
     }
 
-    /** 
-     * {@link String} _MP3_TEST_FILE_DIRECTORY. 
-     * (20171027 saw) name needs to start with _ since automated sorted needs to put it in first place. 
+    /**
+     * {@link String} _MP3_TEST_FILE_DIRECTORY.
+     * (20171027 saw) name needs to start with _ since automated sorted needs to put it in first place.
      */
     public static final String _MP3_TEST_FILE_DIRECTORY = "src" + File.separator + "test" + File.separator //$NON-NLS-1$ //$NON-NLS-2$
             + "mp3"; //$NON-NLS-1$
@@ -79,7 +79,16 @@ public class MP3TestFiles {
      * @param fileHandler {@link FileHandler}
      */
     public static final void iterateOverTestFiles(final FileHandler fileHandler) {
-        final File[] files = new File(MP3TestFiles._MP3_TEST_FILE_DIRECTORY).listFiles(new FileFilter() {
+        iterateOverTestFiles(fileHandler, MP3TestFiles._MP3_TEST_FILE_DIRECTORY);
+    }
+
+    /**
+     * iterateOverTestFiles.
+     * @param fileHandler {@link FileHandler}
+     * @param mp3TestFileDirectory {@link String}
+     */
+    public static void iterateOverTestFiles(final FileHandler fileHandler, final String mp3TestFileDirectory) {
+        final File[] files = new File(mp3TestFileDirectory).listFiles(new FileFilter() {
             @Override
             public boolean accept(final File pathname) {
                 return pathname.isFile() && pathname.canRead()
