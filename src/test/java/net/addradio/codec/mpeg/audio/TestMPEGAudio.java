@@ -29,6 +29,7 @@ import net.addradio.codec.mpeg.audio.model.MPEGAudioFrame;
 import net.addradio.codec.mpeg.audio.model.SamplingRate;
 import net.addradio.codec.mpeg.audio.model.Version;
 import net.addradio.codec.mpeg.audio.tools.MP3TestFiles;
+import net.addradio.codec.mpeg.audio.tools.MPEGAudioContentFilter;
 
 /**
  * TestMPEGAudio.
@@ -58,24 +59,20 @@ public class TestMPEGAudio extends TestCase {
     /**
      * assertMPEGFileIntegrity.
      * @param fileName {@link String}
-     * @param numberOfFrames {@code int} number of mpeg frames in file.
+     * @param numberOfMPEGAudioFrames {@code int} number of mpeg frames in file.
      * @throws IOException due to file problems.
      */
-    private static final void assertMPEGFileIntegrity(final String fileName, final int numberOfFrames)
+    private static final void assertMPEGFileIntegrity(final String fileName, final int numberOfMPEGAudioFrames)
             throws IOException {
-        try (FileInputStream fis = new FileInputStream(fileName)) {
-            final List<MPEGAudioContent> decode = MPEGAudio.decode(fis);
-            assertEquals(numberOfFrames, decode.size());
-            MPEGAudioFrame firstFrame = null;
-            for (final MPEGAudioContent frame : decode) {
-                if (frame instanceof MPEGAudioFrame) {
-                    if (firstFrame == null) {
-                        firstFrame = (MPEGAudioFrame) frame;
-                        continue;
-                    }
-                    assertCommonFramesProperties(firstFrame, (MPEGAudioFrame) frame);
-                }
+        List<MPEGAudioContent> frames = MPEGAudio.decode(fileName, MPEGAudioContentFilter.MPEG_AUDIO_FRAMES);
+        assertEquals(numberOfMPEGAudioFrames, frames.size());
+        MPEGAudioFrame firstFrame = null;
+        for (final MPEGAudioContent frame : frames) {
+            if (firstFrame == null) {
+                firstFrame = (MPEGAudioFrame) frame;
+                continue;
             }
+            assertCommonFramesProperties(firstFrame, (MPEGAudioFrame) frame);
         }
     }
 
@@ -92,12 +89,13 @@ public class TestMPEGAudio extends TestCase {
      */
     @SuppressWarnings("static-method")
     public void testDecode() throws IOException {
-        assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME_1000HZ_MP3, 195);
-        assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME_440HZ_MP3, 195);
+        assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME_1000HZ_MP3, 194);
+        assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME_440HZ_MP3, 194);
         assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME_CLICK_MP3, 1228);
         assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME_ORGAN_MP3, 501);
         assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME_PIANO_MP3, 265);
-        assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME_SWEEP_MP3, 387);
+        assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME_SWEEP_MP3, 386);
+        assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME_MUSIC_MP3, 13324);
     }
 
     /**
