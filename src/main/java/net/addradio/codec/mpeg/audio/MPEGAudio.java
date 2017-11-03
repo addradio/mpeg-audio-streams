@@ -20,15 +20,19 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import net.addradio.codec.id3.model.ID3Tag;
 import net.addradio.codec.mpeg.audio.codecs.MPEGAudioCodecException;
 import net.addradio.codec.mpeg.audio.model.MPEGAudioContent;
 import net.addradio.codec.mpeg.audio.model.MPEGAudioFrame;
+import net.addradio.codec.mpeg.audio.tools.MPEGAudioContentCollectorHandler;
+import net.addradio.codec.mpeg.audio.tools.MPEGAudioContentFilter;
+import net.addradio.codec.mpeg.audio.tools.MPEGAudioContentHandler;
+import net.addradio.codec.mpeg.audio.tools.MPEGAudioFirstContentOnlyHandler;
 
 /**
  * MPEGAudio.
@@ -41,47 +45,75 @@ public class MPEGAudio {
     /**
      * decode.
      * @param is {@link InputStream}
+     * @param filter {@link MPEGAudioContentFilter}
      * @return {@link List}{@code <}{@link MPEGAudioContent}{@code >}
      */
     public static final List<MPEGAudioContent> decode(final InputStream is) {
-        final LinkedList<MPEGAudioContent> chunks = new LinkedList<>();
+        final MPEGAudioContentCollectorHandler handler = new MPEGAudioContentCollectorHandler();
+        decode(is, MPEGAudioContentFilter.ACCEPT_ALL, handler);
+        return handler.getContents();
+    }
+
+    /**
+     * decode.
+     * @param is {@link InputStream}
+     * @param filter {@link MPEGAudioContentFilter}
+     * @param handler {@link MPEGAudioContentHandler}
+     */
+    public static void decode(final InputStream is, final MPEGAudioContentFilter filter,
+            final MPEGAudioContentHandler handler) {
         try (final MPEGAudioFrameInputStream mafis = new MPEGAudioFrameInputStream(is)) {
             MPEGAudioContent frame = null;
             while ((frame = mafis.readFrame()) != null) {
-                chunks.add(frame);
-            }
-        } catch (final IOException e) {
-            LOG.error(e.getLocalizedMessage(), e);
-        }
-        return chunks;
-    }
-
-    /**
-     * decodeFirstFrame.
-     * @param buffer {@code byte[]}
-     * @return {@link MPEGAudioFrame} or {@code null} if nothing could be decoded.
-     */
-    public static MPEGAudioFrame decodeFirstFrame(final byte[] buffer) {
-        return decodeFirstFrame(new ByteArrayInputStream(buffer));
-    }
-
-    /**
-     * decodeFirstFrame.
-     * @param is {@link InputStream}
-     * @return {@link MPEGAudioFrame}
-     */
-    public static MPEGAudioFrame decodeFirstFrame(final InputStream is) {
-        try (final MPEGAudioFrameInputStream mafis = new MPEGAudioFrameInputStream(is)) {
-            MPEGAudioContent content = null;
-            while ((content = mafis.readFrame()) != null) {
-                if (content instanceof MPEGAudioFrame) {
-                    return (MPEGAudioFrame) content;
+                if (filter.accept(frame)) {
+                    if (handler.handle(frame)) {
+                        break;
+                    }
                 }
             }
         } catch (final IOException e) {
-            LOG.error(e.getLocalizedMessage(), e);
+            MPEGAudio.LOG.error(e.getLocalizedMessage(), e);
         }
-        return null;
+    }
+
+    /**
+     * decodeFirstID3Tag.
+     * @param is {@link InputStream}
+     * @return {@link ID3Tag}
+     */
+    public static ID3Tag decodeFirstID3Tag(final InputStream is) {
+        return (ID3Tag) decodeFirstMPEGAudioContent(is, MPEGAudioContentFilter.ID3_TAGS);
+    }
+
+    /**
+     * decodeFirstMPEGAudioContent.
+     * @param is {@link InputStream}
+     * @param filter {@link MPEGAudioContentFilter}
+     * @return {@link MPEGAudioContent} first content decoded from stream matching the filter's criteria or {@code null} if no adequate content will be found.
+     */
+    public static MPEGAudioContent decodeFirstMPEGAudioContent(final InputStream is,
+            final MPEGAudioContentFilter filter) {
+        final MPEGAudioFirstContentOnlyHandler handler = new MPEGAudioFirstContentOnlyHandler();
+        decode(is, filter, handler);
+        return handler.getFirstContent();
+    }
+
+    /**
+     * decodeFirstMPEGAudioFrame.
+     * @param buffer {@code byte[]}
+     * @return {@link MPEGAudioFrame} or {@code null} if nothing could be decoded.
+     */
+    public static MPEGAudioFrame decodeFirstMPEGAudioFrame(final byte[] buffer) {
+        return decodeFirstMPEGAudioFrame(new ByteArrayInputStream(buffer));
+    }
+
+    /**
+     * decodeFirstMPEGAudioFrame.
+     * @param is {@link InputStream}
+     * @return {@link MPEGAudioFrame}
+     */
+    public static MPEGAudioFrame decodeFirstMPEGAudioFrame(final InputStream is) {
+        return (MPEGAudioFrame) decodeFirstMPEGAudioContent(is, MPEGAudioContentFilter.MPEG_AUDIO_FRAMES);
     }
 
     /**
@@ -94,7 +126,7 @@ public class MPEGAudio {
             encode(frames, baos);
             return baos.toByteArray();
         } catch (final IOException e) {
-            LOG.error(e.getLocalizedMessage(), e);
+            MPEGAudio.LOG.error(e.getLocalizedMessage(), e);
         }
         return null;
     }
@@ -111,7 +143,7 @@ public class MPEGAudio {
                 try {
                     mafos.writeFrame(mpegAudioFrame);
                 } catch (final MPEGAudioCodecException e) {
-                    LOG.error(e.getLocalizedMessage(), e);
+                    MPEGAudio.LOG.error(e.getLocalizedMessage(), e);
                 }
             }
         }

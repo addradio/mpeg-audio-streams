@@ -106,7 +106,7 @@ public class TestMPEGAudio extends TestCase {
     @SuppressWarnings("static-method")
     public void testDecodeFirstFrame() throws IOException {
         try (FileInputStream fis = new FileInputStream(MP3TestFiles.FILE_NAME_440HZ_MP3)) {
-            final MPEGAudioFrame firstFrame = MPEGAudio.decodeFirstFrame(fis);
+            final MPEGAudioFrame firstFrame = MPEGAudio.decodeFirstMPEGAudioFrame(fis);
             assertEquals(Version.MPEG_1, firstFrame.getVersion());
             assertEquals(Layer.III, firstFrame.getLayer());
             assertEquals(true, firstFrame.isErrorProtected());
