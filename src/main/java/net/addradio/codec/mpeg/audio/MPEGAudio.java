@@ -71,7 +71,6 @@ public class MPEGAudio {
     /**
      * decode.
      * @param is {@link InputStream}
-     * @param filter {@link MPEGAudioContentFilter}
      * @return {@link List}{@code <}{@link MPEGAudioContent}{@code >}
      */
     public static final List<MPEGAudioContent> decode(final InputStream is) {
