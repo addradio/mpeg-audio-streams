@@ -53,30 +53,38 @@ public class MPEGAudioFrameOutputStream extends BitOutputStream {
     /**
      * writeFrame.
      * @param frame {@link MPEGAudioContent}
+     * @return {@code int} number of bytes written.
      * @throws IOException due to IO problems.
      * @throws MPEGAudioCodecException if encoding encountered a bad model state.
      */
-    public void writeFrame(final MPEGAudioContent frame) throws IOException, MPEGAudioCodecException {
+    public int writeFrame(final MPEGAudioContent frame) throws IOException, MPEGAudioCodecException {
+        int bytesWritten = 0;
         if (frame instanceof MPEGAudioFrame) {
             final MPEGAudioFrame mpegAudioFrame = (MPEGAudioFrame) frame;
             writeBits(MPEGAudioFrame.SYNC_WORD_PATTERN, 11);
             writeBits(mpegAudioFrame.getVersion().getBitMask(), 2);
             writeBits(mpegAudioFrame.getLayer().getBitMask(), 2);
             writeBit(mpegAudioFrame.isErrorProtected() ? 1 : 0);
+            bytesWritten += 2;
+
             writeBits(BitRateCodec.encode(mpegAudioFrame), 4);
             writeBits(SamplingRateCodec.encode(mpegAudioFrame), 2);
             writeBit(mpegAudioFrame.isPadding() ? 1 : 0);
             writeBit(mpegAudioFrame.isPrivate() ? 1 : 0);
+            bytesWritten++;
+
             writeBits(mpegAudioFrame.getMode().getBitMask(), 2);
             writeBits(ModeExtensionCodec.encode(mpegAudioFrame), 2);
             writeBit(mpegAudioFrame.isCopyright() ? 1 : 0);
             writeBit(mpegAudioFrame.isOriginal() ? 1 : 0);
             writeBits(mpegAudioFrame.getEmphasis().getBitMask(), 2);
+            bytesWritten++;
 
             if (mpegAudioFrame.isErrorProtected()) {
                 if ((mpegAudioFrame.getCrc() != null)
                         && (mpegAudioFrame.getCrc().length == MPEGAudioFrame.CRC_SIZE_IN_BYTES)) {
                     write(mpegAudioFrame.getCrc());
+                    bytesWritten += MPEGAudioFrame.CRC_SIZE_IN_BYTES;
                 } else {
                     throw new MPEGAudioCodecException("Invalid CRC in frame [" //$NON-NLS-1$
                             + Arrays.toString(mpegAudioFrame.getCrc()) + "]."); //$NON-NLS-1$
@@ -86,9 +94,11 @@ public class MPEGAudioFrameOutputStream extends BitOutputStream {
                 throw new MPEGAudioCodecException("payload of frame is null."); //$NON-NLS-1$
             }
             write(mpegAudioFrame.getPayload());
+            bytesWritten += mpegAudioFrame.getPayload().length;
         } else {
             // SEBASTIAN implement
         }
+        return bytesWritten;
     }
 
 }
