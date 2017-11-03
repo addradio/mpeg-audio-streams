@@ -59,7 +59,7 @@ public class MPEGAudio {
      * @param filter {@link MPEGAudioContentFilter}
      * @return {@link List}{@code <}{@link MPEGAudioContent}{@code >} or {@code null} if file could not be opened.
      */
-    private static List<MPEGAudioContent> decode(final File file, final MPEGAudioContentFilter filter) {
+    public static List<MPEGAudioContent> decode(final File file, final MPEGAudioContentFilter filter) {
         try (final InputStream is = new FileInputStream(file)) {
             return decode(is, filter);
         } catch (final IOException e1) {
