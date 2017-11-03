@@ -121,6 +121,16 @@ public class MPEGAudio {
     }
 
     /**
+     * decode.
+     * @param fileName {@link String}
+     * @param filter {@link MPEGAudioContentFilter}
+     * @return {@link List}{@code <}{@link MPEGAudioContent}{@code >} or {@code null} if file could not be opened.
+     */
+    public static final List<MPEGAudioContent> decode(final String fileName, final MPEGAudioContentFilter filter) {
+        return decode(fileName != null ? new File(fileName) : null, filter);
+    }
+
+    /**
      * decodeFirstID3Tag.
      * @param is {@link InputStream}
      * @return {@link ID3Tag}
