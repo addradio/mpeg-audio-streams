@@ -20,11 +20,11 @@ package net.addradio.codec.mpeg.audio;
  */
 public class SyncResult {
 
-    /** {@code int} skippedBits. */
-    private int skippedBits;
-
     /** {@link SyncMode} mode. */
     private SyncMode mode;
+
+    /** {@code int} skippedBits. */
+    private int skippedBits;
 
     /**
      * SyncResult constructor.
@@ -44,7 +44,7 @@ public class SyncResult {
 
     /**
      * getMode.
-     * @return SyncMode the mode
+     * @return {@link SyncMode} the mode
      */
     public SyncMode getMode() {
         return this.mode;
@@ -52,7 +52,7 @@ public class SyncResult {
 
     /**
      * getSkippedBits.
-     * @return int the skippedBits
+     * @return {@code int} the skippedBits
      */
     public int getSkippedBits() {
         return this.skippedBits;
@@ -60,18 +60,18 @@ public class SyncResult {
 
     /**
      * setMode.
-     * @param mode SyncMode the mode to set
+     * @param modeRef {@link SyncMode} the mode to set
      */
-    public void setMode(final SyncMode mode) {
-        this.mode = mode;
+    public void setMode(final SyncMode modeRef) {
+        this.mode = modeRef;
     }
 
     /**
      * setSkippedBits.
-     * @param skippedBits int the skippedBits to set
+     * @param skippedBitsVal {@code int} the skippedBits to set
      */
-    public void setSkippedBits(final int skippedBits) {
-        this.skippedBits = skippedBits;
+    public void setSkippedBits(final int skippedBitsVal) {
+        this.skippedBits = skippedBitsVal;
     }
 
 }

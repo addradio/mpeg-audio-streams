@@ -91,18 +91,18 @@ public class ID3v230Tag extends ID3v2Tag {
 
     /**
      * setExperimental.
-     * @param experimental boolean the experimental to set
+     * @param experimentalVal {@code boolean} the experimental to set
      */
-    public void setExperimental(final boolean experimental) {
-        this.experimental = experimental;
+    public void setExperimental(final boolean experimentalVal) {
+        this.experimental = experimentalVal;
     }
 
     /**
      * setExtendedHeader.
-     * @param extendedHeader ExtendedHeader the extendedHeader to set
+     * @param extendedHeaderRef {@link ExtendedHeader} the extendedHeader to set
      */
-    public void setExtendedHeader(final ExtendedHeader extendedHeader) {
-        this.extendedHeader = extendedHeader;
+    public void setExtendedHeader(final ExtendedHeader extendedHeaderRef) {
+        this.extendedHeader = extendedHeaderRef;
     }
 
     /**

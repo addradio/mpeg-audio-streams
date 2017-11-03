@@ -20,17 +20,17 @@ package net.addradio.codec.id3.model.v2.v230;
  */
 public class ExtendedHeader {
 
-    /** {@link int} size. */
-    private int size;
+    /** {@link int} crc32. */
+    private int crc32;
 
     /** {@link boolean} crcDataIsPresent. */
     private boolean crcDataIsPresent;
 
-    /** {@link int} crc32. */
-    private int crc32;
-
     /** {@link int} paddingSize. */
     private int paddingSize;
+
+    /** {@link int} size. */
+    private int size;
 
     /**
      * equals.
@@ -64,7 +64,7 @@ public class ExtendedHeader {
 
     /**
      * getCrc32.
-     * @return int the crc32
+     * @return {@code int} the crc32
      */
     public int getCrc32() {
         return this.crc32;
@@ -72,7 +72,7 @@ public class ExtendedHeader {
 
     /**
      * getPaddingSize.
-     * @return int the paddingSize
+     * @return {@code int} the paddingSize
      */
     public int getPaddingSize() {
         return this.paddingSize;
@@ -80,7 +80,7 @@ public class ExtendedHeader {
 
     /**
      * getSize.
-     * @return int the size
+     * @return {@code int} the size
      */
     public int getSize() {
         return this.size;
@@ -103,7 +103,7 @@ public class ExtendedHeader {
 
     /**
      * isCrcDataIsPresent.
-     * @return boolean the crcDataIsPresent
+     * @return {@code boolean} the crcDataIsPresent
      */
     public boolean isCrcDataIsPresent() {
         return this.crcDataIsPresent;
@@ -111,34 +111,34 @@ public class ExtendedHeader {
 
     /**
      * setCrc32.
-     * @param crc32 int the crc32 to set
+     * @param crc32Val {@code int} the crc32 to set
      */
-    public void setCrc32(final int crc32) {
-        this.crc32 = crc32;
+    public void setCrc32(final int crc32Val) {
+        this.crc32 = crc32Val;
     }
 
     /**
      * setCrcDataIsPresent.
-     * @param crcDataIsPresent boolean the crcDataIsPresent to set
+     * @param crcDataIsPresentVal {@code boolean} the crcDataIsPresent to set
      */
-    public void setCrcDataIsPresent(final boolean crcDataIsPresent) {
-        this.crcDataIsPresent = crcDataIsPresent;
+    public void setCrcDataIsPresent(final boolean crcDataIsPresentVal) {
+        this.crcDataIsPresent = crcDataIsPresentVal;
     }
 
     /**
      * setPaddingSize.
-     * @param paddingSize int the paddingSize to set
+     * @param paddingSizeVal {@code int} the paddingSize to set
      */
-    public void setPaddingSize(final int paddingSize) {
-        this.paddingSize = paddingSize;
+    public void setPaddingSize(final int paddingSizeVal) {
+        this.paddingSize = paddingSizeVal;
     }
 
     /**
      * setSize.
-     * @param size int the size to set
+     * @param sizeVal {@code int} the size to set
      */
-    public void setSize(final int size) {
-        this.size = size;
+    public void setSize(final int sizeVal) {
+        this.size = sizeVal;
     }
 
     /**

@@ -26,20 +26,20 @@ import net.addradio.codec.mpeg.audio.model.MPEGAudioContent;
  */
 public class ID3v2Tag implements MPEGAudioContent, ID3Tag {
 
+    /** {@link List}{@code <}{@link Frame}{@code >} frames. */
+    private List<Frame> frames;
+
     /** {@code int} majorVersion. */
     private int majorVersion;
 
     /** {@code int} revisionNumber. */
     private int revisionNumber;
 
-    /** {@link boolean} unsynchronisation. */
-    private boolean unsynchronisation;
-
     /** {@link int} tagSize. */
     private int tagSize;
 
-    /** {@link List}{@code <Frame>} frames. */
-    private List<Frame> frames;
+    /** {@link boolean} unsynchronisation. */
+    private boolean unsynchronisation;
 
     /**
      * ID3v2Tag constructor.
@@ -90,7 +90,7 @@ public class ID3v2Tag implements MPEGAudioContent, ID3Tag {
 
     /**
      * getFrames.
-     * @return List<Frame> the frames
+     * @return {@link List}{@code <}{@link Frame}{@code >} the frames
      */
     public List<Frame> getFrames() {
         return this.frames;
@@ -98,7 +98,7 @@ public class ID3v2Tag implements MPEGAudioContent, ID3Tag {
 
     /**
      * getMajorVersion.
-     * @return int the majorVersion
+     * @return {@code int} the majorVersion
      */
     public int getMajorVersion() {
         return this.majorVersion;
@@ -106,7 +106,7 @@ public class ID3v2Tag implements MPEGAudioContent, ID3Tag {
 
     /**
      * getRevisionNumber.
-     * @return int the revisionNumber
+     * @return {@code int} the revisionNumber
      */
     public int getRevisionNumber() {
         return this.revisionNumber;
@@ -114,7 +114,7 @@ public class ID3v2Tag implements MPEGAudioContent, ID3Tag {
 
     /**
      * getTagSize.
-     * @return int the tagSize
+     * @return {@code int} the tagSize
      */
     public int getTagSize() {
         return this.tagSize;
@@ -147,42 +147,42 @@ public class ID3v2Tag implements MPEGAudioContent, ID3Tag {
 
     /**
      * setFrames.
-     * @param frames List<Frame> the frames to set
+     * @param framesRef {@link List}{@code <}{@link Frame}{@code >} the frames to set
      */
-    public void setFrames(final List<Frame> frames) {
-        this.frames = frames;
+    public void setFrames(final List<Frame> framesRef) {
+        this.frames = framesRef;
     }
 
     /**
      * setMajorVersion.
-     * @param majorVersion int the majorVersion to set
+     * @param majorVersionVal {@code int} the majorVersion to set
      */
-    public void setMajorVersion(final int majorVersion) {
-        this.majorVersion = majorVersion;
+    public void setMajorVersion(final int majorVersionVal) {
+        this.majorVersion = majorVersionVal;
     }
 
     /**
      * setRevisionNumber.
-     * @param revisionNumber int the revisionNumber to set
+     * @param revisionNumberVal {@code int} the revisionNumber to set
      */
-    public void setRevisionNumber(final int revisionNumber) {
-        this.revisionNumber = revisionNumber;
+    public void setRevisionNumber(final int revisionNumberVal) {
+        this.revisionNumber = revisionNumberVal;
     }
 
     /**
      * setTagSize.
-     * @param tagSize int the tagSize to set
+     * @param tagSizeVal {@code int} the tagSize to set
      */
-    public void setTagSize(final int tagSize) {
-        this.tagSize = tagSize;
+    public void setTagSize(final int tagSizeVal) {
+        this.tagSize = tagSizeVal;
     }
 
     /**
      * setUnsynchronisation.
-     * @param unsynchronisation boolean the unsynchronisation to set
+     * @param unsynchronisationVal {@code boolean} the unsynchronisation to set
      */
-    public void setUnsynchronisation(final boolean unsynchronisation) {
-        this.unsynchronisation = unsynchronisation;
+    public void setUnsynchronisation(final boolean unsynchronisationVal) {
+        this.unsynchronisation = unsynchronisationVal;
     }
 
 }

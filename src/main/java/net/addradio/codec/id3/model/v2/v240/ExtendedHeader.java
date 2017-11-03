@@ -20,17 +20,100 @@ package net.addradio.codec.id3.model.v2.v240;
  */
 public class ExtendedHeader {
 
+    /** {@link int} crc32. */
+    private int crc32;
+
+    /** {@link boolean} crcDataIsPresent. */
+    private boolean crcDataIsPresent;
+
     /** {@link int} size. */
     private int size;
 
     /** {@link boolean} tagIsAnUpdate. */
     private boolean tagIsAnUpdate;
 
-    /** {@link boolean} crcDataIsPresent. */
-    private boolean crcDataIsPresent;
+    /** {@link TagRestrictions} tagRestrictions. */
+    private TagRestrictions tagRestrictions;
 
-    /** {@link int} crc32. */
-    private int crc32;
+    /**
+     * getCrc32.
+     * @return {@code int} the crc32
+     */
+    public int getCrc32() {
+        return this.crc32;
+    }
+
+    /**
+     * getSize.
+     * @return {@code int} the size
+     */
+    public int getSize() {
+        return this.size;
+    }
+
+    /**
+     * getTagRestrictions.
+     * @return {@link TagRestrictions} the tagRestrictions
+     */
+    public TagRestrictions getTagRestrictions() {
+        return this.tagRestrictions;
+    }
+
+    /**
+     * isCrcDataIsPresent.
+     * @return {@code boolean} the crcDataIsPresent
+     */
+    public boolean isCrcDataIsPresent() {
+        return this.crcDataIsPresent;
+    }
+
+    /**
+     * isTagIsAnUpdate.
+     * @return {@code boolean} the tagIsAnUpdate
+     */
+    public boolean isTagIsAnUpdate() {
+        return this.tagIsAnUpdate;
+    }
+
+    /**
+     * setCrc32.
+     * @param crc32Val {@code int} the crc32 to set
+     */
+    public void setCrc32(final int crc32Val) {
+        this.crc32 = crc32Val;
+    }
+
+    /**
+     * setCrcDataIsPresent.
+     * @param crcDataIsPresentVal {@code boolean} the crcDataIsPresent to set
+     */
+    public void setCrcDataIsPresent(final boolean crcDataIsPresentVal) {
+        this.crcDataIsPresent = crcDataIsPresentVal;
+    }
+
+    /**
+     * setSize.
+     * @param sizeVal {@code int} the size to set
+     */
+    public void setSize(final int sizeVal) {
+        this.size = sizeVal;
+    }
+
+    /**
+     * setTagIsAnUpdate.
+     * @param tagIsAnUpdateVal {@code boolean} the tagIsAnUpdate to set
+     */
+    public void setTagIsAnUpdate(final boolean tagIsAnUpdateVal) {
+        this.tagIsAnUpdate = tagIsAnUpdateVal;
+    }
+
+    /**
+     * setTagRestrictions.
+     * @param tagRestrictionsRef {@link TagRestrictions} the tagRestrictions to set
+     */
+    public void setTagRestrictions(final TagRestrictions tagRestrictionsRef) {
+        this.tagRestrictions = tagRestrictionsRef;
+    }
 
     /**
      * toString.
@@ -39,102 +122,19 @@ public class ExtendedHeader {
      */
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("ExtendedHeader [size=");
-        builder.append(size);
-        builder.append(", tagIsAnUpdate=");
-        builder.append(tagIsAnUpdate);
-        builder.append(", crcDataIsPresent=");
-        builder.append(crcDataIsPresent);
-        builder.append(", crc32=");
-        builder.append(crc32);
-        builder.append(", tagRestrictions=");
-        builder.append(tagRestrictions);
-        builder.append("]");
+        final StringBuilder builder = new StringBuilder();
+        builder.append("ExtendedHeader [size="); //$NON-NLS-1$
+        builder.append(this.size);
+        builder.append(", tagIsAnUpdate="); //$NON-NLS-1$
+        builder.append(this.tagIsAnUpdate);
+        builder.append(", crcDataIsPresent="); //$NON-NLS-1$
+        builder.append(this.crcDataIsPresent);
+        builder.append(", crc32="); //$NON-NLS-1$
+        builder.append(this.crc32);
+        builder.append(", tagRestrictions="); //$NON-NLS-1$
+        builder.append(this.tagRestrictions);
+        builder.append("]"); //$NON-NLS-1$
         return builder.toString();
-    }
-
-    /**
-     * getCrc32.
-     * @return int the crc32
-     */
-    public int getCrc32() {
-        return this.crc32;
-    }
-
-    /**
-     * setCrc32.
-     * @param crc32 int the crc32 to set
-     */
-    public void setCrc32(int crc32) {
-        this.crc32 = crc32;
-    }
-
-    /** {@link TagRestrictions} tagRestrictions. */
-    private TagRestrictions tagRestrictions;
-
-    /**
-     * getSize.
-     * @return int the size
-     */
-    public int getSize() {
-        return this.size;
-    }
-
-    /**
-     * getTagRestrictions.
-     * @return TagRestrictions the tagRestrictions
-     */
-    public TagRestrictions getTagRestrictions() {
-        return this.tagRestrictions;
-    }
-
-    /**
-     * isCrcDataIsPresent.
-     * @return boolean the crcDataIsPresent
-     */
-    public boolean isCrcDataIsPresent() {
-        return this.crcDataIsPresent;
-    }
-
-    /**
-     * isTagIsAnUpdate.
-     * @return boolean the tagIsAnUpdate
-     */
-    public boolean isTagIsAnUpdate() {
-        return this.tagIsAnUpdate;
-    }
-
-    /**
-     * setCrcDataIsPresent.
-     * @param crcDataIsPresent boolean the crcDataIsPresent to set
-     */
-    public void setCrcDataIsPresent(final boolean crcDataIsPresent) {
-        this.crcDataIsPresent = crcDataIsPresent;
-    }
-
-    /**
-     * setSize.
-     * @param size int the size to set
-     */
-    public void setSize(final int size) {
-        this.size = size;
-    }
-
-    /**
-     * setTagIsAnUpdate.
-     * @param tagIsAnUpdate boolean the tagIsAnUpdate to set
-     */
-    public void setTagIsAnUpdate(final boolean tagIsAnUpdate) {
-        this.tagIsAnUpdate = tagIsAnUpdate;
-    }
-
-    /**
-     * setTagRestrictions.
-     * @param tagRestrictions TagRestrictions the tagRestrictions to set
-     */
-    public void setTagRestrictions(final TagRestrictions tagRestrictions) {
-        this.tagRestrictions = tagRestrictions;
     }
 
 }

@@ -20,32 +20,32 @@ import net.addradio.codec.mpeg.audio.model.MPEGAudioContent;
 
 /**
  * ID3v1Tag.
- * 
+ *
  * <pre>
  * T      A      G
  * 084    065    071
- * 0x55   0x41   0x47 
+ * 0x55   0x41   0x47
  * </pre>
  */
 public class ID3v1Tag implements MPEGAudioContent, ID3Tag {
 
-    /** {@link String} title. */
-    private String title;
-
-    /** {@link String} artist. */
-    private String artist;
-
     /** {@link String} album. */
     private String album;
 
-    /** {@link int} year. */
-    private int year;
+    /** {@link String} artist. */
+    private String artist;
 
     /** {@link String} comment. */
     private String comment;
 
     /** {@link Genre} genre. */
     private Genre genre;
+
+    /** {@link String} title. */
+    private String title;
+
+    /** {@link int} year. */
+    private int year;
 
     /**
      * equals.
@@ -104,7 +104,7 @@ public class ID3v1Tag implements MPEGAudioContent, ID3Tag {
 
     /**
      * getAlbum.
-     * @return String the album
+     * @return {@link String} the album
      */
     public String getAlbum() {
         return this.album;
@@ -112,7 +112,7 @@ public class ID3v1Tag implements MPEGAudioContent, ID3Tag {
 
     /**
      * getArtist.
-     * @return String the artist
+     * @return {@link String} the artist
      */
     public String getArtist() {
         return this.artist;
@@ -120,7 +120,7 @@ public class ID3v1Tag implements MPEGAudioContent, ID3Tag {
 
     /**
      * getComment.
-     * @return String the comment
+     * @return {@link String} the comment
      */
     public String getComment() {
         return this.comment;
@@ -128,7 +128,7 @@ public class ID3v1Tag implements MPEGAudioContent, ID3Tag {
 
     /**
      * getGenre.
-     * @return Genre the genre
+     * @return {@link Genre} the genre
      */
     public Genre getGenre() {
         return this.genre;
@@ -136,7 +136,7 @@ public class ID3v1Tag implements MPEGAudioContent, ID3Tag {
 
     /**
      * getTitle.
-     * @return String the title
+     * @return {@link String} the title
      */
     public String getTitle() {
         return this.title;
@@ -144,7 +144,7 @@ public class ID3v1Tag implements MPEGAudioContent, ID3Tag {
 
     /**
      * getYear.
-     * @return int the year
+     * @return {@code int} the year
      */
     public int getYear() {
         return this.year;
@@ -170,50 +170,50 @@ public class ID3v1Tag implements MPEGAudioContent, ID3Tag {
 
     /**
      * setAlbum.
-     * @param album String the album to set
+     * @param albumVal {@link String} the album to set
      */
-    public void setAlbum(final String album) {
-        this.album = album;
+    public void setAlbum(final String albumVal) {
+        this.album = albumVal;
     }
 
     /**
      * setArtist.
-     * @param artist String the artist to set
+     * @param artistVal {@link String} the artist to set
      */
-    public void setArtist(final String artist) {
-        this.artist = artist;
+    public void setArtist(final String artistVal) {
+        this.artist = artistVal;
     }
 
     /**
      * setComment.
-     * @param comment String the comment to set
+     * @param commentVal {@link String} the comment to set
      */
-    public void setComment(final String comment) {
-        this.comment = comment;
+    public void setComment(final String commentVal) {
+        this.comment = commentVal;
     }
 
     /**
      * setGenre.
-     * @param genre Genre the genre to set
+     * @param genreRef {@link Genre} the genre to set
      */
-    public void setGenre(final Genre genre) {
-        this.genre = genre;
+    public void setGenre(final Genre genreRef) {
+        this.genre = genreRef;
     }
 
     /**
      * setTitle.
-     * @param title String the title to set
+     * @param titleVal {@link String} the title to set
      */
-    public void setTitle(final String title) {
-        this.title = title;
+    public void setTitle(final String titleVal) {
+        this.title = titleVal;
     }
 
     /**
      * setYear.
-     * @param year int the year to set
+     * @param yearVal {@code int} the year to set
      */
-    public void setYear(final int year) {
-        this.year = year;
+    public void setYear(final int yearVal) {
+        this.year = yearVal;
     }
 
     /**

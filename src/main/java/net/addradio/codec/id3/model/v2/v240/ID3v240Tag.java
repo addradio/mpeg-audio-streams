@@ -44,11 +44,11 @@ public class ID3v240Tag extends ID3v2Tag {
     /** {@link boolean} experimental. */
     private boolean experimental;
 
-    /** {@link boolean} footer. */
-    private boolean footer;
-
     /** {@link ExtendedHeader} extendedHeader. */
     private ExtendedHeader extendedHeader;
+
+    /** {@link boolean} footer. */
+    private boolean footer;
 
     /**
      * ID3v240Tag constructor.
@@ -58,7 +58,7 @@ public class ID3v240Tag extends ID3v2Tag {
 
     /**
      * getExtendedHeader.
-     * @return ExtendedHeader the extendedHeader
+     * @return {@link ExtendedHeader} the extendedHeader
      */
     public ExtendedHeader getExtendedHeader() {
         return this.extendedHeader;
@@ -66,7 +66,7 @@ public class ID3v240Tag extends ID3v2Tag {
 
     /**
      * isExperimental.
-     * @return boolean the experimental
+     * @return {@code boolean} the experimental
      */
     public boolean isExperimental() {
         return this.experimental;
@@ -74,7 +74,7 @@ public class ID3v240Tag extends ID3v2Tag {
 
     /**
      * isFooter.
-     * @return boolean the footer
+     * @return {@code boolean} the footer
      */
     public boolean isFooter() {
         return this.footer;
@@ -82,26 +82,26 @@ public class ID3v240Tag extends ID3v2Tag {
 
     /**
      * setExperimental.
-     * @param experimental boolean the experimental to set
+     * @param experimentalVal {@code boolean} the experimental to set
      */
-    public void setExperimental(final boolean experimental) {
-        this.experimental = experimental;
+    public void setExperimental(final boolean experimentalVal) {
+        this.experimental = experimentalVal;
     }
 
     /**
      * setExtendedHeader.
-     * @param extendedHeader ExtendedHeader the extendedHeader to set
+     * @param extendedHeaderRef {@link ExtendedHeader} the extendedHeader to set
      */
-    public void setExtendedHeader(final ExtendedHeader extendedHeader) {
-        this.extendedHeader = extendedHeader;
+    public void setExtendedHeader(final ExtendedHeader extendedHeaderRef) {
+        this.extendedHeader = extendedHeaderRef;
     }
 
     /**
      * setFooter.
-     * @param footer boolean the footer to set
+     * @param footerVal {@code boolean} the footer to set
      */
-    public void setFooter(final boolean footer) {
-        this.footer = footer;
+    public void setFooter(final boolean footerVal) {
+        this.footer = footerVal;
     }
 
 }

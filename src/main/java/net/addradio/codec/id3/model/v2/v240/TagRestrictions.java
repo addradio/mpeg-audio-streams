@@ -28,7 +28,7 @@ public class TagRestrictions {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("TagRestrictions []");
+        builder.append("TagRestrictions []"); //$NON-NLS-1$
         return builder.toString();
     }
 

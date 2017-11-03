@@ -7,10 +7,13 @@
 	<name>mpeg-audio-streams</name>
 	<url>https://github.com/addradio/mp3-streams</url>
 	<organization>
-		<name>nacamar GmbH</name>
-		<url>http://www.nacamar.de</url>
+		<name>AddRadio - A Division of nacamar GmbH</name>
+		<url>http://www.addradio.de</url>
 	</organization>
 	<description>Decodes mpeg audio byte streams such as mp3 into Java code readable frames. Provides InputStream and OutputStream interfaces.</description>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>org.slf4j</groupId>

@@ -64,7 +64,7 @@ public class ID3v220Tag extends ID3v2Tag {
 
     /**
      * isCompressed.
-     * @return boolean the compressed
+     * @return {@code boolean} the compressed
      */
     public boolean isCompressed() {
         return this.compressed;
@@ -72,10 +72,10 @@ public class ID3v220Tag extends ID3v2Tag {
 
     /**
      * setCompressed.
-     * @param compressed boolean the compressed to set
+     * @param compressedVal {@code boolean} the compressed to set
      */
-    public void setCompressed(final boolean compressed) {
-        this.compressed = compressed;
+    public void setCompressed(final boolean compressedVal) {
+        this.compressed = compressedVal;
     }
 
     /**
@@ -86,19 +86,19 @@ public class ID3v220Tag extends ID3v2Tag {
     @Override
     public String toString() {
         final StringBuilder builder = new StringBuilder();
-        builder.append("ID3v220Tag [compressed=");
+        builder.append("ID3v220Tag [compressed="); //$NON-NLS-1$
         builder.append(this.compressed);
-        builder.append(", getFrames()=");
+        builder.append(", getFrames()="); //$NON-NLS-1$
         builder.append(getFrames());
-        builder.append(", getMajorVersion()=");
+        builder.append(", getMajorVersion()="); //$NON-NLS-1$
         builder.append(getMajorVersion());
-        builder.append(", getRevisionNumber()=");
+        builder.append(", getRevisionNumber()="); //$NON-NLS-1$
         builder.append(getRevisionNumber());
-        builder.append(", getTagSize()=");
+        builder.append(", getTagSize()="); //$NON-NLS-1$
         builder.append(getTagSize());
-        builder.append(", isUnsynchronisation()=");
+        builder.append(", isUnsynchronisation()="); //$NON-NLS-1$
         builder.append(isUnsynchronisation());
-        builder.append("]");
+        builder.append("]"); //$NON-NLS-1$
         return builder.toString();
     }
 }

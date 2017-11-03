@@ -23,15 +23,15 @@ public class Frame {
     /** {@link String} frameId. */
     private String frameId;
 
-    /** {@link int} size. */
-    private int size;
-
     /** {@link String} payload. */
     private String payload;
 
+    /** {@link int} size. */
+    private int size;
+
     /**
      * getFrameId.
-     * @return String the frameId
+     * @return {@link String} the frameId
      */
     public String getFrameId() {
         return this.frameId;
@@ -39,7 +39,7 @@ public class Frame {
 
     /**
      * getPayload.
-     * @return String the payload
+     * @return {@link String} the payload
      */
     public String getPayload() {
         return this.payload;
@@ -47,7 +47,7 @@ public class Frame {
 
     /**
      * getSize.
-     * @return int the size
+     * @return {@code int} the size
      */
     public int getSize() {
         return this.size;
@@ -55,26 +55,26 @@ public class Frame {
 
     /**
      * setFrameId.
-     * @param frameId String the frameId to set
+     * @param frameIdVal {@link String} the frameId to set
      */
-    public void setFrameId(final String frameId) {
-        this.frameId = frameId;
+    public void setFrameId(final String frameIdVal) {
+        this.frameId = frameIdVal;
     }
 
     /**
      * setPayload.
-     * @param payload String the payload to set
+     * @param payloadVal {@link String} the payload to set
      */
-    public void setPayload(final String payload) {
-        this.payload = payload;
+    public void setPayload(final String payloadVal) {
+        this.payload = payloadVal;
     }
 
     /**
      * setSize.
-     * @param size int the size to set
+     * @param sizeVal {@code int} the size to set
      */
-    public void setSize(final int size) {
-        this.size = size;
+    public void setSize(final int sizeVal) {
+        this.size = sizeVal;
     }
 
     /**
