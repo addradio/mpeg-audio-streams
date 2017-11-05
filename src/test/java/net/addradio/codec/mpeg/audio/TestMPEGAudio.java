@@ -17,7 +17,6 @@ package net.addradio.codec.mpeg.audio;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.List;
 
 import org.apache.log4j.BasicConfigurator;
 
@@ -31,6 +30,9 @@ import net.addradio.codec.mpeg.audio.model.Version;
 import net.addradio.codec.mpeg.audio.tools.MP3TestFiles;
 import net.addradio.codec.mpeg.audio.tools.MPEGAudioContentFilter;
 
+/**
+ * TestMPEGAudio.
+ */
 /**
  * TestMPEGAudio.
  */
@@ -64,10 +66,11 @@ public class TestMPEGAudio extends TestCase {
      */
     private static final void assertMPEGFileIntegrity(final String fileName, final int numberOfMPEGAudioFrames)
             throws IOException {
-        List<MPEGAudioContent> frames = MPEGAudio.decode(fileName, MPEGAudioContentFilter.MPEG_AUDIO_FRAMES);
-        assertEquals(numberOfMPEGAudioFrames, frames.size());
+        final DecodingResult dr = MPEGAudio.decode(fileName, MPEGAudioContentFilter.MPEG_AUDIO_FRAMES);
+        assertEquals(numberOfMPEGAudioFrames, dr.getContent().size());
+        assertEquals(0, dr.getSkippedBits());
         MPEGAudioFrame firstFrame = null;
-        for (final MPEGAudioContent frame : frames) {
+        for (final MPEGAudioContent frame : dr.getContent()) {
             if (firstFrame == null) {
                 firstFrame = (MPEGAudioFrame) frame;
                 continue;
@@ -88,14 +91,26 @@ public class TestMPEGAudio extends TestCase {
      * @throws IOException due to file problems.
      */
     @SuppressWarnings("static-method")
-    public void testDecode() throws IOException {
+    public void testDecode1000Hz() throws IOException {
         assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME_1000HZ_MP3, 194);
+    }
+
+    /**
+     * testDecode440Hz.
+     * @throws IOException due to file problems.
+     */
+    @SuppressWarnings("static-method")
+    public void testDecode440Hz() throws IOException {
         assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME_440HZ_MP3, 194);
+    }
+
+    /**
+     * testDecodeClick.
+     * @throws IOException due to file problems.
+     */
+    @SuppressWarnings("static-method")
+    public void testDecodeClick() throws IOException {
         assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME_CLICK_MP3, 1228);
-        assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME_ORGAN_MP3, 501);
-        assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME_PIANO_MP3, 265);
-        assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME_SWEEP_MP3, 386);
-        assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME_MUSIC_MP3, 13324);
     }
 
     /**
@@ -112,6 +127,42 @@ public class TestMPEGAudio extends TestCase {
             assertEquals(BitRate._48, firstFrame.getBitRate());
             assertEquals(SamplingRate._44100, firstFrame.getSamplingRate());
         }
+    }
+
+    /**
+     * testDecodeMusic.
+     * @throws IOException due to file problems.
+     */
+    @SuppressWarnings("static-method")
+    public void testDecodeMusic() throws IOException {
+        assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME_MUSIC_MP3, 13324);
+    }
+
+    /**
+     * testDecodeOrgan.
+     * @throws IOException due to file prolems.
+     */
+    @SuppressWarnings("static-method")
+    public void testDecodeOrgan() throws IOException {
+        assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME_ORGAN_MP3, 501);
+    }
+
+    /**
+     * testDecodePiano.
+     * @throws IOException due to file problems.
+     */
+    @SuppressWarnings("static-method")
+    public void testDecodePiano() throws IOException {
+        assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME_PIANO_MP3, 265);
+    }
+
+    /**
+     * testDecodeSweep.
+     * @throws IOException due to file problems.
+     */
+    @SuppressWarnings("static-method")
+    public void testDecodeSweep() throws IOException {
+        assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME_SWEEP_MP3, 386);
     }
 
 }

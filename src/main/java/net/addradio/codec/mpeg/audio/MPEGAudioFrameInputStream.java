@@ -96,6 +96,9 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
     /** {@code boolean} unalignedSyncAllowed. */
     private boolean unalignedSyncAllowed = false;
 
+    /** {@code long} skippedBits. */
+    private transient long skippedBits = 0;
+
     /**
      * MPEGAudioFrameInputStream constructor.
      *
@@ -113,6 +116,27 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
         if (!isUnalignedSyncAllowed()) {
             assert isByteAligned();
         }
+    }
+
+    /**
+     * assureByteAlignement.
+     * @return {@code int} number of skipped bits during alignment.
+     * @throws IOException
+     */
+    private int assureByteAlignement() throws IOException {
+        int skippedBits = 0;
+        while (!isByteAligned()) {
+            if (MPEGAudioFrameInputStream.LOG.isDebugEnabled()) {
+                MPEGAudioFrameInputStream.LOG.debug("sync start wasn't byte aligned..."); //$NON-NLS-1$
+            }
+            readBit();
+            skippedBits++;
+        }
+        assertByteAlignement();
+        if (MPEGAudioFrameInputStream.LOG.isDebugEnabled()) {
+            MPEGAudioFrameInputStream.LOG.debug("Aligend to byte boundaries.."); //$NON-NLS-1$
+        }
+        return skippedBits;
     }
 
     /**
@@ -215,6 +239,14 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
     }
 
     /**
+     * getSkippedBits.
+     * @return {@code long} the skippedBits
+     */
+    public long getSkippedBits() {
+        return this.skippedBits;
+    }
+
+    /**
      * isUnalignedSyncAllowed.
      * @return {@code boolean true} if sync is allowed even if sync bits are not aligned to byte boundaries.
      */
@@ -247,9 +279,10 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
         while (true) {
             try {
                 final SyncResult syncResult = sync();
-                if (syncResult.getSkippedBits() > 0 && LOG.isInfoEnabled()) {
+                if ((syncResult.getSkippedBits() > 0) && LOG.isInfoEnabled()) {
                     LOG.info("[skippedBits during sync: " + syncResult.getSkippedBits() + "]"); //$NON-NLS-1$ //$NON-NLS-2$
                 }
+                this.skippedBits += syncResult.getSkippedBits();
                 switch (syncResult.getMode()) {
                 case id3v2_aligned:
                     return ID3CodecTools.decodeID3v2Tag(this);
@@ -396,27 +429,6 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
             }
         }
         return new SyncResult(SyncMode.unaligned, skippedBits);
-    }
-
-    /**
-     * assureByteAlignement.
-     * @return {@code int} number of skipped bits during alignment.
-     * @throws IOException
-     */
-    private int assureByteAlignement() throws IOException {
-        int skippedBits = 0;
-        while (!isByteAligned()) {
-            if (MPEGAudioFrameInputStream.LOG.isDebugEnabled()) {
-                MPEGAudioFrameInputStream.LOG.debug("sync start wasn't byte aligned..."); //$NON-NLS-1$
-            }
-            readBit();
-            skippedBits++;
-        }
-        assertByteAlignement();
-        if (MPEGAudioFrameInputStream.LOG.isDebugEnabled()) {
-            MPEGAudioFrameInputStream.LOG.debug("Aligend to byte boundaries.."); //$NON-NLS-1$
-        }
-        return skippedBits;
     }
 
 }

@@ -47,9 +47,9 @@ public class MPEGAudio {
     /**
      * decode.
      * @param file {@link File}
-     * @return {@link List}{@code <}{@link MPEGAudioContent}{@code >} or {@code null} if file could not be opened.
+     * @return {@link DecodingResult} or {@code null} if file could not be opened.
      */
-    public static final List<MPEGAudioContent> decode(final File file) {
+    public static final DecodingResult decode(final File file) {
         return decode(file, MPEGAudioContentFilter.ACCEPT_ALL);
     }
 
@@ -57,9 +57,9 @@ public class MPEGAudio {
      * decode.
      * @param file {@link File}
      * @param filter {@link MPEGAudioContentFilter}
-     * @return {@link List}{@code <}{@link MPEGAudioContent}{@code >} or {@code null} if file could not be opened.
+     * @return {@link DecodingResult} or {@code null} if file could not be opened.
      */
-    public static List<MPEGAudioContent> decode(final File file, final MPEGAudioContentFilter filter) {
+    public static DecodingResult decode(final File file, final MPEGAudioContentFilter filter) {
         try (final InputStream is = new FileInputStream(file)) {
             return decode(is, filter);
         } catch (final IOException e1) {
@@ -71,9 +71,9 @@ public class MPEGAudio {
     /**
      * decode.
      * @param is {@link InputStream}
-     * @return {@link List}{@code <}{@link MPEGAudioContent}{@code >}
+     * @return {@link DecodingResult}
      */
-    public static final List<MPEGAudioContent> decode(final InputStream is) {
+    public static final DecodingResult decode(final InputStream is) {
         return decode(is, MPEGAudioContentFilter.ACCEPT_ALL);
     }
 
@@ -81,12 +81,12 @@ public class MPEGAudio {
      * decode.
      * @param is {@link InputStream}
      * @param filter {@link MPEGAudioContentFilter}
-     * @return {@link List}{@code <}{@link MPEGAudioContent}{@code >}
+     * @return {@link DecodingResult}
      */
-    public static List<MPEGAudioContent> decode(final InputStream is, final MPEGAudioContentFilter filter) {
+    public static DecodingResult decode(final InputStream is, final MPEGAudioContentFilter filter) {
         final MPEGAudioContentCollectorHandler handler = new MPEGAudioContentCollectorHandler();
-        decode(is, filter, handler);
-        return handler.getContents();
+        final long sb = decode(is, filter, handler);
+        return new DecodingResult(sb, handler.getContents());
     }
 
     /**
@@ -94,8 +94,9 @@ public class MPEGAudio {
      * @param is {@link InputStream}
      * @param filter {@link MPEGAudioContentFilter}
      * @param handler {@link MPEGAudioContentHandler}
+     * @return {@code long} number of skipped bits or {@code -1} in case of occurring IOException;
      */
-    public static void decode(final InputStream is, final MPEGAudioContentFilter filter,
+    public static long decode(final InputStream is, final MPEGAudioContentFilter filter,
             final MPEGAudioContentHandler handler) {
         try (final MPEGAudioFrameInputStream mafis = new MPEGAudioFrameInputStream(is)) {
             MPEGAudioContent frame = null;
@@ -106,17 +107,19 @@ public class MPEGAudio {
                     }
                 }
             }
+            return mafis.getSkippedBits();
         } catch (final IOException e) {
             MPEGAudio.LOG.error(e.getLocalizedMessage(), e);
         }
+        return -1;
     }
 
     /**
      * decode.
      * @param fileName {@link String}
-     * @return {@link List}{@code <}{@link MPEGAudioContent}{@code >} or {@code null} if file could not be opened.
+     * @return {@link DecodingResult} or {@code null} if file could not be opened.
      */
-    public static final List<MPEGAudioContent> decode(final String fileName) {
+    public static final DecodingResult decode(final String fileName) {
         return decode(fileName != null ? new File(fileName) : null);
     }
 
@@ -124,9 +127,9 @@ public class MPEGAudio {
      * decode.
      * @param fileName {@link String}
      * @param filter {@link MPEGAudioContentFilter}
-     * @return {@link List}{@code <}{@link MPEGAudioContent}{@code >} or {@code null} if file could not be opened.
+     * @return {@link DecodingResult} or {@code null} if file could not be opened.
      */
-    public static final List<MPEGAudioContent> decode(final String fileName, final MPEGAudioContentFilter filter) {
+    public static final DecodingResult decode(final String fileName, final MPEGAudioContentFilter filter) {
         return decode(fileName != null ? new File(fileName) : null, filter);
     }
 
