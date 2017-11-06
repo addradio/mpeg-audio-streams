@@ -135,6 +135,23 @@ public class MPEGAudio {
 
     /**
      * decodeFirstID3Tag.
+     * @param file {@link File}
+     * @return {@link ID3Tag} first ID3Tag found or {@code null} if file could not be opened.
+     */
+    public static ID3Tag decodeFirstID3Tag(final File file) {
+        if (file == null) {
+            throw new NullPointerException("file MUST NOT be null!"); //$NON-NLS-1$
+        }
+        try (FileInputStream fis = new FileInputStream(file)) {
+            return decodeFirstID3Tag(fis);
+        } catch (final IOException e) {
+            MPEGAudio.LOG.error(e.getLocalizedMessage(), e);
+            return null;
+        }
+    }
+
+    /**
+     * decodeFirstID3Tag.
      * @param is {@link InputStream}
      * @return {@link ID3Tag}
      */
