@@ -13,6 +13,7 @@
 		<url>http://www.addradio.de</url>
 	</organization>
 	<description>Decodes MPEG audio byte streams such as mp3 into Java code readable frames. Encodes these frames back to byte streams also. Provides InputStream and OutputStream interfaces. Rudimentary ID3v1, ID3v2 tag support is implemented as well.</description>
+
 	<licenses>
 		<license>
 			<name>GNU Affero General Public License v3.0</name>
@@ -34,6 +35,18 @@
 		<system>Travic CI</system>
 		<url>https://travis-ci.org/addradio/mpeg-audio-streams</url>
 	</ciManagement>
+
+	<developers>
+		<developer>
+			<name>Sebastian A. Weiss</name>
+			<organization>nacamar GmbH</organization>
+			<organizationUrl>http://www.nacamar.de</organizationUrl>
+			<roles>
+				<role>Maintainer</role>
+			</roles>
+			<email>sebastian.weiss@nacamar.de</email>
+		</developer>
+	</developers>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
