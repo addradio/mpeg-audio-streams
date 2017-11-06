@@ -31,7 +31,7 @@ public class MP3TestFiles {
 
         /**
          * handle.
-         * @param file
+         * @param file {@link File}
          */
         void handle(File file);
     }
