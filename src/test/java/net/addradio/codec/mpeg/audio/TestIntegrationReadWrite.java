@@ -60,7 +60,7 @@ public class TestIntegrationReadWrite extends TestCase {
             TestIntegrationReadWrite.LOG.info("Created tmp file [" + out.getAbsolutePath() + "]"); //$NON-NLS-1$ //$NON-NLS-2$
         }
         try (FileOutputStream fos = new FileOutputStream(out)) {
-            MPEGAudio.encode(dr.getContent(), fos);
+            MPEGAudio.encode(dr.getContent(), fos, true);
         }
         // SEBASTIAN since we do not encode ID3Tags until now, those bytes we have less in our result
         final int id3TagSize = firstID3Tag != null ? firstID3Tag.getOverallSize() : 0;
