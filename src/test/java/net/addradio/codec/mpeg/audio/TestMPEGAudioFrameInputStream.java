@@ -26,6 +26,7 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import junit.framework.TestCase;
+import net.addradio.Log4J;
 import net.addradio.codec.mpeg.audio.codecs.MPEGAudioCodecException;
 import net.addradio.codec.mpeg.audio.model.MPEGAudioContent;
 import net.addradio.codec.mpeg.audio.tools.MP3TestFiles;
@@ -51,8 +52,7 @@ public class TestMPEGAudioFrameInputStream extends TestCase {
      * TestMPEGAudioFrameInputStream constructor.
      */
     public TestMPEGAudioFrameInputStream() {
-        BasicConfigurator.configure();
-        Logger.getRootLogger().setLevel(Level.INFO);
+        Log4J.configureLog4J(Level.INFO);
     }
 
     /**

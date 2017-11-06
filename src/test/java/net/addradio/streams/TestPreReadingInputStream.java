@@ -18,12 +18,22 @@ package net.addradio.streams;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
+import org.apache.log4j.Level;
+
 import junit.framework.TestCase;
+import net.addradio.Log4J;
 
 /**
  * TestPreReadingInputStream.
  */
 public class TestPreReadingInputStream extends TestCase {
+
+    /**
+     * TestPreReadingInputStream constructor.
+     */
+    public TestPreReadingInputStream() {
+        Log4J.configureLog4J(Level.INFO);
+    }
 
     /**
      * testComparingPreReadAndReadByteArray.

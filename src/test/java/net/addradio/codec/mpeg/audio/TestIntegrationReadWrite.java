@@ -22,12 +22,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 
-import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import junit.framework.TestCase;
+import net.addradio.Log4J;
 import net.addradio.codec.id3.model.ID3Tag;
 import net.addradio.codec.mpeg.audio.tools.MP3TestFiles;
 import net.addradio.codec.mpeg.audio.tools.MPEGAudioContentFilter;
@@ -89,8 +89,7 @@ public class TestIntegrationReadWrite extends TestCase {
      * TestIntegrationReadWrite constructor.
      */
     public TestIntegrationReadWrite() {
-        BasicConfigurator.configure();
-        org.apache.log4j.Logger.getRootLogger().setLevel(Level.INFO);
+        Log4J.configureLog4J(Level.INFO);
     }
 
     /**

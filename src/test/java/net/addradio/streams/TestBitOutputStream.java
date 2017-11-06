@@ -19,7 +19,10 @@ package net.addradio.streams;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+import org.apache.log4j.Level;
+
 import junit.framework.TestCase;
+import net.addradio.Log4J;
 
 /**
  * TestBitOutputStream
@@ -30,7 +33,7 @@ public class TestBitOutputStream extends TestCase {
      * TestBitOutputStream constructor.
      */
     public TestBitOutputStream() {
-        super(TestBitOutputStream.class.getSimpleName());
+        Log4J.configureLog4J(Level.INFO);
     }
 
     /**
