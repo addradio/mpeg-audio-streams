@@ -197,7 +197,7 @@ public class MPEGAudio {
      */
     public static byte[] encode(final List<? extends MPEGAudioContent> frames) {
         try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-            encode(frames, baos);
+            encode(frames, baos, true);
             return baos.toByteArray();
         } catch (final IOException e) {
             MPEGAudio.LOG.error(e.getLocalizedMessage(), e);
@@ -209,16 +209,28 @@ public class MPEGAudio {
      * encode.
      * @param frames {@link List}{@code <}{@link MPEGAudioContent}{@code >}
      * @param os {@link OutputStream}
+     * @param autoClose {@code boolean} if {@code true} os will be closed after write.
      * @throws IOException due to IO problems.
      */
-    public static void encode(final List<? extends MPEGAudioContent> frames, final OutputStream os) throws IOException {
-        try (MPEGAudioFrameOutputStream mafos = new MPEGAudioFrameOutputStream(os)) {
+    public static void encode(final List<? extends MPEGAudioContent> frames, final OutputStream os,
+            final boolean autoClose) throws IOException {
+        @SuppressWarnings("resource")
+        MPEGAudioFrameOutputStream mafos = null;
+        try {
+            mafos = new MPEGAudioFrameOutputStream(os);
             for (final MPEGAudioContent mpegAudioFrame : frames) {
                 try {
                     mafos.writeFrame(mpegAudioFrame);
                     mafos.flush();
                 } catch (final MPEGAudioCodecException e) {
                     MPEGAudio.LOG.error(e.getLocalizedMessage(), e);
+                }
+            }
+        } finally {
+            if (autoClose && mafos != null) {
+                try {
+                    mafos.close();
+                } catch (IOException e) {
                 }
             }
         }
