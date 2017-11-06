@@ -174,68 +174,72 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
      * @throws MPEGAudioCodecException
      */
     private MPEGAudioFrame decodeMPEGFrame() throws IOException, MPEGAudioCodecException {
-        final MPEGAudioFrame frame = new MPEGAudioFrame();
-        decodeHeader(frame);
-        assertByteAlignement();
-        readCrcIfNeeded(frame);
+        try {
+            final MPEGAudioFrame frame = new MPEGAudioFrame();
+            decodeHeader(frame);
+            assertByteAlignement();
+            readCrcIfNeeded(frame);
 
-        assertByteAlignement();
-        switch (frame.getLayer()) {
-        case I:
-            switch (frame.getMode()) {
-            case SingleChannel:
-                readLayer1Payload(frame, 1);
+            assertByteAlignement();
+            switch (frame.getLayer()) {
+            case I:
+                switch (frame.getMode()) {
+                case SingleChannel:
+                    readLayer1Payload(frame, 1);
+                    break;
+                case Stereo:
+                case DualChannel:
+                    readLayer1Payload(frame, 2);
+                    break;
+                case JointStereo:
+                    // SEBASTIAN implement
+                    break;
+                default:
+                    break;
+                }
                 break;
-            case Stereo:
-            case DualChannel:
-                readLayer1Payload(frame, 2);
+            case II:
+            case III:
+                final int payloadLengthInBytes = calculateLayer2or3PayloadLength(frame);
+                if (MPEGAudioFrameInputStream.LOG.isDebugEnabled()) {
+                    MPEGAudioFrameInputStream.LOG.debug("[framelength: " + payloadLengthInBytes + "]"); //$NON-NLS-1$ //$NON-NLS-2$
+                }
+                frame.setPayload(new byte[payloadLengthInBytes]);
+                readFully(frame.getPayload());
+                //                    for (int i = 0; i < frameLengthInBytes; i++) {
+                //                        final int read = read();
+                //                        if (MPEGAudioFrameInputStream.LOG.isDebugEnabled()) {
+                //                            MPEGAudioFrameInputStream.LOG.debug(
+                //                                    "payload byte read [index: " + i + ", byte: 0b" + Integer.toBinaryString(read)); //$NON-NLS-1$//$NON-NLS-2$
+                //                        }
+                //                    }
                 break;
-            case JointStereo:
-                // SEBASTIAN implement
-                break;
+            case reserved:
             default:
                 break;
             }
-            break;
-        case II:
-        case III:
-            final int payloadLengthInBytes = calculateLayer2or3PayloadLength(frame);
-            if (MPEGAudioFrameInputStream.LOG.isDebugEnabled()) {
-                MPEGAudioFrameInputStream.LOG.debug("[framelength: " + payloadLengthInBytes + "]"); //$NON-NLS-1$ //$NON-NLS-2$
-            }
-            frame.setPayload(new byte[payloadLengthInBytes]);
-            readFully(frame.getPayload());
-            //                    for (int i = 0; i < frameLengthInBytes; i++) {
-            //                        final int read = read();
-            //                        if (MPEGAudioFrameInputStream.LOG.isDebugEnabled()) {
-            //                            MPEGAudioFrameInputStream.LOG.debug(
-            //                                    "payload byte read [index: " + i + ", byte: 0b" + Integer.toBinaryString(read)); //$NON-NLS-1$//$NON-NLS-2$
-            //                        }
-            //                    }
-            break;
-        case reserved:
-        default:
-            break;
+            assertByteAlignement();
+
+            // SEBASTIAN implement ancillary data
+
+            // int frameSize = 144
+            // * mp3Frame.getBitrate().getValue()
+            // * 1000
+            // / mp3Frame.getSamplingrate().getValue()
+            // + (mp3Frame.isPadding() ? (mp3Frame.getLayer() == Layer.I ? 4
+            // : 1) : 0);
+            // if (LOG.isDebugEnabled()) {
+            // LOG.debug("framesize: " + frameSize);
+            // }
+            //
+            // byte[] data = new byte[frameSize - 4
+            // - (mp3Frame.is_protected() ? 2 : 0)];
+            // readFully(data);
+            // mp3Frame.setData(data);
+            return frame;
+        } catch (NegativeArraySizeException nase) {
+            throw new MPEGAudioCodecException(nase);
         }
-        assertByteAlignement();
-
-        // SEBASTIAN implement ancillary data
-
-        // int frameSize = 144
-        // * mp3Frame.getBitrate().getValue()
-        // * 1000
-        // / mp3Frame.getSamplingrate().getValue()
-        // + (mp3Frame.isPadding() ? (mp3Frame.getLayer() == Layer.I ? 4
-        // : 1) : 0);
-        // if (LOG.isDebugEnabled()) {
-        // LOG.debug("framesize: " + frameSize);
-        // }
-        //
-        // byte[] data = new byte[frameSize - 4
-        // - (mp3Frame.is_protected() ? 2 : 0)];
-        // readFully(data);
-        // mp3Frame.setData(data);
-        return frame;
     }
 
     /**
