@@ -1,16 +1,40 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>net.addradio.codecs</groupId>
+
+	<groupId>net.addradio</groupId>
 	<artifactId>mpeg-audio-streams</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0-SNAPSHOT</version>
+
 	<name>mpeg-audio-streams</name>
 	<url>https://github.com/addradio/mpeg-audio-streams</url>
 	<organization>
 		<name>AddRadio - A Division of nacamar GmbH</name>
 		<url>http://www.addradio.de</url>
 	</organization>
-	<description>Decodes MPEG audio byte streams such as mp3 into Java code readable frames. Provides InputStream and OutputStream interfaces.</description>
+	<description>Decodes MPEG audio byte streams such as mp3 into Java code readable frames. Encodes these frames back to byte streams also. Provides InputStream and OutputStream interfaces. Rudimentary ID3v1, ID3v2 tag support is implemented as well.</description>
+	<licenses>
+		<license>
+			<name>GNU Affero General Public License v3.0</name>
+			<url>https://github.com/addradio/mpeg-audio-streams/blob/master/LICENSE</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	<scm>
+		<connection>scm:git:git://github.com/addradio/mpeg-audio-streams.git</connection>
+		<developerConnection>scm:git:ssh://git@github.com/addradio/mpeg-audio-streams.git</developerConnection>
+		<tag>HEAD</tag>
+		<url>https://github.com/addradio/mpeg-audio-streams</url>
+	</scm>
+	<issueManagement>
+		<url>https://github.com/addradio/mpeg-audio-streams/issues</url>
+		<system>GitHub</system>
+	</issueManagement>
+	<ciManagement>
+		<system>Travic CI</system>
+		<url>https://travis-ci.org/addradio/mpeg-audio-streams</url>
+	</ciManagement>
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
