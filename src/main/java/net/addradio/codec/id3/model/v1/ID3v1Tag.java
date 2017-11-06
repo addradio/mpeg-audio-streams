@@ -29,6 +29,9 @@ import net.addradio.codec.mpeg.audio.model.MPEGAudioContent;
  */
 public class ID3v1Tag implements MPEGAudioContent, ID3Tag {
 
+    /** {@code int} ID3_V1_OVERALL_SIZE */
+    public static final int ID3_V1_OVERALL_SIZE = 128;
+
     /** {@link String} album. */
     private String album;
 
@@ -44,7 +47,7 @@ public class ID3v1Tag implements MPEGAudioContent, ID3Tag {
     /** {@link String} title. */
     private String title;
 
-    /** {@link int} year. */
+    /** {@code int} year. */
     private int year;
 
     /**
@@ -132,6 +135,16 @@ public class ID3v1Tag implements MPEGAudioContent, ID3Tag {
      */
     public Genre getGenre() {
         return this.genre;
+    }
+
+    /**
+     * getOverallSize.
+     * @see net.addradio.codec.id3.model.ID3Tag#getOverallSize()
+     * @return {@code int}
+     */
+    @Override
+    public int getOverallSize() {
+        return ID3v1Tag.ID3_V1_OVERALL_SIZE;
     }
 
     /**

@@ -95,7 +95,7 @@ public class ID3v220Tag extends ID3v2Tag {
         builder.append(", getRevisionNumber()="); //$NON-NLS-1$
         builder.append(getRevisionNumber());
         builder.append(", getTagSize()="); //$NON-NLS-1$
-        builder.append(getTagSize());
+        builder.append(getPayloadSize());
         builder.append(", isUnsynchronisation()="); //$NON-NLS-1$
         builder.append(isUnsynchronisation());
         builder.append("]"); //$NON-NLS-1$

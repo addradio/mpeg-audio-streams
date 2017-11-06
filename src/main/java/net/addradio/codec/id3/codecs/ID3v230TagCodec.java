@@ -59,9 +59,10 @@ public final class ID3v230TagCodec {
         if (maybeUnreadable && ID3v230TagCodec.LOG.isDebugEnabled()) {
             ID3v230TagCodec.LOG.debug("id3v2 tag is maybe unreadable!"); //$NON-NLS-1$
         }
-        id3v230Tag.setTagSize(ID3CodecTools.readSyncSafeInt(bis));
+        id3v230Tag.setPayloadSize(ID3CodecTools.readSyncSafeInt(bis));
+        id3v230Tag.setOverallSize(ID3v220TagCodec.NUM_OF_HEADER_BYTES + id3v230Tag.getPayloadSize());
 
-        int bytesLeft = id3v230Tag.getTagSize();
+        int bytesLeft = id3v230Tag.getPayloadSize();
         if (id3v230Tag.getExtendedHeader() != null) {
             id3v230Tag.getExtendedHeader().setSize(bis.readInt(4));
             bytesLeft -= 4;

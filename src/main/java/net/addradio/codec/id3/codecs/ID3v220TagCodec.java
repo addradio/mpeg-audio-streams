@@ -34,6 +34,9 @@ public final class ID3v220TagCodec {
     /** {@link Logger} LOG */
     private static final Logger LOG = LoggerFactory.getLogger(ID3v220TagCodec.class);
 
+    /** {@code int} NUM_OF_HEADER_BYTES */
+    static final int NUM_OF_HEADER_BYTES = 10;
+
     /**
      * decodeID3v220Tag.
      * @param bis {@link BitInputStream}
@@ -56,9 +59,11 @@ public final class ID3v220TagCodec {
         if (maybeUnreadable && ID3v220TagCodec.LOG.isDebugEnabled()) {
             ID3v220TagCodec.LOG.debug("id3v220 tag is maybe unreadable!"); //$NON-NLS-1$
         }
-        id3v220Tag.setTagSize(ID3CodecTools.readSyncSafeInt(bis));
 
-        int bytesLeft = id3v220Tag.getTagSize();
+        id3v220Tag.setPayloadSize(ID3CodecTools.readSyncSafeInt(bis));
+        id3v220Tag.setOverallSize(ID3v220TagCodec.NUM_OF_HEADER_BYTES + id3v220Tag.getPayloadSize());
+
+        int bytesLeft = id3v220Tag.getPayloadSize();
         while (bytesLeft > 0) {
             final Frame e = new Frame();
             e.setFrameId(ID3CodecTools.readStringFromStream(bis, 3));

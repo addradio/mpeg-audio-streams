@@ -32,13 +32,16 @@ public class ID3v2Tag implements MPEGAudioContent, ID3Tag {
     /** {@code int} majorVersion. */
     private int majorVersion;
 
+    /** {@code int} overallSize */
+    private int overallSize;
+
+    /** {@code int} payloadSize. */
+    private int payloadSize;
+
     /** {@code int} revisionNumber. */
     private int revisionNumber;
 
-    /** {@link int} tagSize. */
-    private int tagSize;
-
-    /** {@link boolean} unsynchronisation. */
+    /** {@code boolean} unsynchronisation. */
     private boolean unsynchronisation;
 
     /**
@@ -79,7 +82,7 @@ public class ID3v2Tag implements MPEGAudioContent, ID3Tag {
         if (this.revisionNumber != other.revisionNumber) {
             return false;
         }
-        if (this.tagSize != other.tagSize) {
+        if (this.payloadSize != other.payloadSize) {
             return false;
         }
         if (this.unsynchronisation != other.unsynchronisation) {
@@ -105,19 +108,27 @@ public class ID3v2Tag implements MPEGAudioContent, ID3Tag {
     }
 
     /**
+     * @return the {@code int} overallSize
+     */
+    @Override
+    public int getOverallSize() {
+        return this.overallSize;
+    }
+
+    /**
+     * getTagSize.
+     * @return {@code int} the payloadSize
+     */
+    public int getPayloadSize() {
+        return this.payloadSize;
+    }
+
+    /**
      * getRevisionNumber.
      * @return {@code int} the revisionNumber
      */
     public int getRevisionNumber() {
         return this.revisionNumber;
-    }
-
-    /**
-     * getTagSize.
-     * @return {@code int} the tagSize
-     */
-    public int getTagSize() {
-        return this.tagSize;
     }
 
     /**
@@ -132,7 +143,7 @@ public class ID3v2Tag implements MPEGAudioContent, ID3Tag {
         result = (prime * result) + ((this.frames == null) ? 0 : this.frames.hashCode());
         result = (prime * result) + this.majorVersion;
         result = (prime * result) + this.revisionNumber;
-        result = (prime * result) + this.tagSize;
+        result = (prime * result) + this.payloadSize;
         result = (prime * result) + (this.unsynchronisation ? 1231 : 1237);
         return result;
     }
@@ -162,19 +173,26 @@ public class ID3v2Tag implements MPEGAudioContent, ID3Tag {
     }
 
     /**
+     * @param overallSizeVal {@code int} the overallSize to set
+     */
+    public void setOverallSize(final int overallSizeVal) {
+        this.overallSize = overallSizeVal;
+    }
+
+    /**
+     * setTagSize.
+     * @param tagSizeVal {@code int} the payloadSize to set
+     */
+    public void setPayloadSize(final int tagSizeVal) {
+        this.payloadSize = tagSizeVal;
+    }
+
+    /**
      * setRevisionNumber.
      * @param revisionNumberVal {@code int} the revisionNumber to set
      */
     public void setRevisionNumber(final int revisionNumberVal) {
         this.revisionNumber = revisionNumberVal;
-    }
-
-    /**
-     * setTagSize.
-     * @param tagSizeVal {@code int} the tagSize to set
-     */
-    public void setTagSize(final int tagSizeVal) {
-        this.tagSize = tagSizeVal;
     }
 
     /**

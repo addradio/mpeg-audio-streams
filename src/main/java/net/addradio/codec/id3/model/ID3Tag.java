@@ -21,4 +21,10 @@ package net.addradio.codec.id3.model;
  */
 public interface ID3Tag {
 
+    /**
+     * getOverallSize.
+     * @return {@code int} the tag's overall size (incl. header) in {@code bytes}
+     */
+    int getOverallSize();
+
 }

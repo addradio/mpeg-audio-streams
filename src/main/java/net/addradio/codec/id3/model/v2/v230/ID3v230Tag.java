@@ -120,7 +120,7 @@ public class ID3v230Tag extends ID3v2Tag {
         builder.append(", isUnsynchronisation()="); //$NON-NLS-1$
         builder.append(isUnsynchronisation());
         builder.append(", getTagSize()="); //$NON-NLS-1$
-        builder.append(getTagSize());
+        builder.append(getPayloadSize());
         builder.append(", getFrames()="); //$NON-NLS-1$
         builder.append(getFrames());
         builder.append(", experimental="); //$NON-NLS-1$

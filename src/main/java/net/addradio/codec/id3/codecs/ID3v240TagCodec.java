@@ -37,6 +37,9 @@ public final class ID3v240TagCodec {
     /** {@link Logger} LOG */
     private static final Logger LOG = LoggerFactory.getLogger(ID3v240TagCodec.class);
 
+    /** {@code int} NUM_OF_FOOTER_BYTES */
+    static final int NUM_OF_FOOTER_BYTES = 10;
+
     /**
      * decodeID3v240Tag.
      * @param bis {@link BitInputStream}
@@ -63,9 +66,11 @@ public final class ID3v240TagCodec {
         if (maybeUnreadable && ID3v240TagCodec.LOG.isDebugEnabled()) {
             ID3v240TagCodec.LOG.debug("id3v2 tag is maybe unreadable!"); //$NON-NLS-1$
         }
-        id3v240Tag.setTagSize(ID3CodecTools.readSyncSafeInt(bis));
+        id3v240Tag.setPayloadSize(ID3CodecTools.readSyncSafeInt(bis));
+        id3v240Tag.setOverallSize(ID3v220TagCodec.NUM_OF_HEADER_BYTES
+                + (id3v240Tag.isFooter() ? ID3v240TagCodec.NUM_OF_FOOTER_BYTES : 0) + id3v240Tag.getPayloadSize());
 
-        int bytesLeft = id3v240Tag.getTagSize();
+        int bytesLeft = id3v240Tag.getPayloadSize();
         if (id3v240Tag.getExtendedHeader() != null) {
             id3v240Tag.getExtendedHeader().setSize(ID3CodecTools.readSyncSafeInt(bis));
             bytesLeft -= 4;
