@@ -199,6 +199,7 @@ public class MPEGAudio {
             for (final MPEGAudioContent mpegAudioFrame : frames) {
                 try {
                     mafos.writeFrame(mpegAudioFrame);
+                    mafos.flush();
                 } catch (final MPEGAudioCodecException e) {
                     MPEGAudio.LOG.error(e.getLocalizedMessage(), e);
                 }
