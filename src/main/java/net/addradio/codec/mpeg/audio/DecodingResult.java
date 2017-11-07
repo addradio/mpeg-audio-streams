@@ -24,11 +24,14 @@ import net.addradio.codec.mpeg.audio.model.MPEGAudioContent;
  */
 public class DecodingResult {
 
-    /** {@code long} skippedBits. */
-    private long skippedBits;
+    /** {@link float} averageBitRate */
+    private float averageBitRate = -1;
 
     /** {@link List}{@code <}{@link MPEGAudioContent}{@code >} content. */
     private List<MPEGAudioContent> content;
+
+    /** {@code long} skippedBits. */
+    private long skippedBits;
 
     /**
     * DecodingResult constructor.
@@ -39,11 +42,21 @@ public class DecodingResult {
     /**
      * DecodingResult constructor.
      * @param skippedBitsVal {@code long}
+     * @param averageBitRateVal {@code float}
      * @param contentRef {@link List}{@code <}{@link MPEGAudioContent}{@code >}
      */
-    public DecodingResult(final long skippedBitsVal, final List<MPEGAudioContent> contentRef) {
+    public DecodingResult(final long skippedBitsVal, final float averageBitRateVal,
+            final List<MPEGAudioContent> contentRef) {
         setSkippedBits(skippedBitsVal);
+        setAverageBitRate(averageBitRateVal);
         setContent(contentRef);
+    }
+
+    /**
+     * @return the {@link float} averageBitRate or {@code -1} if average bitrate has not been calculated so far.
+     */
+    public float getAverageBitRate() {
+        return this.averageBitRate;
     }
 
     /**
@@ -63,19 +76,26 @@ public class DecodingResult {
     }
 
     /**
-     * setContent.
-     * @param content {@link List}{@code <}{@link MPEGAudioContent}{@code >} the content to set
+     * @param averageBitRateVal {@link float} the averageBitRate to set
      */
-    public void setContent(final List<MPEGAudioContent> content) {
-        this.content = content;
+    public void setAverageBitRate(final float averageBitRateVal) {
+        this.averageBitRate = averageBitRateVal;
+    }
+
+    /**
+     * setContent.
+     * @param contentRef {@link List}{@code <}{@link MPEGAudioContent}{@code >} the content to set
+     */
+    public void setContent(final List<MPEGAudioContent> contentRef) {
+        this.content = contentRef;
     }
 
     /**
      * setSkippedBits.
-     * @param skippedBits {@code long} the skippedBits to set
+     * @param skippedBitsVal {@code long} the skippedBits to set
      */
-    public void setSkippedBits(final long skippedBits) {
-        this.skippedBits = skippedBits;
+    public void setSkippedBits(final long skippedBitsVal) {
+        this.skippedBits = skippedBitsVal;
     }
 
 }

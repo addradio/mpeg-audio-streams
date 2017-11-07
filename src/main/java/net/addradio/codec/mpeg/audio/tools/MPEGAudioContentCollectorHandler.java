@@ -20,19 +20,33 @@ import java.util.LinkedList;
 import java.util.List;
 
 import net.addradio.codec.mpeg.audio.model.MPEGAudioContent;
+import net.addradio.codec.mpeg.audio.model.MPEGAudioFrame;
 
 /**
  * MPEGAudioContentCollectorHandler
  */
 public class MPEGAudioContentCollectorHandler implements MPEGAudioContentHandler {
 
+    /** {@link float} averageBitRate */
+    private transient float averageBitRate = 0;
+
     /** {@link List}{@code <}{@link MPEGAudioContent}{@code >} contents */
     final List<MPEGAudioContent> contents = new LinkedList<>();
+
+    /** {@link int} mpegaFrameCount */
+    private transient int mpegaFrameCount = 0;
 
     /**
      * MPEGAudioContentCollectorHandler constructor.
      */
     public MPEGAudioContentCollectorHandler() {
+    }
+
+    /**
+     * @return the {@link float} averageBitRate
+     */
+    public float getAverageBitRate() {
+        return this.averageBitRate;
     }
 
     /**
@@ -52,6 +66,11 @@ public class MPEGAudioContentCollectorHandler implements MPEGAudioContentHandler
     public boolean handle(final MPEGAudioContent content) {
         if (content != null) {
             this.contents.add(content);
+            if (content instanceof MPEGAudioFrame) {
+                this.mpegaFrameCount++;
+                this.averageBitRate = ((this.averageBitRate * (this.mpegaFrameCount - 1))
+                        + ((MPEGAudioFrame) content).getBitRate().getValue()) / this.mpegaFrameCount;
+            }
         }
         return false;
     }

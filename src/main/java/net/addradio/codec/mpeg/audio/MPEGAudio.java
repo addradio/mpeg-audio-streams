@@ -86,7 +86,7 @@ public class MPEGAudio {
     public static DecodingResult decode(final InputStream is, final MPEGAudioContentFilter filter) {
         final MPEGAudioContentCollectorHandler handler = new MPEGAudioContentCollectorHandler();
         final long sb = decode(is, filter, handler);
-        return new DecodingResult(sb, handler.getContents());
+        return new DecodingResult(sb, handler.getAverageBitRate(), handler.getContents());
     }
 
     /**
