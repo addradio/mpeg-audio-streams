@@ -53,7 +53,7 @@ public class DecodingResult {
     }
 
     /**
-     * @return the {@link float} averageBitRate or {@code -1} if average bitrate has not been calculated so far.
+     * @return the {@code float} averageBitRate or {@code -1} if average bitrate has not been calculated so far.
      */
     public float getAverageBitRate() {
         return this.averageBitRate;
@@ -76,7 +76,7 @@ public class DecodingResult {
     }
 
     /**
-     * @param averageBitRateVal {@link float} the averageBitRate to set
+     * @param averageBitRateVal {@code float} the averageBitRate to set
      */
     public void setAverageBitRate(final float averageBitRateVal) {
         this.averageBitRate = averageBitRateVal;

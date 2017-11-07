@@ -43,7 +43,7 @@ public class MPEGAudioContentCollectorHandler implements MPEGAudioContentHandler
     }
 
     /**
-     * @return the {@link float} averageBitRate
+     * @return the {@code float} averageBitRate
      */
     public float getAverageBitRate() {
         return this.averageBitRate;
