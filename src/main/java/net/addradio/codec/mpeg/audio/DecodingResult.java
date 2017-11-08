@@ -68,6 +68,14 @@ public class DecodingResult {
     }
 
     /**
+     * getNumberOfDecodedContents.
+     * @return {@code int}
+     */
+    public int getNumberOfDecodedContents() {
+        return this.content.size();
+    }
+
+    /**
      * getSkippedBits.
      * @return {@code long} the skippedBits
      */
@@ -96,6 +104,25 @@ public class DecodingResult {
      */
     public void setSkippedBits(final long skippedBitsVal) {
         this.skippedBits = skippedBitsVal;
+    }
+
+    /**
+     * toString.
+     * @see java.lang.Object#toString()
+     * @return {@link String}
+     */
+    @SuppressWarnings("nls")
+    @Override
+    public String toString() {
+        final StringBuilder builder = new StringBuilder();
+        builder.append("DecodingResult [averageBitRate=");
+        builder.append(this.averageBitRate);
+        builder.append(", skippedBits=");
+        builder.append(this.skippedBits);
+        builder.append(", getNumberOfDecodedContents()=");
+        builder.append(getNumberOfDecodedContents());
+        builder.append("]");
+        return builder.toString();
     }
 
 }
