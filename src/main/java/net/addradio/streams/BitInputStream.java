@@ -211,6 +211,12 @@ public class BitInputStream extends InputStream {
         skipBits(1);
     }
 
+//    @Override
+//    public long skip(long n) throws IOException {
+//        // TODO Auto-generated method stub
+//        return super.skip(n);
+//    }
+    
     /**
      * skipBits.
      * @param numberOfBitsToSkip {@code int}
