@@ -16,6 +16,7 @@
 
 package net.addradio.codec.mpeg.audio;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -206,6 +207,37 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
                 }
                 frame.setPayload(new byte[payloadLengthInBytes]);
                 readFully(frame.getPayload());
+
+                switch (frame.getMode()) {
+                case SingleChannel:
+                    frame.setGlobalGain(new int[2][1]);
+                    try (BitInputStream bis = new BitInputStream(new ByteArrayInputStream(frame.getPayload()))) {
+                        bis.skipBits(18);
+                        for (int gr = 0; gr < 2; gr++) {
+                            bis.skipBits(21);
+                            frame.getGlobalGain()[gr][0] = bis.read();
+                            bis.skipBits(30);
+                        }
+                    }
+                    break;
+                case DualChannel:
+                case JointStereo:
+                case Stereo:
+                default:
+                    frame.setGlobalGain(new int[2][2]);
+                    try (BitInputStream bis = new BitInputStream(new ByteArrayInputStream(frame.getPayload()))) {
+                        bis.skipBits(20);
+                        for (int gr = 0; gr < 2; gr++) {
+                            for (int ch = 0; ch < 2; ch++) {
+                                bis.skipBits(21);
+                                frame.getGlobalGain()[gr][ch] = bis.read();
+                                bis.skipBits(30);
+                            }
+                        }
+                    }
+                    break;
+                }
+
                 //                    for (int i = 0; i < frameLengthInBytes; i++) {
                 //                        final int read = read();
                 //                        if (MPEGAudioFrameInputStream.LOG.isDebugEnabled()) {
