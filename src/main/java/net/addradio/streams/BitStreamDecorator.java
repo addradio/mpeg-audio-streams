@@ -58,6 +58,18 @@ public class BitStreamDecorator extends OutputStream {
     }
 
     /**
+     * skipBytes.
+     * @param i {@code int}
+     * @throws IOException due to IO problems.
+     */
+    public void skipBytes(final int i) throws IOException {
+        // SEBASTIAN improve
+        for (int j = i; j > 0; j--) {
+            this.outBOS.write(this.inBIS.read());
+        }
+    }
+
+    /**
      * @param b {@code byte[]}
      * @throws IOException due to IO problems.
      * @see java.io.OutputStream#write(byte[])
