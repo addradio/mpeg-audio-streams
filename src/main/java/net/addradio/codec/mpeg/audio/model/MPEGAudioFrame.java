@@ -65,6 +65,9 @@ public class MPEGAudioFrame implements MPEGAudioContent {
     /** {@code boolean} errorProtected. */
     private boolean errorProtected = false;
 
+    /** {@code int[][]} globalGain */
+    private int[][] globalGain;
+
     /** {@link Layer} layer. */
     private Layer layer;
 
@@ -134,6 +137,13 @@ public class MPEGAudioFrame implements MPEGAudioContent {
     public int getFrameLength() {
         return getPayload().length + MPEGAudioFrame.HEADER_SIZE_IN_BYTES
                 + (isErrorProtected() ? MPEGAudioFrame.CRC_SIZE_IN_BYTES : 0);
+    }
+
+    /**
+     * @return the {@code int[][]} globalGain
+     */
+    public int[][] getGlobalGain() {
+        return this.globalGain;
     }
 
     /**
@@ -289,6 +299,13 @@ public class MPEGAudioFrame implements MPEGAudioContent {
      */
     public void setErrorProtected(final boolean errorProtectedVal) {
         this.errorProtected = errorProtectedVal;
+    }
+
+    /**
+     * @param globalGainRef {@code int[][]} the globalGain to set
+     */
+    public void setGlobalGain(final int[][] globalGainRef) {
+        this.globalGain = globalGainRef;
     }
 
     /**
