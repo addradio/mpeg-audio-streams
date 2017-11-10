@@ -15,6 +15,8 @@
  */
 package net.addradio.codec.mpeg.audio.model;
 
+import java.util.Arrays;
+
 /**
  * MPEGAudioFrame.
  *
@@ -436,6 +438,8 @@ public class MPEGAudioFrame implements MPEGAudioContent {
         builder.append(this.original);
         builder.append(", emphasis="); //$NON-NLS-1$
         builder.append(this.emphasis);
+        builder.append(", globalGain="); //$NON-NLS-1$
+        builder.append(Arrays.deepToString(this.globalGain));
         builder.append("]"); //$NON-NLS-1$
         return builder.toString();
     }
