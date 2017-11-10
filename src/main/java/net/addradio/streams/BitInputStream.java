@@ -203,4 +203,22 @@ public class BitInputStream extends InputStream {
         this.inner = innerRef;
     }
 
+    /**
+     * skipBit.
+     * @throws IOException due to bad IO situations.
+     */
+    public void skipBit() throws IOException {
+        skipBits(1);
+    }
+
+    /**
+     * skipBits.
+     * @param numberOfBitsToSkip {@code int}
+     * @throws IOException in case of bad IO situations.
+     */
+    public void skipBits(final int numberOfBitsToSkip) throws IOException {
+        // SEBASTIAN implement more efficiently
+        readBits(numberOfBitsToSkip);
+    }
+
 }
