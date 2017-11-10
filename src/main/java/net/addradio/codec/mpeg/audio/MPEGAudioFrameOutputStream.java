@@ -16,6 +16,7 @@
 
 package net.addradio.codec.mpeg.audio;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Arrays;
@@ -29,7 +30,9 @@ import net.addradio.codec.mpeg.audio.codecs.ModeExtensionCodec;
 import net.addradio.codec.mpeg.audio.codecs.SamplingRateCodec;
 import net.addradio.codec.mpeg.audio.model.MPEGAudioContent;
 import net.addradio.codec.mpeg.audio.model.MPEGAudioFrame;
+import net.addradio.streams.BitInputStream;
 import net.addradio.streams.BitOutputStream;
+import net.addradio.streams.BitStreamDecorator;
 
 /**
  * MPEGAudioFrameOutputStream
@@ -93,8 +96,50 @@ public class MPEGAudioFrameOutputStream extends BitOutputStream {
             if (mpegAudioFrame.getPayload() == null) {
                 throw new MPEGAudioCodecException("payload of frame is null."); //$NON-NLS-1$
             }
-            write(mpegAudioFrame.getPayload());
-            bytesWritten += mpegAudioFrame.getPayload().length;
+
+            switch (((MPEGAudioFrame) frame).getLayer()) {
+            case I:
+                break;
+            case II:
+                break;
+            case III:
+                switch (((MPEGAudioFrame) frame).getMode()) {
+                case SingleChannel:
+                    final BitStreamDecorator bsd = new BitStreamDecorator(
+                            new BitInputStream(new ByteArrayInputStream(((MPEGAudioFrame) frame).getPayload())), this);
+                    bsd.skipBits(18);
+                    for (int gr = 0; gr < 2; gr++) {
+                        bsd.skipBits(21);
+                        bsd.write(((MPEGAudioFrame) frame).getGlobalGain()[gr][0]);
+                        bsd.skipBits(30);
+                    }
+                    bsd.skipBytes(((MPEGAudioFrame) frame).getPayload().length - 17);
+                    bytesWritten += mpegAudioFrame.getPayload().length;
+                    break;
+                case DualChannel:
+                case JointStereo:
+                case Stereo:
+                default:
+                    final BitStreamDecorator bsd2 = new BitStreamDecorator(
+                            new BitInputStream(new ByteArrayInputStream(((MPEGAudioFrame) frame).getPayload())), this);
+                    bsd2.skipBits(20);
+                    for (int gr = 0; gr < 2; gr++) {
+                        for (int ch = 0; ch < 2; ch++) {
+                            bsd2.skipBits(21);
+                            bsd2.write(((MPEGAudioFrame) frame).getGlobalGain()[gr][ch]);
+                            bsd2.skipBits(30);
+                        }
+                    }
+                    bsd2.skipBytes(((MPEGAudioFrame) frame).getPayload().length - 32);
+                    bytesWritten += mpegAudioFrame.getPayload().length;
+                    break;
+                }
+                break;
+            case reserved:
+            default:
+                break;
+            }
+
         } else {
             // SEBASTIAN implement
         }
