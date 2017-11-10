@@ -125,19 +125,19 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
      * @throws IOException
      */
     private int assureByteAlignement() throws IOException {
-        int skippedBits = 0;
+        int skippedBitsVal = 0;
         while (!isByteAligned()) {
             if (MPEGAudioFrameInputStream.LOG.isDebugEnabled()) {
                 MPEGAudioFrameInputStream.LOG.debug("sync start wasn't byte aligned..."); //$NON-NLS-1$
             }
             readBit();
-            skippedBits++;
+            skippedBitsVal++;
         }
         assertByteAlignement();
         if (MPEGAudioFrameInputStream.LOG.isDebugEnabled()) {
             MPEGAudioFrameInputStream.LOG.debug("Aligend to byte boundaries.."); //$NON-NLS-1$
         }
-        return skippedBits;
+        return skippedBitsVal;
     }
 
     /**
