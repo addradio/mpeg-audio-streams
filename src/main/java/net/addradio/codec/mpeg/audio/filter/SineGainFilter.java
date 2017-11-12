@@ -20,7 +20,7 @@ import net.addradio.codec.mpeg.audio.model.MPEGAudioFrame;
 /**
  * SineGainFilter.
  */
-public class SineGainFilter extends BaseMPEGAudioFrameFilter implements Filter {
+public class SineGainFilter extends GainFilter implements Filter {
 
     /** {@link boolean} initialized. */
     private boolean initialized;
@@ -54,12 +54,7 @@ public class SineGainFilter extends BaseMPEGAudioFrameFilter implements Filter {
                     * (((frame.getFrameLength() * 8f) / frame.getBitRate().getValue()) / getWavelengthInSecs());
             this.initialized = true;
         }
-        final double sinePart = Math.abs(Math.sin(this.x));
-        for (int i = 0; i < frame.getGlobalGain().length; i++) {
-            for (int j = 0; j < frame.getGlobalGain()[i].length; j++) {
-                frame.getGlobalGain()[i][j] = (int) Math.round(sinePart * frame.getGlobalGain()[i][j]);
-            }
-        }
+        applyFactorToGlobalGain(frame, Math.abs(Math.sin(this.x)));
         this.x += this.deltaX;
     }
 

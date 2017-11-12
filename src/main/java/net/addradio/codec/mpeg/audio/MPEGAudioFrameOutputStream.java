@@ -107,10 +107,21 @@ public class MPEGAudioFrameOutputStream extends BitOutputStream {
                 case SingleChannel:
                     final BitStreamDecorator bsd = new BitStreamDecorator(
                             new BitInputStream(new ByteArrayInputStream(((MPEGAudioFrame) frame).getPayload())), this);
+                    //     9 bits main_data_end
+                    //     5 bits private_bits
+                    // 4 x 1 bits scfsi
                     bsd.skipBits(18);
                     for (int gr = 0; gr < 2; gr++) {
+                        // 12 bits part2_3_length
+                        //  9 bits big_values
                         bsd.skipBits(21);
                         bsd.write(((MPEGAudioFrame) frame).getGlobalGain()[gr][0]);
+                        //  4 bits scalefac_compress
+                        //  1 bit  blocksplit_flag
+                        // 22 bits block
+                        //  1 bit  preflag
+                        //  1 bit  scalefac_scale
+                        //  1 bit  count1table_select
                         bsd.skipBits(30);
                     }
                     bsd.skipBytes(((MPEGAudioFrame) frame).getPayload().length - 17);

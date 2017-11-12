@@ -24,7 +24,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import net.addradio.codec.id3.model.ID3Tag;
-import net.addradio.codec.mpeg.audio.filter.SineGainFilter;
+import net.addradio.codec.mpeg.audio.filter.Filter;
+import net.addradio.codec.mpeg.audio.filter.FixFactorGainFIlter;
 import net.addradio.codec.mpeg.audio.tools.MPEGAudioContentFilter;
 
 /**
@@ -43,7 +44,7 @@ public class AppTestApplyGainFilter {
     public static void main(String[] args) throws IOException {
 
         BasicConfigurator.configure();
-        
+
         final File in = new File("src/test/mp3/1000Hz.mp3");
         // assume there is just one id 3 tag at the very beginning...
         final ID3Tag firstID3Tag = MPEGAudio.decodeFirstID3Tag(in);
@@ -57,8 +58,9 @@ public class AppTestApplyGainFilter {
             LOG.info("Created tmp file [" + out.getAbsolutePath() + "]"); //$NON-NLS-1$ //$NON-NLS-2$
         }
         try (FileOutputStream fos = new FileOutputStream(out)) {
-            SineGainFilter filter = new SineGainFilter();
-            filter.setWavelengthInSecs(10);
+            //            SineGainFilter filter = new SineGainFilter();
+            //            filter.setWavelengthInSecs(10);
+            Filter filter = new FixFactorGainFIlter(1.0);
             MPEGAudio.encode(dr.getContent(), filter, fos, true);
         }
 
