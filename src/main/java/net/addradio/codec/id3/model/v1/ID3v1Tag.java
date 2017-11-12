@@ -16,7 +16,6 @@
 package net.addradio.codec.id3.model.v1;
 
 import net.addradio.codec.id3.model.ID3Tag;
-import net.addradio.codec.mpeg.audio.model.MPEGAudioContent;
 
 /**
  * ID3v1Tag.
@@ -27,7 +26,7 @@ import net.addradio.codec.mpeg.audio.model.MPEGAudioContent;
  * 0x55   0x41   0x47
  * </pre>
  */
-public class ID3v1Tag implements MPEGAudioContent, ID3Tag {
+public class ID3v1Tag extends ID3Tag {
 
     /** {@code int} ID3_V1_OVERALL_SIZE */
     public static final int ID3_V1_OVERALL_SIZE = 128;

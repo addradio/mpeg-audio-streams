@@ -16,15 +16,37 @@
 
 package net.addradio.codec.id3.model;
 
+import net.addradio.codec.mpeg.audio.model.MPEGAudioContent;
+
 /**
  * ID3Tag
  */
-public interface ID3Tag {
+public abstract class ID3Tag implements MPEGAudioContent {
 
     /**
      * getOverallSize.
      * @return {@code int} the tag's overall size (incl. header) in {@code bytes}
      */
-    int getOverallSize();
+    public abstract int getOverallSize();
+
+    /**
+     * isID3Tag.
+     * @see net.addradio.codec.mpeg.audio.model.MPEGAudioContent#isID3Tag()
+     * @return {@code boolean true} always.
+     */
+    @Override
+    public boolean isID3Tag() {
+        return true;
+    }
+
+    /**
+     * isMPEGAudioFrame.
+     * @see net.addradio.codec.mpeg.audio.model.MPEGAudioContent#isMPEGAudioFrame()
+     * @return {@code boolean false} always.
+     */
+    @Override
+    public boolean isMPEGAudioFrame() {
+        return false;
+    }
 
 }

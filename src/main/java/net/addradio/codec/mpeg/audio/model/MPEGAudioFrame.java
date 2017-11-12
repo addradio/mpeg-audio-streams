@@ -228,6 +228,26 @@ public class MPEGAudioFrame implements MPEGAudioContent {
     }
 
     /**
+     * isID3Tag.
+     * @see net.addradio.codec.mpeg.audio.model.MPEGAudioContent#isID3Tag()
+     * @return {@code boolean false} always.
+     */
+    @Override
+    public boolean isID3Tag() {
+        return false;
+    }
+
+    /**
+     * isMPEGAudioFrame.
+     * @see net.addradio.codec.mpeg.audio.model.MPEGAudioContent#isMPEGAudioFrame()
+     * @return {@code boolean true} always.
+     */
+    @Override
+    public boolean isMPEGAudioFrame() {
+        return true;
+    }
+
+    /**
      * isOriginal.
      * @return {@code boolean} the original.
      */
