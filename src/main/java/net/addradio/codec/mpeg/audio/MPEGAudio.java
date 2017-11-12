@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import net.addradio.codec.id3.model.ID3Tag;
 import net.addradio.codec.mpeg.audio.codecs.MPEGAudioCodecException;
+import net.addradio.codec.mpeg.audio.filter.Filter;
 import net.addradio.codec.mpeg.audio.model.MPEGAudioContent;
 import net.addradio.codec.mpeg.audio.model.MPEGAudioFrame;
 import net.addradio.codec.mpeg.audio.tools.MPEGAudioContentCollectorHandler;
@@ -208,32 +209,46 @@ public class MPEGAudio {
     /**
      * encode.
      * @param frames {@link List}{@code <}{@link MPEGAudioContent}{@code >}
+     * @param filter {@link Filter}
      * @param os {@link OutputStream}
      * @param autoClose {@code boolean} if {@code true} os will be closed after write.
      * @throws IOException due to IO problems.
      */
-    public static void encode(final List<? extends MPEGAudioContent> frames, final OutputStream os,
+    public static void encode(final List<? extends MPEGAudioContent> frames, final Filter filter, final OutputStream os,
             final boolean autoClose) throws IOException {
+        final Filter filterRef = filter != null ? filter : Filter.DO_NOTHING;
         @SuppressWarnings("resource")
         MPEGAudioFrameOutputStream mafos = null;
         try {
             mafos = new MPEGAudioFrameOutputStream(os);
             for (final MPEGAudioContent mpegAudioFrame : frames) {
                 try {
-                    mafos.writeFrame(mpegAudioFrame);
+                    mafos.writeFrame(filterRef.apply(mpegAudioFrame));
                     mafos.flush();
                 } catch (final MPEGAudioCodecException e) {
                     MPEGAudio.LOG.error(e.getLocalizedMessage(), e);
                 }
             }
         } finally {
-            if (autoClose && mafos != null) {
+            if (autoClose && (mafos != null)) {
                 try {
                     mafos.close();
-                } catch (IOException e) {
+                } catch (final IOException e) {
                 }
             }
         }
+    }
+
+    /**
+     * encode.
+     * @param frames {@link List}{@code <}{@link MPEGAudioContent}{@code >}
+     * @param os {@link OutputStream}
+     * @param autoClose {@code boolean} if {@code true} os will be closed after write.
+     * @throws IOException due to IO problems.
+     */
+    public static void encode(final List<? extends MPEGAudioContent> frames, final OutputStream os,
+            final boolean autoClose) throws IOException {
+        encode(frames, null, os, autoClose);
     }
 
 }
