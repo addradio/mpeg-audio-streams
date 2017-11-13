@@ -153,7 +153,8 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
     private void decodeHeader(final MPEGAudioFrame mp3Frame) throws IOException, MPEGAudioCodecException {
         mp3Frame.setVersion((Version) BitMaskFlagCodec.decode(readBits(2), Version.class));
         mp3Frame.setLayer((Layer) BitMaskFlagCodec.decode(readBits(2), Layer.class));
-        mp3Frame.setErrorProtected(isNextBitOne());
+        // (20171113 saw) bug fix: frame is error protected if bit is 0 not 1!
+        mp3Frame.setErrorProtected(isNextBitZero());
         assertByteAlignement();
         mp3Frame.setBitRate(BitRateCodec.decode(mp3Frame, readBits(4)));
         mp3Frame.setSamplingRate(SamplingRateCodec.decode(mp3Frame, readBits(2)));
@@ -218,7 +219,6 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
                             frame.getGlobalGain()[gr][0] = bis.read();
                             bis.skipBits(30);
                         }
-                        //                        bis.skipBits(16);
                     }
                     break;
                 case DualChannel:
