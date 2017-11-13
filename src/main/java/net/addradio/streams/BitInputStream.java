@@ -114,6 +114,16 @@ public class BitInputStream extends InputStream {
     }
 
     /**
+     * isNextBitOne. Reads just one bit and checks whether it is 0b0 or not.
+     *
+     * @return {@code boolean true} only if the next bit is 0b0.
+     * @throws IOException due to IO problems.
+     */
+    public boolean isNextBitZero() throws IOException {
+        return readBit() == 0;
+    }
+
+    /**
      * read.
      * @see java.io.InputStream#read()
      * @return {@code int}
@@ -211,12 +221,12 @@ public class BitInputStream extends InputStream {
         skipBits(1);
     }
 
-//    @Override
-//    public long skip(long n) throws IOException {
-//        // TODO Auto-generated method stub
-//        return super.skip(n);
-//    }
-    
+    //    @Override
+    //    public long skip(long n) throws IOException {
+    //        // TODO Auto-generated method stub
+    //        return super.skip(n);
+    //    }
+
     /**
      * skipBits.
      * @param numberOfBitsToSkip {@code int}
