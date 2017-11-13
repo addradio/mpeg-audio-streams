@@ -124,7 +124,7 @@ public class TestMPEGAudio extends TestCase {
             final MPEGAudioFrame firstFrame = MPEGAudio.decodeFirstMPEGAudioFrame(fis);
             assertEquals(Version.MPEG_1, firstFrame.getVersion());
             assertEquals(Layer.III, firstFrame.getLayer());
-            assertEquals(true, firstFrame.isErrorProtected());
+            assertEquals(false, firstFrame.isErrorProtected());
             assertEquals(BitRate._48, firstFrame.getBitRate());
             assertEquals(SamplingRate._44100, firstFrame.getSamplingRate());
         }
