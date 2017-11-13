@@ -53,7 +53,7 @@ public abstract class WaveFormGainFilter extends GainFilter implements Filter {
     protected void applyImpl(final MPEGAudioFrame frame) {
         if (!this.initialized) {
             this.deltaX = 2 * Math.PI
-                    * (((frame.getFrameLength() * 8f) / frame.getBitRate().getValue()) / getWavelengthInSecs());
+                    * (((frame.getFrameLength() * 8d) / frame.getBitRate().getValue()) / getWavelengthInSecs());
             this.initialized = true;
         }
         applyFactorToGlobalGain(frame, Math.abs(calculateWaveFormPart(this.x)));
