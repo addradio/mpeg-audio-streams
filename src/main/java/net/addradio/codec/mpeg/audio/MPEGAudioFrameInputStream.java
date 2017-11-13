@@ -218,6 +218,7 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
                             frame.getGlobalGain()[gr][0] = bis.read();
                             bis.skipBits(30);
                         }
+                        //                        bis.skipBits(16);
                     }
                     break;
                 case DualChannel:
@@ -297,8 +298,9 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
      *            {@link MPEGAudioFrame}
      * @throws IOException
      */
-    private void readCrcIfNeeded(final MPEGAudioFrame mp3Frame) throws IOException {
+    private void readCrcIfNeeded(final MPEGAudioFrame mp3Frame) throws IOException { 
         if (mp3Frame.isErrorProtected()) {
+            //            System.out.println("MAFIS is error protected");
             mp3Frame.setCrc(new byte[MPEGAudioFrame.CRC_SIZE_IN_BYTES]);
             readFully(mp3Frame.getCrc());
         }

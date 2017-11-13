@@ -110,6 +110,7 @@ public class MPEGAudioFrameOutputStream extends BitOutputStream {
                     //     9 bits main_data_end
                     //     5 bits private_bits
                     // 4 x 1 bits scfsi
+                    //                    bsd.skipBits(18);
                     bsd.skipBits(18);
                     for (int gr = 0; gr < 2; gr++) {
                         // 12 bits part2_3_length
@@ -124,6 +125,7 @@ public class MPEGAudioFrameOutputStream extends BitOutputStream {
                         //  1 bit  count1table_select
                         bsd.skipBits(30);
                     }
+                    //                    bsd.skipBits(16);
                     bsd.skipBytes(((MPEGAudioFrame) frame).getPayload().length - 17);
                     bytesWritten += mpegAudioFrame.getPayload().length;
                     break;
