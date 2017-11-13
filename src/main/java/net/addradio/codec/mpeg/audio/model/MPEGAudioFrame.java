@@ -101,6 +101,69 @@ public class MPEGAudioFrame implements MPEGAudioContent {
     private Version version;
 
     /**
+     * equals.
+     * @see java.lang.Object#equals(java.lang.Object)
+     * @param obj {@link Object}
+     * @return {@code boolean}
+     */
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof MPEGAudioFrame)) {
+            return false;
+        }
+        final MPEGAudioFrame other = (MPEGAudioFrame) obj;
+        if (this._private != other._private) {
+            return false;
+        }
+        if (this.bitRate != other.bitRate) {
+            return false;
+        }
+        if (this.copyright != other.copyright) {
+            return false;
+        }
+        if (!Arrays.equals(this.crc, other.crc)) {
+            return false;
+        }
+        if (this.emphasis != other.emphasis) {
+            return false;
+        }
+        if (this.errorProtected != other.errorProtected) {
+            return false;
+        }
+        if (!Arrays.deepEquals(this.globalGain, other.globalGain)) {
+            return false;
+        }
+        if (this.layer != other.layer) {
+            return false;
+        }
+        if (this.mode != other.mode) {
+            return false;
+        }
+        if (this.modeExtension != other.modeExtension) {
+            return false;
+        }
+        if (this.original != other.original) {
+            return false;
+        }
+        if (this.padding != other.padding) {
+            return false;
+        }
+        if (this.samplingRate != other.samplingRate) {
+            return false;
+        }
+        if (this.version != other.version) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * getAllocations.
      * @return {@code int[][]} the allocations.
      */
@@ -209,6 +272,32 @@ public class MPEGAudioFrame implements MPEGAudioContent {
      */
     public Version getVersion() {
         return this.version;
+    }
+
+    /**
+     * hashCode.
+     * @see java.lang.Object#hashCode()
+     * @return {@code int}
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = (prime * result) + (this._private ? 1231 : 1237);
+        result = (prime * result) + ((this.bitRate == null) ? 0 : this.bitRate.hashCode());
+        result = (prime * result) + (this.copyright ? 1231 : 1237);
+        result = (prime * result) + Arrays.hashCode(this.crc);
+        result = (prime * result) + ((this.emphasis == null) ? 0 : this.emphasis.hashCode());
+        result = (prime * result) + (this.errorProtected ? 1231 : 1237);
+        result = (prime * result) + Arrays.deepHashCode(this.globalGain);
+        result = (prime * result) + ((this.layer == null) ? 0 : this.layer.hashCode());
+        result = (prime * result) + ((this.mode == null) ? 0 : this.mode.hashCode());
+        result = (prime * result) + ((this.modeExtension == null) ? 0 : this.modeExtension.hashCode());
+        result = (prime * result) + (this.original ? 1231 : 1237);
+        result = (prime * result) + (this.padding ? 1231 : 1237);
+        result = (prime * result) + ((this.samplingRate == null) ? 0 : this.samplingRate.hashCode());
+        result = (prime * result) + ((this.version == null) ? 0 : this.version.hashCode());
+        return result;
     }
 
     /**
