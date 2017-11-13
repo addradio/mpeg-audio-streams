@@ -13,8 +13,9 @@
  * <br/>
  * (c) Sebastian A. Weiss, nacamar GmbH 2017 - All rights reserved.
  */
-package net.addradio.codec.mpeg.audio.filter;
+package net.addradio.codec.mpeg.audio.filter.gain;
 
+import net.addradio.codec.mpeg.audio.filter.BaseMPEGAudioFrameFilter;
 import net.addradio.codec.mpeg.audio.model.MPEGAudioFrame;
 
 /**
@@ -30,9 +31,7 @@ public abstract class GainFilter extends BaseMPEGAudioFrameFilter {
     protected static void applyFactorToGlobalGain(final MPEGAudioFrame frame, final double factor) {
         for (int i = 0; i < frame.getGlobalGain().length; i++) {
             for (int j = 0; j < frame.getGlobalGain()[i].length; j++) {
-                frame.getGlobalGain()[i][j] = (int) Math.round(factor * frame.getGlobalGain()[i][j]);
-                //                System.out.println("[i: " + i + ", j: " + j + ", sinePart: " + factor + ", oldval: " + oldVal
-                //                        + ", newVal: " + frame.getGlobalGain()[i][j] + "]");
+                frame.getGlobalGain()[i][j] = (int) Math.round(((factor * 0.35) + 0.65) * frame.getGlobalGain()[i][j]);
             }
         }
     }

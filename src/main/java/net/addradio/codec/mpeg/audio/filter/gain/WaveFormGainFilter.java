@@ -1,8 +1,8 @@
 /**
- * Class:    SineGainFilter<br/>
+ * Class:    WaveFormGainFilter<br/>
  * <br/>
  * Created:  12.11.2017<br/>
- * Filename: SineGainFilter.java<br/>
+ * Filename: WaveFormGainFilter.java<br/>
  * Version:  $Revision$<br/>
  * <br/>
  * last modified on $Date$<br/>
@@ -13,14 +13,16 @@
  * <br/>
  * (c) Sebastian A. Weiss, nacamar GmbH 2017 - All rights reserved.
  */
-package net.addradio.codec.mpeg.audio.filter;
+package net.addradio.codec.mpeg.audio.filter.gain;
 
+import net.addradio.codec.mpeg.audio.filter.BaseMPEGAudioFrameFilter;
+import net.addradio.codec.mpeg.audio.filter.Filter;
 import net.addradio.codec.mpeg.audio.model.MPEGAudioFrame;
 
 /**
- * SineGainFilter.
+ * WaveFormGainFilter.
  */
-public class SineGainFilter extends GainFilter implements Filter {
+public abstract class WaveFormGainFilter extends GainFilter implements Filter {
 
     /** {@link boolean} initialized. */
     private boolean initialized;
@@ -35,9 +37,9 @@ public class SineGainFilter extends GainFilter implements Filter {
     private double deltaX;
 
     /**
-     * SineGainFilter constructor.
+     * WaveFormGainFilter constructor.
      */
-    public SineGainFilter() {
+    public WaveFormGainFilter() {
         this.initialized = false;
         setWavelengthInSecs(1);
     }
@@ -54,9 +56,16 @@ public class SineGainFilter extends GainFilter implements Filter {
                     * (((frame.getFrameLength() * 8f) / frame.getBitRate().getValue()) / getWavelengthInSecs());
             this.initialized = true;
         }
-        applyFactorToGlobalGain(frame, Math.abs(Math.sin(this.x)));
+        applyFactorToGlobalGain(frame, Math.abs(calculateWaveFormPart(this.x)));
         this.x += this.deltaX;
     }
+
+    /**
+     * calculateWaveFormPart.
+     * @param xVal {@code double}
+     * @return {@code double}
+     */
+    protected abstract double calculateWaveFormPart(final double xVal);
 
     /**
      * getWavelengthInSecs.

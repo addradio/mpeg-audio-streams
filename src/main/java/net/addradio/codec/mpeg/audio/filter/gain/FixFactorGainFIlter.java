@@ -13,8 +13,9 @@
  * <br/>
  * (c) Sebastian A. Weiss, nacamar GmbH 2017 - All rights reserved.
  */
-package net.addradio.codec.mpeg.audio.filter;
+package net.addradio.codec.mpeg.audio.filter.gain;
 
+import net.addradio.codec.mpeg.audio.filter.BaseMPEGAudioFrameFilter;
 import net.addradio.codec.mpeg.audio.model.MPEGAudioFrame;
 
 /**

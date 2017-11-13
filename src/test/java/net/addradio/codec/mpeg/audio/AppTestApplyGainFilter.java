@@ -24,8 +24,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import net.addradio.codec.id3.model.ID3Tag;
-import net.addradio.codec.mpeg.audio.filter.Filter;
-import net.addradio.codec.mpeg.audio.filter.FixFactorGainFIlter;
+import net.addradio.codec.mpeg.audio.filter.gain.CosineGainFilter;
+import net.addradio.codec.mpeg.audio.filter.gain.WaveFormGainFilter;
 import net.addradio.codec.mpeg.audio.tools.MPEGAudioContentFilter;
 
 /**
@@ -58,9 +58,9 @@ public class AppTestApplyGainFilter {
             LOG.info("Created tmp file [" + out.getAbsolutePath() + "]"); //$NON-NLS-1$ //$NON-NLS-2$
         }
         try (FileOutputStream fos = new FileOutputStream(out)) {
-            //            SineGainFilter filter = new SineGainFilter();
-            //            filter.setWavelengthInSecs(10);
-            Filter filter = new FixFactorGainFIlter(0.9);
+            WaveFormGainFilter filter = new CosineGainFilter();
+            filter.setWavelengthInSecs(20f);
+            //            Filter filter = new FixFactorGainFIlter(0.9);
             MPEGAudio.encode(dr.getContent(), filter, fos, true);
         }
 
