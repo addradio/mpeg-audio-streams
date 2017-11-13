@@ -21,6 +21,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.Iterator;
+import java.util.List;
 
 import org.apache.log4j.Level;
 import org.slf4j.Logger;
@@ -29,6 +31,7 @@ import org.slf4j.LoggerFactory;
 import junit.framework.TestCase;
 import net.addradio.Log4J;
 import net.addradio.codec.id3.model.ID3Tag;
+import net.addradio.codec.mpeg.audio.model.MPEGAudioContent;
 import net.addradio.codec.mpeg.audio.tools.MP3TestFiles;
 import net.addradio.codec.mpeg.audio.tools.MPEGAudioContentFilter;
 
@@ -80,6 +83,14 @@ public class TestIntegrationReadWrite extends TestCase {
                     byteNum++;
                 }
             }
+        }
+
+        final DecodingResult drreencoded = MPEGAudio.decode(out, MPEGAudioContentFilter.MPEG_AUDIO_FRAMES);
+        final List<MPEGAudioContent> content = dr.getContent();
+        final Iterator<MPEGAudioContent> iterator = content.iterator();
+        final Iterator<MPEGAudioContent> iterator2 = drreencoded.getContent().iterator();
+        while (iterator.hasNext() && iterator2.hasNext()) {
+            assertEquals(iterator.next(), iterator2.next());
         }
 
         Files.deleteIfExists(out.toPath());
