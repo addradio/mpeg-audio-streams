@@ -60,7 +60,7 @@ public class AppTestApplyGainFilter {
         try (FileOutputStream fos = new FileOutputStream(out)) {
             //            SineGainFilter filter = new SineGainFilter();
             //            filter.setWavelengthInSecs(10);
-            Filter filter = new FixFactorGainFIlter(1.0);
+            Filter filter = new FixFactorGainFIlter(0.9);
             MPEGAudio.encode(dr.getContent(), filter, fos, true);
         }
 
