@@ -28,7 +28,7 @@ public abstract class GainFilter extends BaseMPEGAudioFrameFilter {
      * @param frame {@link MPEGAudioFrame}
      * @param factor {@code double}
      */
-    protected static void applyFactorToGlobalGain(final MPEGAudioFrame frame, final double factor) {
+    public static void applyFactorToGlobalGain(final MPEGAudioFrame frame, final double factor) {
         for (int i = 0; i < frame.getGlobalGain().length; i++) {
             for (int j = 0; j < frame.getGlobalGain()[i].length; j++) {
                 frame.getGlobalGain()[i][j] = (int) Math.round(((factor * 0.35) + 0.65) * frame.getGlobalGain()[i][j]);
