@@ -52,7 +52,7 @@ public class AppTestMPEGAudioFrameInputStream {
                 if (ID3Tag.class.isAssignableFrom(frame.getClass())
                         && AppTestMPEGAudioFrameInputStream.LOG.isInfoEnabled()) {
                     AppTestMPEGAudioFrameInputStream.LOG.info(frame.toString());
-                } else if (frame instanceof MPEGAudioFrame && AppTestMPEGAudioFrameInputStream.LOG.isDebugEnabled()) {
+                } else if ((frame instanceof MPEGAudioFrame) && AppTestMPEGAudioFrameInputStream.LOG.isDebugEnabled()) {
                     AppTestMPEGAudioFrameInputStream.LOG.debug(frame.toString());
                 }
             }

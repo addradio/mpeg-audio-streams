@@ -60,12 +60,12 @@ public final class ID3v1TagCodec {
     private static int saveParseInt(final String readStringFromStream) {
         // SEBASTIAN maybe throw ID3 encoding exception
 
-        if (readStringFromStream == null || readStringFromStream.trim().isEmpty()) {
+        if ((readStringFromStream == null) || readStringFromStream.trim().isEmpty()) {
             return 0;
         }
         try {
             return Integer.parseInt(readStringFromStream);
-        } catch (NumberFormatException nfe) {
+        } catch (final NumberFormatException nfe) {
             return 0;
         }
     }

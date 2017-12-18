@@ -27,12 +27,6 @@ import org.apache.log4j.PatternLayout;
 public final class Log4J {
 
     /**
-     * Hidden Log4J constructor.
-     */
-    private Log4J() {
-    }
-
-    /**
      * configureLog4J.
      * @param level {@link Level}
      */
@@ -42,6 +36,12 @@ public final class Log4J {
             rootLogger.addAppender(new ConsoleAppender(new PatternLayout(PatternLayout.TTCC_CONVERSION_PATTERN)));
         }
         rootLogger.setLevel(level);
+    }
+
+    /**
+     * Hidden Log4J constructor.
+     */
+    private Log4J() {
     }
 
 }

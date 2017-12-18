@@ -15,7 +15,6 @@
  */
 package net.addradio.codec.mpeg.audio.filter.gain;
 
-import net.addradio.codec.mpeg.audio.filter.BaseMPEGAudioFrameFilter;
 import net.addradio.codec.mpeg.audio.filter.Filter;
 import net.addradio.codec.mpeg.audio.model.MPEGAudioFrame;
 

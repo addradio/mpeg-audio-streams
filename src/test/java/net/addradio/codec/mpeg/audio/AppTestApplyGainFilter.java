@@ -41,7 +41,7 @@ public class AppTestApplyGainFilter {
      * @param args {@link String}{@code []}
      * @throws IOException due to file errors.
      */
-    public static void main(String[] args) throws IOException {
+    public static void main(final String[] args) throws IOException {
 
         BasicConfigurator.configure();
 
@@ -58,7 +58,7 @@ public class AppTestApplyGainFilter {
             LOG.info("Created tmp file [" + out.getAbsolutePath() + "]"); //$NON-NLS-1$ //$NON-NLS-2$
         }
         try (FileOutputStream fos = new FileOutputStream(out)) {
-            WaveFormGainFilter filter = new CosineGainFilter();
+            final WaveFormGainFilter filter = new CosineGainFilter();
             filter.setWavelengthInSecs(20f);
             //            Filter filter = new FixFactorGainFIlter(0.9);
             MPEGAudio.encode(dr.getContent(), filter, fos, true);

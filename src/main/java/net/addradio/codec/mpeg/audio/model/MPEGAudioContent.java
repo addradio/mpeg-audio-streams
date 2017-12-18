@@ -21,15 +21,15 @@ package net.addradio.codec.mpeg.audio.model;
 public interface MPEGAudioContent {
 
     /**
-     * isMPEGAudioFrame.
-     * @return {@code true} if content is a {@link MPEGAudioFrame}
-     */
-    boolean isMPEGAudioFrame();
-
-    /**
      * isID3Tag.
      * @return {@code true} if content is an ID3Tag
      */
     boolean isID3Tag();
+
+    /**
+     * isMPEGAudioFrame.
+     * @return {@code true} if content is a {@link MPEGAudioFrame}
+     */
+    boolean isMPEGAudioFrame();
 
 }

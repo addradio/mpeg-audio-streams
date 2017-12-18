@@ -270,7 +270,7 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
             // readFully(data);
             // mp3Frame.setData(data);
             return frame;
-        } catch (NegativeArraySizeException nase) {
+        } catch (final NegativeArraySizeException nase) {
             throw new MPEGAudioCodecException(nase);
         }
     }
@@ -298,7 +298,7 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
      *            {@link MPEGAudioFrame}
      * @throws IOException
      */
-    private void readCrcIfNeeded(final MPEGAudioFrame mp3Frame) throws IOException { 
+    private void readCrcIfNeeded(final MPEGAudioFrame mp3Frame) throws IOException {
         if (mp3Frame.isErrorProtected()) {
             //            System.out.println("MAFIS is error protected");
             mp3Frame.setCrc(new byte[MPEGAudioFrame.CRC_SIZE_IN_BYTES]);

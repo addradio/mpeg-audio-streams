@@ -29,16 +29,44 @@ import net.addradio.codec.mpeg.audio.tools.MPEGAudioContentFilter;
  */
 public class FadeOutSandbox {
 
+    /** <code>int</code> INT_0XFF. */
+    private static final int INT_0XFF = 0xff;
+
+    /** <code>int</code> INT_8. */
+    private static final int INT_8 = 8;
+
+    /**
+     * formatIntegerToBitString.
+     * @param unsignedIntForByte <code>int</code>
+     * @return {@link String}
+     */
+    public static String formatIntegerToBitString(final int unsignedIntForByte) {
+        String binaryString = Integer.toBinaryString(unsignedIntForByte);
+        while (binaryString.length() < INT_8) {
+            binaryString = "0" + binaryString; //$NON-NLS-1$
+        }
+        return binaryString;
+    }
+
+    /**
+     * getUnsignedIntForByte.
+     * @param b <code>byte</code>
+     * @return <code>int</code>
+     */
+    public static int getUnsignedIntForByte(final byte b) {
+        return (b & INT_0XFF);
+    }
+
     /**
      * main.
      * @param args {@link String}{@code []}
      */
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
 
         //        DecodingResult drfo = MPEGAudio.decode(new File("src/test/mp3/click.mp3"),
-        DecodingResult drfo = MPEGAudio.decode(new File("src/test/mp3/click_fade_out.mp3"),
+        final DecodingResult drfo = MPEGAudio.decode(new File("src/test/mp3/click_fade_out.mp3"),
                 MPEGAudioContentFilter.MPEG_AUDIO_FRAMES);
-        DecodingResult dro = MPEGAudio.decode(new File("src/test/mp3/click.mp3"),
+        final DecodingResult dro = MPEGAudio.decode(new File("src/test/mp3/click.mp3"),
                 MPEGAudioContentFilter.MPEG_AUDIO_FRAMES);
 
         System.out.println("drfo contents count: " + drfo.getNumberOfDecodedContents());
@@ -61,7 +89,7 @@ public class FadeOutSandbox {
                         + ", drfoLength: " + drfoNext.getPayload().length);
                 StringBuffer droSB = new StringBuffer();
                 StringBuffer drfoSB = new StringBuffer();
-                for (int i = 0; i < droNext.getPayload().length && i < drfoNext.getPayload().length; i++) {
+                for (int i = 0; (i < droNext.getPayload().length) && (i < drfoNext.getPayload().length); i++) {
                     final byte bo = droNext.getPayload()[i];
                     final byte bfo = drfoNext.getPayload()[i];
                     droSB.append(formatIntegerToBitString(getUnsignedIntForByte(bo)));
@@ -76,7 +104,7 @@ public class FadeOutSandbox {
                     } else {
                         drfoSB.append(" ");
                     }
-                    if (i > 0 && (i + 1) % 8 == 0) {
+                    if ((i > 0) && (((i + 1) % 8) == 0)) {
                         System.out.println(droSB.toString() + "\t" + drfoSB.toString() + "\n");
                         drfoSB = new StringBuffer();
                         droSB = new StringBuffer();
@@ -98,34 +126,6 @@ public class FadeOutSandbox {
         //            System.out.println(mpegAudioContent);
         //            //            }
         //        }
-    }
-
-    /** <code>int</code> INT_0XFF. */
-    private static final int INT_0XFF = 0xff;
-
-    /** <code>int</code> INT_8. */
-    private static final int INT_8 = 8;
-
-    /**
-     * getUnsignedIntForByte.
-     * @param b <code>byte</code>
-     * @return <code>int</code>
-     */
-    public static int getUnsignedIntForByte(final byte b) {
-        return (b & INT_0XFF);
-    }
-
-    /**
-     * formatIntegerToBitString.
-     * @param unsignedIntForByte <code>int</code>
-     * @return {@link String}
-     */
-    public static String formatIntegerToBitString(final int unsignedIntForByte) {
-        String binaryString = Integer.toBinaryString(unsignedIntForByte);
-        while (binaryString.length() < INT_8) {
-            binaryString = "0" + binaryString; //$NON-NLS-1$
-        }
-        return binaryString;
     }
 
 }

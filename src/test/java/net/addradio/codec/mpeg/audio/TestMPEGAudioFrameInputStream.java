@@ -21,9 +21,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
 
 import junit.framework.TestCase;
 import net.addradio.Log4J;
@@ -105,7 +103,7 @@ public class TestMPEGAudioFrameInputStream extends TestCase {
     public void testSync() throws IOException {
         try (MPEGAudioFrameInputStream mafis = new MPEGAudioFrameInputStream(
                 new FileInputStream(MP3TestFiles.FILE_NAME_1000HZ_MP3))) {
-            SyncResult syncResult = mafis.sync();
+            final SyncResult syncResult = mafis.sync();
             assertEquals(0, syncResult.getSkippedBits());
             assertEquals(SyncMode.id3v2_aligned, syncResult.getMode());
         }
