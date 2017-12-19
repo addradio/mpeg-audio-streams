@@ -19,6 +19,9 @@ package net.addradio.codec.mpeg.audio.tools;
 import java.io.File;
 import java.io.FileFilter;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * MP3TestFiles
  */
@@ -71,6 +74,9 @@ public class MP3TestFiles {
     public static final String FILE_NAME_SWEEP_MP3 = MP3TestFiles._MP3_TEST_FILE_DIRECTORY + File.separator
             + "sweep.mp3"; //$NON-NLS-1$
 
+    /** {@link Logger} LOG */
+    private static final Logger LOG = LoggerFactory.getLogger(MP3TestFiles.class);
+
     /** {@link String} MP3_SUFFIX. */
     public static final String MP3_SUFFIX = ".mp3"; //$NON-NLS-1$
 
@@ -95,8 +101,13 @@ public class MP3TestFiles {
                         && pathname.getName().toLowerCase().endsWith(MP3TestFiles.MP3_SUFFIX);
             }
         });
-        for (final File file : files) {
-            fileHandler.handle(file);
+        if (files != null) {
+            for (final File file : files) {
+                fileHandler.handle(file);
+            }
+        } else {
+            MP3TestFiles.LOG.error("Could not find mp3 test file directory [" + mp3TestFileDirectory //$NON-NLS-1$
+                    + "]."); //$NON-NLS-1$
         }
     }
 
