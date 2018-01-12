@@ -24,7 +24,7 @@ import net.addradio.codec.mpeg.audio.model.MPEGAudioContent;
  */
 public class DecodingResult {
 
-    /** {@link float} averageBitRate */
+    /** {@code float} averageBitRate */
     private float averageBitRate = -1;
 
     /** {@link List}{@code <}{@link MPEGAudioContent}{@code >} content. */
@@ -32,6 +32,9 @@ public class DecodingResult {
 
     /** {@code long} skippedBits. */
     private long skippedBits;
+
+    /** {@code long} durationMillis. */
+    private long durationMillis = -1;
 
     /**
     * DecodingResult constructor.
@@ -43,12 +46,14 @@ public class DecodingResult {
      * DecodingResult constructor.
      * @param skippedBitsVal {@code long}
      * @param averageBitRateVal {@code float}
+     * @param durationMillisVal {@code long}
      * @param contentRef {@link List}{@code <}{@link MPEGAudioContent}{@code >}
      */
-    public DecodingResult(final long skippedBitsVal, final float averageBitRateVal,
+    public DecodingResult(final long skippedBitsVal, final float averageBitRateVal, final long durationMillisVal,
             final List<MPEGAudioContent> contentRef) {
         setSkippedBits(skippedBitsVal);
         setAverageBitRate(averageBitRateVal);
+        setDurationMillis(durationMillisVal);
         setContent(contentRef);
     }
 
@@ -65,6 +70,14 @@ public class DecodingResult {
      */
     public List<MPEGAudioContent> getContent() {
         return this.content;
+    }
+
+    /**
+     * getDurationMillis.
+     * @return long the durationMillis
+     */
+    public long getDurationMillis() {
+        return this.durationMillis;
     }
 
     /**
@@ -99,6 +112,14 @@ public class DecodingResult {
     }
 
     /**
+     * setDurationMillis.
+     * @param durationMillis long the durationMillis to set
+     */
+    public void setDurationMillis(final long durationMillis) {
+        this.durationMillis = durationMillis;
+    }
+
+    /**
      * setSkippedBits.
      * @param skippedBitsVal {@code long} the skippedBits to set
      */
@@ -117,6 +138,8 @@ public class DecodingResult {
         final StringBuilder builder = new StringBuilder();
         builder.append("DecodingResult [averageBitRate=");
         builder.append(this.averageBitRate);
+        builder.append(", durationMillis=");
+        builder.append(this.durationMillis);
         builder.append(", skippedBits=");
         builder.append(this.skippedBits);
         builder.append(", getNumberOfDecodedContents()=");

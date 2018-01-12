@@ -101,6 +101,19 @@ public class MPEGAudioFrame implements MPEGAudioContent {
     private Version version;
 
     /**
+     * calculateDurationMillis.
+     * @return {@code long} duration of frame in milliseconds or
+     *         {@code -1} if duration could not be calculated due to decoding issues..
+     */
+    public long calculateDurationMillis() {
+        int frameLength = getFrameLength();
+        if (frameLength < 0) {
+            return -1;
+        }
+        return (frameLength * 8 * 1000) / getBitRate().getValue();
+    }
+
+    /**
      * equals.
      * @see java.lang.Object#equals(java.lang.Object)
      * @param obj {@link Object}
@@ -197,9 +210,13 @@ public class MPEGAudioFrame implements MPEGAudioContent {
 
     /**
      * getFrameLength.
-     * @return {@code int} the frame length incl. header and crc.
+     * @return {@code int} the frame length in bytes incl. header and crc or 
+     *         {@code -1} if length of frame is not available (due to decoding issues.).
      */
     public int getFrameLength() {
+        if (getPayload() == null) {
+            return -1;
+        }
         return getPayload().length + MPEGAudioFrame.HEADER_SIZE_IN_BYTES
                 + (isErrorProtected() ? MPEGAudioFrame.CRC_SIZE_IN_BYTES : 0);
     }

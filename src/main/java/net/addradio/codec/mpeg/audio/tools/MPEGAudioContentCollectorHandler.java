@@ -33,8 +33,19 @@ public class MPEGAudioContentCollectorHandler implements MPEGAudioContentHandler
     /** {@link List}{@code <}{@link MPEGAudioContent}{@code >} contents */
     final List<MPEGAudioContent> contents = new LinkedList<>();
 
-    /** {@link int} mpegaFrameCount */
+    /** {@code int} mpegaFrameCount */
     private transient int mpegaFrameCount = 0;
+
+    /** {@code long} durationMillis. */
+    private transient long durationMillis;
+
+    /**
+     * getDurationMillis.
+     * @return {@code long} the durationMillis
+     */
+    public long getDurationMillis() {
+        return this.durationMillis;
+    }
 
     /**
      * MPEGAudioContentCollectorHandler constructor.
@@ -65,11 +76,18 @@ public class MPEGAudioContentCollectorHandler implements MPEGAudioContentHandler
     @Override
     public boolean handle(final MPEGAudioContent content) {
         if (content != null) {
-            this.contents.add(content);
             if (content instanceof MPEGAudioFrame) {
-                this.mpegaFrameCount++;
-                this.averageBitRate = ((this.averageBitRate * (this.mpegaFrameCount - 1))
-                        + ((MPEGAudioFrame) content).getBitRate().getValue()) / this.mpegaFrameCount;
+                final MPEGAudioFrame mpegAudioFrame = (MPEGAudioFrame) content;
+                long durMillis = mpegAudioFrame.calculateDurationMillis();
+                if (durMillis > -1) {
+                    this.contents.add(content);
+                    this.mpegaFrameCount++;
+                    this.durationMillis += durMillis;
+                    this.averageBitRate = ((this.averageBitRate * (this.mpegaFrameCount - 1))
+                            + mpegAudioFrame.getBitRate().getValue()) / this.mpegaFrameCount;
+                }
+            } else {
+                this.contents.add(content);
             }
         }
         return false;
