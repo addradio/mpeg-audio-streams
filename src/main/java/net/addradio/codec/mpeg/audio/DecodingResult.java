@@ -113,10 +113,10 @@ public class DecodingResult {
 
     /**
      * setDurationMillis.
-     * @param durationMillis long the durationMillis to set
+     * @param durationMillisVal long the durationMillis to set
      */
-    public void setDurationMillis(final long durationMillis) {
-        this.durationMillis = durationMillis;
+    public void setDurationMillis(final long durationMillisVal) {
+        this.durationMillis = durationMillisVal;
     }
 
     /**
