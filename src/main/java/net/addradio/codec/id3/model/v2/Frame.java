@@ -82,6 +82,7 @@ public class Frame {
      * @see java.lang.Object#toString()
      * @return {@link String}
      */
+    @SuppressWarnings("nls")
     @Override
     public String toString() {
         final StringBuilder builder = new StringBuilder();
@@ -90,7 +91,11 @@ public class Frame {
         builder.append(", size="); //$NON-NLS-1$
         builder.append(this.size);
         builder.append(", payload="); //$NON-NLS-1$
-        builder.append(this.payload);
+        if (!getFrameId().equals("APIC")) {
+            builder.append(this.payload);
+        } else {
+            builder.append("<BINARY>");
+        }
         builder.append("]"); //$NON-NLS-1$
         return builder.toString();
     }
