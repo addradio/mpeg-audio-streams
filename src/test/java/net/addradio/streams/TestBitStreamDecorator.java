@@ -49,26 +49,25 @@ public class TestBitStreamDecorator extends TestCase {
         try (final BitInputStream inBIS = new BitInputStream(new ByteArrayInputStream(TestBitStreamDecorator.IN_BUF))) {
             final ByteArrayOutputStream baos = new ByteArrayOutputStream();
             try (final BitOutputStream outBOS = new BitOutputStream(baos)) {
-                final BitStreamDecorator bsd = new BitStreamDecorator(inBIS, outBOS);
+                try (final BitStreamDecorator bsd = new BitStreamDecorator(inBIS, outBOS)) {
+                    bsd.skipBits(8);
 
-                bsd.skipBits(8);
+                    bsd.write(1);
 
-                bsd.write(1);
+                    bsd.skipBits(8);
 
-                bsd.skipBits(8);
+                    bsd.skipBits(3);
+                    bsd.writeBit(1);
+                    bsd.skipBits(4);
 
-                bsd.skipBits(3);
-                bsd.writeBit(1);
-                bsd.skipBits(4);
+                    bsd.skipBits(8);
+                    bsd.skipBits(8);
 
-                bsd.skipBits(8);
-                bsd.skipBits(8);
+                    bsd.skipBits(6);
+                    bsd.writeBits(3, 2);
 
-                bsd.skipBits(6);
-                bsd.writeBits(3, 2);
-
-                bsd.skipBits(8);
-
+                    bsd.skipBits(8);
+                }
             }
             final byte[] byteArray = baos.toByteArray();
             assertEquals(OUT_BUF.length, byteArray.length);
