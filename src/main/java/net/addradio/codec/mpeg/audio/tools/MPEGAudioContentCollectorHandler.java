@@ -19,6 +19,7 @@ package net.addradio.codec.mpeg.audio.tools;
 import java.util.LinkedList;
 import java.util.List;
 
+import net.addradio.codec.id3.model.ID3Tag;
 import net.addradio.codec.mpeg.audio.model.MPEGAudioContent;
 import net.addradio.codec.mpeg.audio.model.MPEGAudioFrame;
 
@@ -27,30 +28,42 @@ import net.addradio.codec.mpeg.audio.model.MPEGAudioFrame;
  */
 public class MPEGAudioContentCollectorHandler implements MPEGAudioContentHandler {
 
+    /** {@link List}{@code <}{@link MPEGAudioContent}{@code >} allContents */
+    final List<MPEGAudioContent> allContents = new LinkedList<>();
+
+    /** {@link List}{@code <}{@link MPEGAudioFrame}{@code >} audioFramesOnly */
+    final List<MPEGAudioFrame> audioFramesOnly = new LinkedList<>();
+
     /** {@link float} averageBitRate */
     private transient float averageBitRate = 0;
-
-    /** {@link List}{@code <}{@link MPEGAudioContent}{@code >} contents */
-    final List<MPEGAudioContent> contents = new LinkedList<>();
-
-    /** {@code int} mpegaFrameCount */
-    private transient int mpegaFrameCount = 0;
 
     /** {@code long} durationMillis. */
     private transient long durationMillis;
 
-    /**
-     * getDurationMillis.
-     * @return {@code long} the durationMillis
-     */
-    public long getDurationMillis() {
-        return this.durationMillis;
-    }
+    /** {@link List}{@code <}{@link ID3Tag}{@code >} id3TagsOnly */
+    final List<ID3Tag> id3TagsOnly = new LinkedList<>();
+
+    /** {@code int} mpegaFrameCount */
+    private transient int mpegaFrameCount = 0;
 
     /**
      * MPEGAudioContentCollectorHandler constructor.
      */
     public MPEGAudioContentCollectorHandler() {
+    }
+
+    /**
+     * @return the {@link List}{@code <}{@link MPEGAudioContent}{@code >} allContents
+     */
+    public List<MPEGAudioContent> getAllContents() {
+        return this.allContents;
+    }
+
+    /**
+     * @return the {@link List}{@code <}{@link MPEGAudioFrame}{@code >} audioFramesOnly
+     */
+    public List<MPEGAudioFrame> getAudioFramesOnly() {
+        return this.audioFramesOnly;
     }
 
     /**
@@ -61,10 +74,18 @@ public class MPEGAudioContentCollectorHandler implements MPEGAudioContentHandler
     }
 
     /**
-     * @return the {@link List}{@code <}{@link MPEGAudioContent}{@code >} contents
+     * getDurationMillis.
+     * @return {@code long} the durationMillis
      */
-    public List<MPEGAudioContent> getContents() {
-        return this.contents;
+    public long getDurationMillis() {
+        return this.durationMillis;
+    }
+
+    /**
+     * @return the {@link List}{@code <}{@link ID3Tag}{@code >} id3TagsOnly
+     */
+    public List<ID3Tag> getId3TagsOnly() {
+        return this.id3TagsOnly;
     }
 
     /**
@@ -76,18 +97,22 @@ public class MPEGAudioContentCollectorHandler implements MPEGAudioContentHandler
     @Override
     public boolean handle(final MPEGAudioContent content) {
         if (content != null) {
-            if (content instanceof MPEGAudioFrame) {
+            if (MPEGAudioContentFilter.MPEG_AUDIO_FRAMES.accept(content)) {
                 final MPEGAudioFrame mpegAudioFrame = (MPEGAudioFrame) content;
-                long durMillis = mpegAudioFrame.calculateDurationMillis();
+                final long durMillis = mpegAudioFrame.calculateDurationMillis();
                 if (durMillis > -1) {
-                    this.contents.add(content);
+                    this.allContents.add(mpegAudioFrame);
+                    this.audioFramesOnly.add(mpegAudioFrame);
                     this.mpegaFrameCount++;
                     this.durationMillis += durMillis;
                     this.averageBitRate = ((this.averageBitRate * (this.mpegaFrameCount - 1))
                             + mpegAudioFrame.getBitRate().getValue()) / this.mpegaFrameCount;
                 }
+            } else if (MPEGAudioContentFilter.ID3_TAGS.accept(content)) {
+                this.allContents.add(content);
+                this.id3TagsOnly.add((ID3Tag) content);
             } else {
-                this.contents.add(content);
+                this.allContents.add(content);
             }
         }
         return false;
