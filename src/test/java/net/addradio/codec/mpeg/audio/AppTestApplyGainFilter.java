@@ -41,6 +41,7 @@ public class AppTestApplyGainFilter {
      * @param args {@link String}{@code []}
      * @throws IOException due to file errors.
      */
+    @SuppressWarnings("nls")
     public static void main(final String[] args) throws IOException {
 
         BasicConfigurator.configure();

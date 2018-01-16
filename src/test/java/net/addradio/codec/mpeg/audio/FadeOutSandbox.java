@@ -18,7 +18,6 @@ package net.addradio.codec.mpeg.audio;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.List;
 
 import net.addradio.codec.mpeg.audio.model.MPEGAudioContent;
 import net.addradio.codec.mpeg.audio.model.MPEGAudioFrame;
@@ -61,6 +60,7 @@ public class FadeOutSandbox {
      * main.
      * @param args {@link String}{@code []}
      */
+    @SuppressWarnings("nls")
     public static void main(final String[] args) {
 
         //        DecodingResult drfo = MPEGAudio.decode(new File("src/test/mp3/click.mp3"),
@@ -72,7 +72,7 @@ public class FadeOutSandbox {
         System.out.println("drfo contents count: " + drfo.getNumberOfDecodedContents());
         System.out.println("dro contents count: " + dro.getNumberOfDecodedContents());
 
-        final List<MPEGAudioContent> content = dro.getContent();
+        //        final List<MPEGAudioContent> content = dro.getContent();
         final Iterator<MPEGAudioContent> droIterator = dro.getContent().iterator();
         // remove APE header
         droIterator.next();
