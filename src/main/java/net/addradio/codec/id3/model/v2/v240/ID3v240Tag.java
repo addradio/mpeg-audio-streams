@@ -104,4 +104,24 @@ public class ID3v240Tag extends ID3v2Tag {
         this.footer = footerVal;
     }
 
+    /**
+     * {@inheritDoc}
+     * @see java.lang.Object#toString()
+     */
+    @SuppressWarnings("nls")
+    @Override
+    public String toString() {
+        final StringBuilder builder = new StringBuilder();
+        builder.append("ID3v240Tag [experimental:");
+        builder.append(this.experimental);
+        builder.append(", extendedHeader:");
+        builder.append(this.extendedHeader);
+        builder.append(", footer:");
+        builder.append(this.footer);
+        builder.append(", getFrames():");
+        builder.append(getFrames());
+        builder.append("]");
+        return builder.toString();
+    }
+
 }
