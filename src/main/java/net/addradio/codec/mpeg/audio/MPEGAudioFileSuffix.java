@@ -35,7 +35,7 @@ public enum MPEGAudioFileSuffix {
     /** {@link MPEGAudioFileSuffix} mpg */
     mpg(".mpg"); //$NON-NLS-1$
 
-    /** {@link FilenFilter} FILE_FILTER */
+    /** {@link FileFilter} FILE_FILTER */
     public static final FileFilter FILE_FILTER = new FileFilter() {
         @Override
         public boolean accept(final File arg0) {
