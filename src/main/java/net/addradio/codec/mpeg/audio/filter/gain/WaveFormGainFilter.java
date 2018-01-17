@@ -79,10 +79,10 @@ public abstract class WaveFormGainFilter extends GainFilter implements Filter {
 
     /**
      * setWavelengthInSecs.
-     * @param wavelengthInSecs float the wavelengthInSecs to set
+     * @param wavelengthInSecsVal float the wavelengthInSecs to set
      */
-    public void setWavelengthInSecs(final float wavelengthInSecs) {
-        this.wavelengthInSecs = wavelengthInSecs;
+    public void setWavelengthInSecs(final float wavelengthInSecsVal) {
+        this.wavelengthInSecs = wavelengthInSecsVal;
         this.initialized = false;
     }
 
