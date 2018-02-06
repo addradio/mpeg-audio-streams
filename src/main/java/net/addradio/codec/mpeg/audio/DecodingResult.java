@@ -83,6 +83,14 @@ public class DecodingResult {
     }
 
     /**
+     * getNumberOfDecodedBytes.
+     * @return {@code long}
+     */
+    public long getNumberOfDecodedBytes() {
+        return this.delegate.getNumberOfCollectedBytes();
+    }
+
+    /**
      * getNumberOfDecodedContents.
      * @return {@code int}
      */

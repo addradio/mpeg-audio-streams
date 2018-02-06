@@ -40,6 +40,9 @@ public class MPEGAudioContentCollectorHandler implements MPEGAudioContentHandler
     /** {@code long} durationMillis. */
     private transient long durationMillis;
 
+    /** {@code long} numberOfCollectedBytes. */
+    private transient long numberOfCollectedBytes;
+
     /** {@link List}{@code <}{@link ID3Tag}{@code >} id3TagsOnly */
     final List<ID3Tag> id3TagsOnly = new LinkedList<>();
 
@@ -89,6 +92,14 @@ public class MPEGAudioContentCollectorHandler implements MPEGAudioContentHandler
     }
 
     /**
+     * getNumberOfCollectedBytes.
+     * @return long the numberOfCollectedBytes
+     */
+    public long getNumberOfCollectedBytes() {
+        return this.numberOfCollectedBytes;
+    }
+
+    /**
      * handle.
      * @see net.addradio.codec.mpeg.audio.tools.MPEGAudioContentHandler#handle(net.addradio.codec.mpeg.audio.model.MPEGAudioContent)
      * @param content {@link MPEGAudioContent}
@@ -105,13 +116,16 @@ public class MPEGAudioContentCollectorHandler implements MPEGAudioContentHandler
                     this.audioFramesOnly.add(mpegAudioFrame);
                     this.mpegaFrameCount++;
                     this.durationMillis += durMillis;
+                    this.numberOfCollectedBytes += mpegAudioFrame.getFrameLength();
                     this.averageBitRate = ((this.averageBitRate * (this.mpegaFrameCount - 1))
                             + mpegAudioFrame.getBitRate().getValue()) / this.mpegaFrameCount;
                 }
             } else if (MPEGAudioContentFilter.ID3_TAGS.accept(content)) {
                 this.allContents.add(content);
                 this.id3TagsOnly.add((ID3Tag) content);
+                this.numberOfCollectedBytes += ((ID3Tag) content).getOverallSize();
             } else {
+                // SEBASTIAN take care
                 this.allContents.add(content);
             }
         }
