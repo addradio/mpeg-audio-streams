@@ -134,23 +134,30 @@ public final class ID3v240TagCodec {
                 }
             }
         }
-        while (bytesLeft > 0) {
-            final Frame e = new Frame();
-            e.setFrameId(ID3CodecTools.readStringFromStream(bis, 4));
-            bytesLeft -= 4;
-            e.setSize(ID3CodecTools.readSyncSafeInt(bis));
-            bytesLeft -= 4;
-            // SEBASTIAN decode flags
-            bis.read();
-            bytesLeft--;
-            bis.read();
-            bytesLeft--;
-            // SEBASTIAN decode payload
-            for (int i = e.getSize(); i > 0; i--) {
+        try {
+            while (bytesLeft > 0) {
+                final Frame e = new Frame();
+                e.setFrameId(ID3CodecTools.readStringFromStream(bis, 4));
+                bytesLeft -= 4;
+                e.setSize(ID3CodecTools.readSyncSafeInt(bis));
+                System.out.println("size: " + e.getSize());
+                bytesLeft -= 4;
+                // SEBASTIAN decode flags
                 bis.read();
                 bytesLeft--;
+                bis.read();
+                bytesLeft--;
+                // SEBASTIAN decode payload
+                for (int i = e.getSize(); bytesLeft > 0 && i > 0; i--) {
+                    bis.read();
+                    bytesLeft--;
+                }
+                if (!e.getFrameId().isEmpty()) {
+                    id3v240Tag.getFrames().add(e);
+                }
             }
-            id3v240Tag.getFrames().add(e);
+        } catch (Throwable t) {
+            LOG.error(t.getLocalizedMessage(), t);
         }
         return id3v240Tag;
     }

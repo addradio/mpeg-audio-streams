@@ -54,6 +54,9 @@ public class MP3TestFiles {
     public static final String FILE_NAME_440HZ_MP3 = MP3TestFiles._MP3_TEST_FILE_DIRECTORY + File.separator
             + "440Hz.mp3"; //$NON-NLS-1$
 
+    /** {@link String} FILE_NAME_AD1_MP3 */
+    public static final String FILE_NAME_AD1_MP3 = MP3TestFiles._MP3_TEST_FILE_DIRECTORY + File.separator + "ad1.mp3"; //$NON-NLS-1$
+
     /** {@link String} FILE_NAME_CLICK_MP3 */
     public static final String FILE_NAME_CLICK_MP3 = MP3TestFiles._MP3_TEST_FILE_DIRECTORY + File.separator
             + "click.mp3"; //$NON-NLS-1$

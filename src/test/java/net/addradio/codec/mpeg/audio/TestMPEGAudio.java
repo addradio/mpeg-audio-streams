@@ -105,6 +105,16 @@ public class TestMPEGAudio extends TestCase {
         assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME_440HZ_MP3, 194);
     }
 
+    // SEBASTIAN fix this test
+    //    /**
+    //     * testDecodeAd1.
+    //     * @throws IOException due to file problems.
+    //     */
+    //    @SuppressWarnings("static-method")
+    //    public void testDecodeAd1() throws IOException {
+    //        assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME_AD1_MP3, 1249);
+    //    }
+
     /**
      * testDecodeClick.
      * @throws IOException due to file problems.
@@ -113,6 +123,16 @@ public class TestMPEGAudio extends TestCase {
     public void testDecodeClick() throws IOException {
         assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME_CLICK_MP3, 1228);
     }
+
+    // SEBASTIAN fix this test
+    //    /**
+    //     * testDecodeMusic.
+    //     * @throws IOException due to file problems.
+    //     */
+    //    @SuppressWarnings("static-method")
+    //    public void testDecodeMusic() throws IOException {
+    //        assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME_MUSIC_MP3, 13324);
+    //    }
 
     /**
      * testDecodeFirstFrame.
@@ -129,16 +149,6 @@ public class TestMPEGAudio extends TestCase {
             assertEquals(SamplingRate._44100, firstFrame.getSamplingRate());
         }
     }
-
-    // SEBASTIAN fix this test
-    //    /**
-    //     * testDecodeMusic.
-    //     * @throws IOException due to file problems.
-    //     */
-    //    @SuppressWarnings("static-method")
-    //    public void testDecodeMusic() throws IOException {
-    //        assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME_MUSIC_MP3, 13324);
-    //    }
 
     /**
      * testDecodeOrgan.
