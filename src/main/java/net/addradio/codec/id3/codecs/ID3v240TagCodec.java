@@ -140,7 +140,6 @@ public final class ID3v240TagCodec {
                 e.setFrameId(ID3CodecTools.readStringFromStream(bis, 4));
                 bytesLeft -= 4;
                 e.setSize(ID3CodecTools.readSyncSafeInt(bis));
-                System.out.println("size: " + e.getSize());
                 bytesLeft -= 4;
                 // SEBASTIAN decode flags
                 bis.read();
