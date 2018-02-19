@@ -43,6 +43,9 @@ public class MPEGAudioFrameOutputStream extends BitOutputStream {
     @SuppressWarnings("unused")
     private final static Logger LOG = LoggerFactory.getLogger(MPEGAudioFrameOutputStream.class);
 
+    /** {@code long} durationSoFar. Overall duration of encoded frames so far in milliseconds. */
+    private long durationSoFar;
+
     /**
      * MPEGAudioFrameOutputStream constructor.
      *
@@ -51,6 +54,14 @@ public class MPEGAudioFrameOutputStream extends BitOutputStream {
      */
     public MPEGAudioFrameOutputStream(final OutputStream innerRef) {
         super(innerRef);
+        this.durationSoFar = 0;
+    }
+
+    /**
+     * @return the {@code long} durationSoFar. Overall duration of encoded frames so far in milliseconds.
+     */
+    public long getDurationSoFar() {
+        return this.durationSoFar;
     }
 
     /**
@@ -151,7 +162,7 @@ public class MPEGAudioFrameOutputStream extends BitOutputStream {
             default:
                 break;
             }
-
+            this.durationSoFar += mpegAudioFrame.calculateDurationMillis();
         } else {
             // SEBASTIAN implement
         }
