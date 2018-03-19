@@ -73,6 +73,9 @@ public class MPEGAudioFrame implements MPEGAudioContent {
     /** {@link Layer} layer. */
     private Layer layer;
 
+    /** {@code int} mainDataBegin */
+    private int mainDataBegin;
+
     /** {@link Mode} mode. */
     private Mode mode;
 
@@ -106,7 +109,7 @@ public class MPEGAudioFrame implements MPEGAudioContent {
      *         {@code -1} if duration could not be calculated due to decoding issues..
      */
     public long calculateDurationMillis() {
-        int frameLength = getFrameLength();
+        final int frameLength = getFrameLength();
         if (frameLength < 0) {
             return -1;
         }
@@ -210,7 +213,7 @@ public class MPEGAudioFrame implements MPEGAudioContent {
 
     /**
      * getFrameLength.
-     * @return {@code int} the frame length in bytes incl. header and crc or 
+     * @return {@code int} the frame length in bytes incl. header and crc or
      *         {@code -1} if length of frame is not available (due to decoding issues.).
      */
     public int getFrameLength() {
@@ -234,6 +237,13 @@ public class MPEGAudioFrame implements MPEGAudioContent {
      */
     public Layer getLayer() {
         return this.layer;
+    }
+
+    /**
+     * @return the {@code int} mainDataBegin
+     */
+    public int getMainDataBegin() {
+        return this.mainDataBegin;
     }
 
     /**
@@ -443,6 +453,13 @@ public class MPEGAudioFrame implements MPEGAudioContent {
      */
     public void setLayer(final Layer layerRef) {
         this.layer = layerRef;
+    }
+
+    /**
+     * @param mainDataBeginVal {@code int} the mainDataBegin to set
+     */
+    public void setMainDataBegin(final int mainDataBeginVal) {
+        this.mainDataBegin = mainDataBeginVal;
     }
 
     /**

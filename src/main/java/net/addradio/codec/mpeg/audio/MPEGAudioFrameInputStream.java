@@ -213,7 +213,8 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
                 case SingleChannel:
                     frame.setGlobalGain(new int[2][1]);
                     try (BitInputStream bis = new BitInputStream(new ByteArrayInputStream(frame.getPayload()))) {
-                        bis.skipBits(18);
+                        frame.setMainDataBegin(bis.readBits(9));
+                        bis.skipBits(9);
                         for (int gr = 0; gr < 2; gr++) {
                             bis.skipBits(21);
                             frame.getGlobalGain()[gr][0] = bis.read();
@@ -227,7 +228,8 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
                 default:
                     frame.setGlobalGain(new int[2][2]);
                     try (BitInputStream bis = new BitInputStream(new ByteArrayInputStream(frame.getPayload()))) {
-                        bis.skipBits(20);
+                        frame.setMainDataBegin(bis.readBits(9));
+                        bis.skipBits(11);
                         for (int gr = 0; gr < 2; gr++) {
                             for (int ch = 0; ch < 2; ch++) {
                                 bis.skipBits(21);
