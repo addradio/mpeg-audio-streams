@@ -105,6 +105,15 @@ public class TestMPEGAudio extends TestCase {
         assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME_440HZ_MP3, 194);
     }
 
+    /**
+     * testDecodePaddingBug48000SR48Kbps.
+     * @throws IOException due to I/O issues.
+     */
+    @SuppressWarnings("static-method")
+    public void testDecodePaddingBug48000SR48Kbps() throws IOException {
+        assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME_PADDING_BUG_48000_48_MP3, 194);
+    }
+
     // SEBASTIAN fix this test
     //    /**
     //     * testDecodeAd1.

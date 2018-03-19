@@ -69,6 +69,10 @@ public class MP3TestFiles {
     public static final String FILE_NAME_ORGAN_MP3 = MP3TestFiles._MP3_TEST_FILE_DIRECTORY + File.separator
             + "organ.mp3"; //$NON-NLS-1$
 
+    /** {@link String} FILE_NAME_PADDING_BUG_48000_48_MP3 */
+    public static final String FILE_NAME_PADDING_BUG_48000_48_MP3 = MP3TestFiles._MP3_TEST_FILE_DIRECTORY
+            + File.separator + "padding_bug_48000_48.mp3"; //$NON-NLS-1$
+
     /** {@link String} FILE_NAME_PIANO_MP3 */
     public static final String FILE_NAME_PIANO_MP3 = MP3TestFiles._MP3_TEST_FILE_DIRECTORY + File.separator
             + "piano.mp3"; //$NON-NLS-1$
