@@ -100,7 +100,14 @@ public class MPEGAudio {
             final MPEGAudioContentHandler handler) {
         try (final MPEGAudioFrameInputStream mafis = new MPEGAudioFrameInputStream(is)) {
             MPEGAudioContent frame = null;
+            //            int count = 0;
+            //            long bytesSoFar = 0;
             while ((frame = mafis.readFrame()) != null) {
+                //                final int frameLength = ((MPEGAudioFrame) frame).getFrameLength();
+                //                bytesSoFar += frameLength;
+                //                System.out.println("counter " + count++ + ", frame length: " + frameLength + ", bytesSoFar: "
+                //                        + bytesSoFar + ", frame: " + frame);
+                // System.out.println("MDB: " + ((MPEGAudioFrame) frame).getMainDataBegin());
                 if (filter.accept(frame)) {
                     if (handler.handle(frame)) {
                         break;
