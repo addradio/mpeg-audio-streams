@@ -21,7 +21,7 @@ package net.addradio.codec.mpeg.audio.model;
 public enum BitRate {
 
     /** {@link BitRate} _112 */
-    _112(122000),
+    _112(112000),
 
     /** {@link BitRate} _128 */
     _128(128000),
