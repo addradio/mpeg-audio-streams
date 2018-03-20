@@ -105,9 +105,10 @@ public class MPEGAudio {
             while ((frame = mafis.readFrame()) != null) {
                 //                final int frameLength = ((MPEGAudioFrame) frame).getFrameLength();
                 //                bytesSoFar += frameLength;
-                //                System.out.println("counter " + count++ + ", frame length: " + frameLength + ", bytesSoFar: "
-                //                        + bytesSoFar + ", frame: " + frame);
-                // System.out.println("MDB: " + ((MPEGAudioFrame) frame).getMainDataBegin());
+                //                System.out.println("counter " + count++ + ", frame length: " + frameLength + ", bytesSoFar: 0x"
+                //                        + Long.toHexString(bytesSoFar).toUpperCase() + ", frame: " + frame);
+                //                HexDump.printHexDumpString(((MPEGAudioFrame) frame).getPayload());
+                //                System.out.println("MDB: " + ((MPEGAudioFrame) frame).getMainDataBegin());
                 if (filter.accept(frame)) {
                     if (handler.handle(frame)) {
                         break;
