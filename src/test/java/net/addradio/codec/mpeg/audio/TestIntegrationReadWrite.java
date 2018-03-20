@@ -109,7 +109,7 @@ public class TestIntegrationReadWrite extends TestCase {
      */
     @SuppressWarnings("static-method")
     public void testReadWrite1000Hz() throws IOException {
-        assertByteWiseReencodedFile(MP3TestFiles.FILE_NAME_1000HZ_MP3);
+        assertByteWiseReencodedFile(MP3TestFiles.FILE_NAME__1000HZ_MP3);
     }
 
     /**
@@ -118,7 +118,7 @@ public class TestIntegrationReadWrite extends TestCase {
      */
     @SuppressWarnings("static-method")
     public void testReadWrite440Hz() throws IOException {
-        assertByteWiseReencodedFile(MP3TestFiles.FILE_NAME_440HZ_MP3);
+        assertByteWiseReencodedFile(MP3TestFiles.FILE_NAME__440HZ_MP3);
     }
 
     /**
@@ -127,7 +127,7 @@ public class TestIntegrationReadWrite extends TestCase {
      */
     @SuppressWarnings("static-method")
     public void testReadWriteClick() throws IOException {
-        assertByteWiseReencodedFile(MP3TestFiles.FILE_NAME_CLICK_MP3);
+        assertByteWiseReencodedFile(MP3TestFiles.FILE_NAME__CLICK_MP3);
     }
 
     // SEBASTIAN temp fix
@@ -137,7 +137,7 @@ public class TestIntegrationReadWrite extends TestCase {
     //     */
     //    @SuppressWarnings("static-method")
     //    public void testReadWriteMusic() throws IOException {
-    //        assertByteWiseReencodedFile(MP3TestFiles.FILE_NAME_MUSIC_MP3);
+    //        assertByteWiseReencodedFile(MP3TestFiles.FILE_NAME__MUSIC_MP3);
     //    }
 
     /**
@@ -146,7 +146,7 @@ public class TestIntegrationReadWrite extends TestCase {
      */
     @SuppressWarnings("static-method")
     public void testReadWriteOrgan() throws IOException {
-        assertByteWiseReencodedFile(MP3TestFiles.FILE_NAME_ORGAN_MP3);
+        assertByteWiseReencodedFile(MP3TestFiles.FILE_NAME__ORGAN_MP3);
     }
 
     /**
@@ -155,7 +155,7 @@ public class TestIntegrationReadWrite extends TestCase {
      */
     @SuppressWarnings("static-method")
     public void testReadWritePiano() throws IOException {
-        assertByteWiseReencodedFile(MP3TestFiles.FILE_NAME_PIANO_MP3);
+        assertByteWiseReencodedFile(MP3TestFiles.FILE_NAME__PIANO_MP3);
     }
 
     /**
@@ -164,7 +164,7 @@ public class TestIntegrationReadWrite extends TestCase {
      */
     @SuppressWarnings("static-method")
     public void testReadWriteSweep() throws IOException {
-        assertByteWiseReencodedFile(MP3TestFiles.FILE_NAME_SWEEP_MP3);
+        assertByteWiseReencodedFile(MP3TestFiles.FILE_NAME__SWEEP_MP3);
     }
 
 }

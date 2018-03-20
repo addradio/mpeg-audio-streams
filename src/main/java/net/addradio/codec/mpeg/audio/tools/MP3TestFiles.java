@@ -46,39 +46,43 @@ public class MP3TestFiles {
     public static final String _MP3_TEST_FILE_DIRECTORY = "src" + File.separator + "test" + File.separator //$NON-NLS-1$ //$NON-NLS-2$
             + "mp3"; //$NON-NLS-1$
 
-    /** {@link String} FILE_NAME_1000HZ_MP3 */
-    public static final String FILE_NAME_1000HZ_MP3 = MP3TestFiles._MP3_TEST_FILE_DIRECTORY + File.separator
+    /** {@link String} FILE_NAME__1000HZ_MP3 */
+    public static final String FILE_NAME__1000HZ_MP3 = MP3TestFiles._MP3_TEST_FILE_DIRECTORY + File.separator
             + "1000Hz.mp3"; //$NON-NLS-1$
 
-    /** {@link String} FILE_NAME_440HZ_MP3 */
-    public static final String FILE_NAME_440HZ_MP3 = MP3TestFiles._MP3_TEST_FILE_DIRECTORY + File.separator
+    /** {@link String} FILE_NAME__440HZ_MP3 */
+    public static final String FILE_NAME__440HZ_MP3 = MP3TestFiles._MP3_TEST_FILE_DIRECTORY + File.separator
             + "440Hz.mp3"; //$NON-NLS-1$
 
-    /** {@link String} FILE_NAME_AD1_MP3 */
-    public static final String FILE_NAME_AD1_MP3 = MP3TestFiles._MP3_TEST_FILE_DIRECTORY + File.separator + "ad1.mp3"; //$NON-NLS-1$
+    /** {@link String} FILE_NAME__AD1_MP3 */
+    public static final String FILE_NAME__AD1_MP3 = MP3TestFiles._MP3_TEST_FILE_DIRECTORY + File.separator + "ad1.mp3"; //$NON-NLS-1$
 
-    /** {@link String} FILE_NAME_CLICK_MP3 */
-    public static final String FILE_NAME_CLICK_MP3 = MP3TestFiles._MP3_TEST_FILE_DIRECTORY + File.separator
+    /** {@link String} FILE_NAME__BUG_20180320_48000_MP3 */
+    public static final String FILE_NAME__BUG_20180320_48000_MP3 = MP3TestFiles._MP3_TEST_FILE_DIRECTORY
+            + File.separator + "bug_20180320_112kbps_48000.mp3"; //$NON-NLS-1$
+
+    /** {@link String} FILE_NAME__CLICK_MP3 */
+    public static final String FILE_NAME__CLICK_MP3 = MP3TestFiles._MP3_TEST_FILE_DIRECTORY + File.separator
             + "click.mp3"; //$NON-NLS-1$
 
-    /** {@link String} FILE_NAME_MUSIC_MP3 */
-    public static final String FILE_NAME_MUSIC_MP3 = MP3TestFiles._MP3_TEST_FILE_DIRECTORY + File.separator
+    /** {@link String} FILE_NAME__MUSIC_MP3 */
+    public static final String FILE_NAME__MUSIC_MP3 = MP3TestFiles._MP3_TEST_FILE_DIRECTORY + File.separator
             + "music.mp3"; //$NON-NLS-1$
 
-    /** {@link String} FILE_NAME_ORGAN_MP3 */
-    public static final String FILE_NAME_ORGAN_MP3 = MP3TestFiles._MP3_TEST_FILE_DIRECTORY + File.separator
+    /** {@link String} FILE_NAME__ORGAN_MP3 */
+    public static final String FILE_NAME__ORGAN_MP3 = MP3TestFiles._MP3_TEST_FILE_DIRECTORY + File.separator
             + "organ.mp3"; //$NON-NLS-1$
 
-    /** {@link String} FILE_NAME_PADDING_BUG_48000_48_MP3 */
-    public static final String FILE_NAME_PADDING_BUG_48000_48_MP3 = MP3TestFiles._MP3_TEST_FILE_DIRECTORY
+    /** {@link String} FILE_NAME__PADDING_BUG_48000_48_MP3 */
+    public static final String FILE_NAME__PADDING_BUG_48000_48_MP3 = MP3TestFiles._MP3_TEST_FILE_DIRECTORY
             + File.separator + "padding_bug_48000_48.mp3"; //$NON-NLS-1$
 
-    /** {@link String} FILE_NAME_PIANO_MP3 */
-    public static final String FILE_NAME_PIANO_MP3 = MP3TestFiles._MP3_TEST_FILE_DIRECTORY + File.separator
+    /** {@link String} FILE_NAME__PIANO_MP3 */
+    public static final String FILE_NAME__PIANO_MP3 = MP3TestFiles._MP3_TEST_FILE_DIRECTORY + File.separator
             + "piano.mp3"; //$NON-NLS-1$
 
-    /** {@link String} FILE_NAME_SWEEP_MP3 */
-    public static final String FILE_NAME_SWEEP_MP3 = MP3TestFiles._MP3_TEST_FILE_DIRECTORY + File.separator
+    /** {@link String} FILE_NAME__SWEEP_MP3 */
+    public static final String FILE_NAME__SWEEP_MP3 = MP3TestFiles._MP3_TEST_FILE_DIRECTORY + File.separator
             + "sweep.mp3"; //$NON-NLS-1$
 
     /** {@link Logger} LOG */

@@ -93,7 +93,7 @@ public class TestMPEGAudio extends TestCase {
      */
     @SuppressWarnings("static-method")
     public void testDecode1000Hz() throws IOException {
-        assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME_1000HZ_MP3, 194);
+        assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME__1000HZ_MP3, 194);
     }
 
     /**
@@ -102,7 +102,7 @@ public class TestMPEGAudio extends TestCase {
      */
     @SuppressWarnings("static-method")
     public void testDecode440Hz() throws IOException {
-        assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME_440HZ_MP3, 194);
+        assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME__440HZ_MP3, 194);
     }
 
     /**
@@ -110,8 +110,9 @@ public class TestMPEGAudio extends TestCase {
      * @throws IOException due to I/O issues.
      */
     @SuppressWarnings("static-method")
-    public void testDecodePaddingBug48000SR48Kbps() throws IOException {
-        assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME_PADDING_BUG_48000_48_MP3, 194);
+    public void testDecodeBug20180320Kbps112SF48000() throws IOException {
+        assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME__BUG_20180320_48000_MP3, 12132);
+        //        assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME__PADDING_BUG_48000_48_MP3, 194);
     }
 
     // SEBASTIAN fix this test
@@ -121,7 +122,7 @@ public class TestMPEGAudio extends TestCase {
     //     */
     //    @SuppressWarnings("static-method")
     //    public void testDecodeAd1() throws IOException {
-    //        assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME_AD1_MP3, 1249);
+    //        assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME__AD1_MP3, 1249);
     //    }
 
     /**
@@ -130,7 +131,7 @@ public class TestMPEGAudio extends TestCase {
      */
     @SuppressWarnings("static-method")
     public void testDecodeClick() throws IOException {
-        assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME_CLICK_MP3, 1228);
+        assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME__CLICK_MP3, 1228);
     }
 
     // SEBASTIAN fix this test
@@ -140,7 +141,7 @@ public class TestMPEGAudio extends TestCase {
     //     */
     //    @SuppressWarnings("static-method")
     //    public void testDecodeMusic() throws IOException {
-    //        assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME_MUSIC_MP3, 13324);
+    //        assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME__MUSIC_MP3, 13324);
     //    }
 
     /**
@@ -149,7 +150,7 @@ public class TestMPEGAudio extends TestCase {
      */
     @SuppressWarnings("static-method")
     public void testDecodeFirstFrame() throws IOException {
-        try (FileInputStream fis = new FileInputStream(MP3TestFiles.FILE_NAME_440HZ_MP3)) {
+        try (FileInputStream fis = new FileInputStream(MP3TestFiles.FILE_NAME__440HZ_MP3)) {
             final MPEGAudioFrame firstFrame = MPEGAudio.decodeFirstMPEGAudioFrame(fis);
             assertEquals(Version.MPEG_1, firstFrame.getVersion());
             assertEquals(Layer.III, firstFrame.getLayer());
@@ -165,7 +166,7 @@ public class TestMPEGAudio extends TestCase {
      */
     @SuppressWarnings("static-method")
     public void testDecodeOrgan() throws IOException {
-        assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME_ORGAN_MP3, 501);
+        assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME__ORGAN_MP3, 501);
     }
 
     /**
@@ -174,7 +175,7 @@ public class TestMPEGAudio extends TestCase {
      */
     @SuppressWarnings("static-method")
     public void testDecodePiano() throws IOException {
-        assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME_PIANO_MP3, 265);
+        assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME__PIANO_MP3, 265);
     }
 
     /**
@@ -183,7 +184,7 @@ public class TestMPEGAudio extends TestCase {
      */
     @SuppressWarnings("static-method")
     public void testDecodeSweep() throws IOException {
-        assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME_SWEEP_MP3, 386);
+        assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME__SWEEP_MP3, 386);
     }
 
 }

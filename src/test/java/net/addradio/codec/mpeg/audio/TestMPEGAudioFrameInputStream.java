@@ -87,7 +87,7 @@ public class TestMPEGAudioFrameInputStream extends TestCase {
     @SuppressWarnings("static-method")
     public void testSimplyIfBroken() throws FileNotFoundException, IOException, MPEGAudioCodecException {
         try (MPEGAudioFrameInputStream mafis = new MPEGAudioFrameInputStream(
-                new FileInputStream(MP3TestFiles.FILE_NAME_PIANO_MP3))) {
+                new FileInputStream(MP3TestFiles.FILE_NAME__PIANO_MP3))) {
             @SuppressWarnings("unused")
             MPEGAudioContent frame = null;
             while ((frame = mafis.readFrame()) != null) {
@@ -102,7 +102,7 @@ public class TestMPEGAudioFrameInputStream extends TestCase {
     @SuppressWarnings("static-method")
     public void testSync() throws IOException {
         try (MPEGAudioFrameInputStream mafis = new MPEGAudioFrameInputStream(
-                new FileInputStream(MP3TestFiles.FILE_NAME_1000HZ_MP3))) {
+                new FileInputStream(MP3TestFiles.FILE_NAME__1000HZ_MP3))) {
             final SyncResult syncResult = mafis.sync();
             assertEquals(0, syncResult.getSkippedBits());
             assertEquals(SyncMode.id3v2_aligned, syncResult.getMode());
