@@ -118,7 +118,7 @@ public class MPEGAudioContentCollectorHandler implements MPEGAudioContentHandler
                     this.durationMillis += durMillis;
                     this.numberOfCollectedBytes += mpegAudioFrame.getFrameLength();
                     this.averageBitRate = ((this.averageBitRate * (this.mpegaFrameCount - 1))
-                            + mpegAudioFrame.getBitRate().getValue()) / this.mpegaFrameCount;
+                            + mpegAudioFrame.getBitRate().getValueInBps()) / this.mpegaFrameCount;
                 }
             } else if (MPEGAudioContentFilter.ID3_TAGS.accept(content)) {
                 this.allContents.add(content);

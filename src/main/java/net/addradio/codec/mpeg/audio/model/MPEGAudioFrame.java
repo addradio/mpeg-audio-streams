@@ -113,7 +113,7 @@ public class MPEGAudioFrame implements MPEGAudioContent {
         if (frameLength < 0) {
             return -1;
         }
-        return (frameLength * 8 * 1000) / getBitRate().getValue();
+        return (frameLength * 8 * 1000) / getBitRate().getValueInBps();
     }
 
     /**
