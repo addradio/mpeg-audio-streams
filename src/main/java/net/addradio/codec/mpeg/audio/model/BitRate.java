@@ -146,4 +146,13 @@ public enum BitRate {
         this.valueInKbps = valueInKbpsVal;
     }
 
+    /**
+     * {@inheritDoc}
+     * @see java.lang.Enum#toString()
+     */
+    @Override
+    public String toString() {
+        return Integer.toString(getValueInBps());
+    }
+
 }

@@ -76,4 +76,13 @@ public enum SamplingRate {
         this.value = valueVal;
     }
 
+    /**
+     * {@inheritDoc}
+     * @see java.lang.Enum#toString()
+     */
+    @Override
+    public String toString() {
+        return Integer.toString(getValue());
+    }
+
 }
