@@ -86,6 +86,7 @@ public class MPEGAudio {
     public static DecodingResult decode(final InputStream is, final MPEGAudioContentFilter filter) {
         final MPEGAudioContentCollectorHandler handler = new MPEGAudioContentCollectorHandler();
         final long sb = decode(is, filter, handler);
+        // SEBASTIAN what about decoding processes that went wrong? Introduce a status return value!
         return new DecodingResult(sb, handler);
     }
 
