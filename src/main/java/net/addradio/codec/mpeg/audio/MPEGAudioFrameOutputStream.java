@@ -162,7 +162,10 @@ public class MPEGAudioFrameOutputStream extends BitOutputStream {
             default:
                 break;
             }
-            this.durationSoFar += mpegAudioFrame.calculateDurationMillis();
+            final long calculateDurationMillis = mpegAudioFrame.calculateDurationMillis();
+            if (calculateDurationMillis > -1) {
+                this.durationSoFar += calculateDurationMillis;
+            }
         } else {
             // SEBASTIAN implement
         }
