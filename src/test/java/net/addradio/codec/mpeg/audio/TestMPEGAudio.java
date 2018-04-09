@@ -116,14 +116,14 @@ public class TestMPEGAudio extends TestCase {
     }
 
     // SEBASTIAN fix this test
-    //    /**
-    //     * testDecodeAd1.
-    //     * @throws IOException due to file problems.
-    //     */
-    //    @SuppressWarnings("static-method")
-    //    public void testDecodeAd1() throws IOException {
-    //        assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME__AD1_MP3, 1249);
-    //    }
+    /**
+     * testDecodeAd1.
+     * @throws IOException due to file problems.
+     */
+    @SuppressWarnings("static-method")
+    public void testDecodeAd1() throws IOException {
+        assertMPEGFileIntegrity(MP3TestFiles.FILE_NAME__AD1_MP3, 1252);
+    }
 
     /**
      * testDecodeClick.
