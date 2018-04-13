@@ -98,6 +98,21 @@ public enum BitRate {
     /** {@link BitRate} reserved */
     reserved(-1, -1);
 
+    /**
+     * getBitRateforBps.
+     * @param bps {@code int}
+     * @return {@link BitRate}
+     */
+    public static BitRate getBitRateforBps(final int bps) {
+        final BitRate[] values = values();
+        for (final BitRate bitRate : values) {
+            if (bitRate.valueInBps == bps) {
+                return bitRate;
+            }
+        }
+        return BitRate.free;
+    }
+
     /** {@code int} valueInBps */
     private int valueInBps;
 
