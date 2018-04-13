@@ -117,6 +117,18 @@ public class MPEGAudioFrame implements MPEGAudioContent {
     }
 
     /**
+     * calculateDurationMillisDoublePrecision.
+     * @return {@code double}
+     */
+    public double calculateDurationMillisDoublePrecision() {
+        final int frameLength = getFrameLength();
+        if (frameLength < 0) {
+            return -1;
+        }
+        return (frameLength * 8 * 1000) / (double) getBitRate().getValueInBps();
+    }
+
+    /**
      * equals.
      * @see java.lang.Object#equals(java.lang.Object)
      * @param obj {@link Object}
