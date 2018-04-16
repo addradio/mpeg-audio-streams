@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 import net.addradio.codec.id3.model.ID3Tag;
 import net.addradio.codec.mpeg.audio.codecs.MPEGAudioCodecException;
 import net.addradio.codec.mpeg.audio.model.MPEGAudioContent;
+import net.addradio.codec.mpeg.audio.model.MPEGAudioEncodingFormat;
 import net.addradio.codec.mpeg.audio.model.MPEGAudioFrame;
 import net.addradio.codec.mpeg.audio.tools.MPEGAudioContentCollectorHandler;
 import net.addradio.codec.mpeg.audio.tools.MPEGAudioContentFilter;
@@ -43,6 +44,30 @@ public class MPEGAudio {
 
     /** {@link Logger} LOG. */
     private final static Logger LOG = LoggerFactory.getLogger(MPEGAudio.class);
+
+    /**
+     * createEncodingFormatForFrame.
+     * @param frame {@link MPEGAudioFrame}
+     * @return {@link MPEGAudioEncodingFormat} corresponding to frame.
+     */
+    public static MPEGAudioEncodingFormat createEncodingFormatForFrame(final MPEGAudioFrame frame) {
+        if (frame != null) {
+            final MPEGAudioEncodingFormat mef = new MPEGAudioEncodingFormat();
+            mef.setBitRate(frame.getBitRate());
+            mef.setCopyright(frame.isCopyright());
+            mef.setEmphasis(frame.getEmphasis());
+            mef.setErrorProtected(frame.isErrorProtected());
+            mef.setLayer(frame.getLayer());
+            mef.setMode(frame.getMode());
+            mef.setModeExtension(frame.getModeExtension());
+            mef.setOriginal(frame.isOriginal());
+            mef.setPrivate(frame.isPrivate());
+            mef.setSamplingRate(frame.getSamplingRate());
+            mef.setVersion(frame.getVersion());
+            return mef;
+        }
+        return null;
+    }
 
     /**
      * decode.
