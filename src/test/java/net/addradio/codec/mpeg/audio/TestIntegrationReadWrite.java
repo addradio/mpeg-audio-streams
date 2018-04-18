@@ -24,12 +24,10 @@ import java.nio.file.Files;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.log4j.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import junit.framework.TestCase;
-import net.addradio.Log4J;
 import net.addradio.codec.id3.model.ID3Tag;
 import net.addradio.codec.mpeg.audio.model.MPEGAudioContent;
 import net.addradio.codec.mpeg.audio.tools.MP3TestFiles;
@@ -100,7 +98,6 @@ public class TestIntegrationReadWrite extends TestCase {
      * TestIntegrationReadWrite constructor.
      */
     public TestIntegrationReadWrite() {
-        Log4J.configureLog4J(Level.INFO);
     }
 
     /**

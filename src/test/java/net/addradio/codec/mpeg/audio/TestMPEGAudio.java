@@ -18,10 +18,7 @@ package net.addradio.codec.mpeg.audio;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-import org.apache.log4j.Level;
-
 import junit.framework.TestCase;
-import net.addradio.Log4J;
 import net.addradio.codec.mpeg.audio.model.BitRate;
 import net.addradio.codec.mpeg.audio.model.Layer;
 import net.addradio.codec.mpeg.audio.model.MPEGAudioContent;
@@ -84,7 +81,6 @@ public class TestMPEGAudio extends TestCase {
      * TestMPEGAudio constructor.
      */
     public TestMPEGAudio() {
-        Log4J.configureLog4J(Level.INFO);
     }
 
     /**

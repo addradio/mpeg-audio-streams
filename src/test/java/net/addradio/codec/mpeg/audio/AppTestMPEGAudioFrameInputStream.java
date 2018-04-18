@@ -20,8 +20,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Level;
+import org.apache.logging.log4j.core.config.Configurator;
+import org.apache.logging.log4j.core.config.DefaultConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,8 +69,7 @@ public class AppTestMPEGAudioFrameInputStream {
      *            {@link String}{@code []}
      */
     public static void main(final String[] args) {
-        BasicConfigurator.configure();
-        org.apache.log4j.Logger.getRootLogger().setLevel(Level.INFO);
+        Configurator.initialize(new DefaultConfiguration());
 
         MP3TestFiles.iterateOverTestFiles(new FileHandler() {
             @Override
