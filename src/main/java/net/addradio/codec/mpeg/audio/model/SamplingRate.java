@@ -21,59 +21,78 @@ package net.addradio.codec.mpeg.audio.model;
 public enum SamplingRate {
 
     /** {@link SamplingRate} COMMENT. */
-    _11025(11025),
+    _11025(11025, 11.025f),
 
     /** {@link SamplingRate} COMMENT. */
-    _12000(12000),
+    _12000(12000, 12f),
 
     /** {@link SamplingRate} COMMENT. */
-    _16000(16000),
+    _16000(16000, 16f),
 
     /** {@link SamplingRate} COMMENT. */
-    _22050(22050),
+    _22050(22050, 22.05f),
 
     /** {@link SamplingRate} COMMENT. */
-    _24000(24000),
+    _24000(24000, 24f),
 
     /** {@link SamplingRate} COMMENT. */
-    _32000(32000),
+    _32000(32000, 32f),
 
     /** {@link SamplingRate} COMMENT. */
-    _44100(44100),
+    _44100(44100, 44.1f),
 
     /** {@link SamplingRate} COMMENT. */
-    _48000(48000),
+    _48000(48000, 48f),
 
     /** {@link SamplingRate} COMMENT. */
-    _8000(8000),
+    _8000(8000, 8f),
 
     /** {@link SamplingRate} COMMENT. */
-    reserved(-1);
+    reserved(-1, -1f);
 
     /** {@link int} COMMENT. */
-    private int value;
+    private int valueInHz;
+
+    /** {@link float} valueInKHz */
+    private float valueInKHz;
 
     /**
      * Default constructor.
      *
      * @param valueVal <code>int</code>
+     * @param valueInKHzVal {@code float}
      */
-    private SamplingRate(final int valueVal) {
-        setValue(valueVal);
+    private SamplingRate(final int valueVal, final float valueInKHzVal) {
+        setValueInHz(valueVal);
+        setValueInKHz(valueInKHzVal);
     }
 
     /**
-     * @return <code>int</code> the value.
+     * @return <code>int</code> the valueInHz.
      */
-    public int getValue() {
-        return this.value;
+    public int getValueInHz() {
+        return this.valueInHz;
     }
 
     /**
-     * @param valueVal <code>int</code> the value to set.
+     * @return the {@link float} valueInKHz
      */
-    private void setValue(final int valueVal) {
-        this.value = valueVal;
+    public float getValueInKHz() {
+        return this.valueInKHz;
+    }
+
+    /**
+     * @param valueVal <code>int</code> the valueInHz to set.
+     */
+    private void setValueInHz(final int valueVal) {
+        this.valueInHz = valueVal;
+    }
+
+    /**
+     * @param valueInKHzVal {@link float} the valueInKHz to set
+     */
+    private void setValueInKHz(final float valueInKHzVal) {
+        this.valueInKHz = valueInKHzVal;
     }
 
     /**
@@ -82,7 +101,7 @@ public enum SamplingRate {
      */
     @Override
     public String toString() {
-        return Integer.toString(getValue());
+        return Integer.toString(getValueInHz());
     }
 
 }

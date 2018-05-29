@@ -208,7 +208,7 @@ public class MPEGAudioEncodingFormat implements EncodingFormat {
      * @return {@code int} the samplingRate
      */
     public int getSamplingRateInHz() {
-        return this.samplingRate.getValue();
+        return this.samplingRate.getValueInHz();
     }
 
     /**

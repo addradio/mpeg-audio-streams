@@ -60,7 +60,7 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
      */
     private static final int calculateLayer2or3FrameLength(final MPEGAudioFrame mpegFrame) {
         return ((MPEGAudioFrameInputStream.MAGIC_144 * mpegFrame.getBitRate().getValueInBps())
-                / mpegFrame.getSamplingRate().getValue()) + (mpegFrame.isPadding() ? 1 : 0);
+                / mpegFrame.getSamplingRate().getValueInHz()) + (mpegFrame.isPadding() ? 1 : 0);
     }
 
     /**
