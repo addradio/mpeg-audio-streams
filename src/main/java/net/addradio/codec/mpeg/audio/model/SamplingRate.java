@@ -75,7 +75,7 @@ public enum SamplingRate {
     }
 
     /**
-     * @return the {@link float} valueInKHz
+     * @return the {@code float} valueInKHz
      */
     public float getValueInKHz() {
         return this.valueInKHz;
