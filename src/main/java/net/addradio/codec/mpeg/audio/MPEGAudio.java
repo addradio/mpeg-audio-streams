@@ -51,22 +51,22 @@ public class MPEGAudio {
      * @return {@link MPEGAudioEncodingFormat} corresponding to frame.
      */
     public static MPEGAudioEncodingFormat createEncodingFormatForFrame(final MPEGAudioFrame frame) {
-        if (frame != null) {
-            final MPEGAudioEncodingFormat mef = new MPEGAudioEncodingFormat();
-            mef.setBitRate(frame.getBitRate());
-            mef.setCopyright(frame.isCopyright());
-            mef.setEmphasis(frame.getEmphasis());
-            mef.setErrorProtected(frame.isErrorProtected());
-            mef.setLayer(frame.getLayer());
-            mef.setMode(frame.getMode());
-            mef.setModeExtension(frame.getModeExtension());
-            mef.setOriginal(frame.isOriginal());
-            mef.setPrivate(frame.isPrivate());
-            mef.setSamplingRate(frame.getSamplingRate());
-            mef.setVersion(frame.getVersion());
-            return mef;
+        if (frame == null) {
+            throw new NullPointerException("frame MUST NOT be null!"); //$NON-NLS-1$
         }
-        return null;
+        final MPEGAudioEncodingFormat mef = new MPEGAudioEncodingFormat();
+        mef.setBitRate(frame.getBitRate());
+        mef.setCopyright(frame.isCopyright());
+        mef.setEmphasis(frame.getEmphasis());
+        mef.setErrorProtected(frame.isErrorProtected());
+        mef.setLayer(frame.getLayer());
+        mef.setMode(frame.getMode());
+        mef.setModeExtension(frame.getModeExtension());
+        mef.setOriginal(frame.isOriginal());
+        mef.setPrivate(frame.isPrivate());
+        mef.setSamplingRate(frame.getSamplingRate());
+        mef.setVersion(frame.getVersion());
+        return mef;
     }
 
     /**
