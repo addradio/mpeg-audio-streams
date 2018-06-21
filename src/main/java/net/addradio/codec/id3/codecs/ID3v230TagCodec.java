@@ -87,7 +87,7 @@ public final class ID3v230TagCodec {
             bytesLeft--;
             e.setPayload(ID3CodecTools.readStringFromStream(bis, e.getSize()));
             bytesLeft -= e.getSize();
-            id3v230Tag.getFrames().add(e);
+            id3v230Tag.getFrames().put(e.getFrameId(), e);
         }
         return id3v230Tag;
     }

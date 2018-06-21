@@ -146,13 +146,11 @@ public final class ID3v240TagCodec {
                 bytesLeft--;
                 bis.read();
                 bytesLeft--;
-                // SEBASTIAN decode payload
-                for (int i = e.getSize(); bytesLeft > 0 && i > 0; i--) {
-                    bis.read();
-                    bytesLeft--;
-                }
+                final int saveLength = ID3CodecTools.getSaveLength(e.getSize(), bytesLeft);
+                e.setPayload(ID3CodecTools.readStringFromStream(bis, saveLength));
+                bytesLeft -= saveLength;
                 if (!e.getFrameId().isEmpty()) {
-                    id3v240Tag.getFrames().add(e);
+                    id3v240Tag.getFrames().put(e.getFrameId(), e);
                 }
             }
             // SEBASTIAN take care, actually this should never happen
@@ -160,7 +158,7 @@ public final class ID3v240TagCodec {
                 bis.read();
                 bytesLeft--;
             }
-        } catch (Throwable t) {
+        } catch (final Throwable t) {
             LOG.error(t.getLocalizedMessage(), t);
         }
         return id3v240Tag;

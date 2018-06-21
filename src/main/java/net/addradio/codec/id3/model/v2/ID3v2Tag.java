@@ -15,18 +15,18 @@
  */
 package net.addradio.codec.id3.model.v2;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import net.addradio.codec.id3.model.ID3Tag;
 
 /**
  * ID3v2Tag.
  */
-public class ID3v2Tag extends ID3Tag {
+public abstract class ID3v2Tag extends ID3Tag {
 
-    /** {@link List}{@code <}{@link Frame}{@code >} frames. */
-    private List<Frame> frames;
+    /** {@link Map}{@code <}{@link String}@{@code , }{@link Frame}{@code >} frames. */
+    private Map<String, Frame> frames;
 
     /** {@code int} majorVersion. */
     private int majorVersion;
@@ -47,7 +47,7 @@ public class ID3v2Tag extends ID3Tag {
      * ID3v2Tag constructor.
      */
     public ID3v2Tag() {
-        this.frames = new LinkedList<>();
+        this.frames = new HashMap<>();
     }
 
     /**
@@ -92,9 +92,9 @@ public class ID3v2Tag extends ID3Tag {
 
     /**
      * getFrames.
-     * @return {@link List}{@code <}{@link Frame}{@code >} the frames
+     * @return {@link Map}{@code <}{@link String}@{@code , }{@link Frame}{@code >} the frames
      */
-    public List<Frame> getFrames() {
+    public Map<String, Frame> getFrames() {
         return this.frames;
     }
 
@@ -157,9 +157,9 @@ public class ID3v2Tag extends ID3Tag {
 
     /**
      * setFrames.
-     * @param framesRef {@link List}{@code <}{@link Frame}{@code >} the frames to set
+     * @param framesRef {@link Map}{@code <}{@link String}@{@code , }{@link Frame}{@code >} the frames to set
      */
-    public void setFrames(final List<Frame> framesRef) {
+    public void setFrames(final Map<String, Frame> framesRef) {
         this.frames = framesRef;
     }
 

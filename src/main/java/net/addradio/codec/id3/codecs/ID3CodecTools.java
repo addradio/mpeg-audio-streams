@@ -19,6 +19,7 @@ package net.addradio.codec.id3.codecs;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
+import net.addradio.codec.id3.model.v2.Frame;
 import net.addradio.codec.id3.model.v2.ID3v2Tag;
 import net.addradio.streams.BitInputStream;
 
@@ -58,6 +59,35 @@ public final class ID3CodecTools {
         id3v2Tag.setRevisionNumber(revision);
         id3v2Tag.setUnsynchronisation(unsynchronized);
         return id3v2Tag;
+    }
+
+    /**
+     * getSaveLength.
+     * @param length {@code int} number of bytes to be read.
+     * @param leftBytes {@code int} number of bytes available.
+     * @return {@code int} the length to be safely read.
+     */
+    public static final int getSaveLength(final int length, final int leftBytes) {
+        if (length <= leftBytes) {
+            return length;
+        }
+        return leftBytes;
+    }
+
+    /**
+     * getSavePayload.
+     * @param v2Tag {@link ID3v2Tag}
+     * @param frameIds {@link String}
+     * @return {@link String} or {@code null} if frame for frameId does not exist.
+     */
+    public static String getSavePayload(final ID3v2Tag v2Tag, final String... frameIds) {
+        for (String id : frameIds) {
+            final Frame frame = v2Tag.getFrames().get(id);
+            if (frame != null) {
+                return frame.getPayload();
+            }
+        }
+        return null;
     }
 
     /**

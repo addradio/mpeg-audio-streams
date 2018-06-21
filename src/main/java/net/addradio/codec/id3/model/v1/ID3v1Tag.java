@@ -137,6 +137,15 @@ public class ID3v1Tag extends ID3Tag {
     }
 
     /**
+     * {@inheritDoc}
+     * @see net.addradio.codec.id3.model.ID3Tag#getLeadPerformerSoloistORBandOrchestraAccompaniment()
+     */
+    @Override
+    public String getLeadPerformerSoloistORBandOrchestraAccompaniment() {
+        return getArtist();
+    }
+
+    /**
      * getOverallSize.
      * @see net.addradio.codec.id3.model.ID3Tag#getOverallSize()
      * @return {@code int}
@@ -152,6 +161,15 @@ public class ID3v1Tag extends ID3Tag {
      */
     public String getTitle() {
         return this.title;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see net.addradio.codec.id3.model.ID3Tag#getTitleSongnameContentDescription()
+     */
+    @Override
+    public String getTitleSongnameContentDescription() {
+        return getTitle();
     }
 
     /**

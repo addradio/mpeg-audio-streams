@@ -15,6 +15,7 @@
  */
 package net.addradio.codec.id3.model.v2.v230;
 
+import net.addradio.codec.id3.codecs.ID3CodecTools;
 import net.addradio.codec.id3.model.v2.ID3v2Tag;
 
 /**
@@ -65,6 +66,24 @@ public class ID3v230Tag extends ID3v2Tag {
      */
     public ExtendedHeader getExtendedHeader() {
         return this.extendedHeader;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see net.addradio.codec.id3.model.ID3Tag#getLeadPerformerSoloistORBandOrchestraAccompaniment()
+     */
+    @Override
+    public String getLeadPerformerSoloistORBandOrchestraAccompaniment() {
+        return ID3CodecTools.getSavePayload(this, new String[] { "TPE1", "TPE2" }); //$NON-NLS-1$ //$NON-NLS-2$
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see net.addradio.codec.id3.model.ID3Tag#getTitleSongnameContentDescription()
+     */
+    @Override
+    public String getTitleSongnameContentDescription() {
+        return ID3CodecTools.getSavePayload(this, "TIT2"); //$NON-NLS-1$
     }
 
     /**

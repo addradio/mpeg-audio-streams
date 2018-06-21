@@ -15,6 +15,7 @@
  */
 package net.addradio.codec.id3.model.v2.v240;
 
+import net.addradio.codec.id3.codecs.ID3CodecTools;
 import net.addradio.codec.id3.model.v2.ID3v2Tag;
 
 /**
@@ -65,6 +66,24 @@ public class ID3v240Tag extends ID3v2Tag {
     }
 
     /**
+     * {@inheritDoc}
+     * @see net.addradio.codec.id3.model.ID3Tag#getLeadPerformerSoloistORBandOrchestraAccompaniment()
+     */
+    @Override
+    public String getLeadPerformerSoloistORBandOrchestraAccompaniment() {
+        return ID3CodecTools.getSavePayload(this, new String[] { "TPE1", "TPE2" }); //$NON-NLS-1$ //$NON-NLS-2$
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see net.addradio.codec.id3.model.ID3Tag#getTitleSongnameContentDescription()
+     */
+    @Override
+    public String getTitleSongnameContentDescription() {
+        return ID3CodecTools.getSavePayload(this, "TIT2"); //$NON-NLS-1$
+    }
+
+    /**
      * isExperimental.
      * @return {@code boolean} the experimental
      */
@@ -112,13 +131,17 @@ public class ID3v240Tag extends ID3v2Tag {
     @Override
     public String toString() {
         final StringBuilder builder = new StringBuilder();
-        builder.append("ID3v240Tag [experimental:");
+        builder.append("ID3v240Tag [experimental=");
         builder.append(this.experimental);
-        builder.append(", extendedHeader:");
+        builder.append(", extendedHeader=");
         builder.append(this.extendedHeader);
-        builder.append(", footer:");
+        builder.append(", footer=");
         builder.append(this.footer);
-        builder.append(", getFrames():");
+        builder.append(", getMajorVersion()=");
+        builder.append(getMajorVersion());
+        builder.append(", getRevisionNumber()=");
+        builder.append(getRevisionNumber());
+        builder.append(", getFrames()=");
         builder.append(getFrames());
         builder.append("]");
         return builder.toString();

@@ -30,6 +30,18 @@ public abstract class ID3Tag implements MPEGAudioContent {
     public abstract int getOverallSize();
 
     /**
+     * getTitleSongnameContentDescription.
+     * @return {@link String} the title, the songs's name or a content description.
+     */
+    public abstract String getTitleSongnameContentDescription();
+
+    /**
+     * getLeadPerformerSoloistORBandOrchestraAccompaniment.
+     * @return {@link String}
+     */
+    public abstract String getLeadPerformerSoloistORBandOrchestraAccompaniment();
+
+    /**
      * isID3Tag.
      * @see net.addradio.codec.mpeg.audio.model.MPEGAudioContent#isID3Tag()
      * @return {@code boolean true} always.

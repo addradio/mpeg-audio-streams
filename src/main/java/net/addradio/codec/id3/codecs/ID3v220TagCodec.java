@@ -73,7 +73,7 @@ public final class ID3v220TagCodec {
             // SEBASTIAN decode payload
             e.setPayload(ID3CodecTools.readStringFromStream(bis, e.getSize()));
             bytesLeft -= e.getSize();
-            id3v220Tag.getFrames().add(e);
+            id3v220Tag.getFrames().put(e.getFrameId(), e);
         }
         return id3v220Tag;
     }
