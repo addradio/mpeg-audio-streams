@@ -102,7 +102,7 @@ public final class ID3CodecTools {
             throws IOException, UnsupportedEncodingException {
         final byte[] buffer = new byte[length];
         bis.readFully(buffer);
-        return new String(buffer, "UTF-8").trim(); //$NON-NLS-1$
+        return new String(buffer, "ISO-8859-1").trim(); //$NON-NLS-1$
     }
 
     /**
