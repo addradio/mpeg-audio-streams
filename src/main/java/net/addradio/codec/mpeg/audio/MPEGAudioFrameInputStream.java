@@ -48,7 +48,7 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
     private static final Logger LOG = LoggerFactory.getLogger(MPEGAudioFrameInputStream.class);
 
     /**
-     * {@link int} MAGIC_144
+     * {@code int} MAGIC_144
      * SEBASTIAN check definitions
      */
     private static final int MAGIC_144 = 144;
@@ -122,7 +122,7 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
     /**
      * assureByteAlignement.
      * @return {@code int} number of skipped bits during alignment.
-     * @throws IOException
+     * @throws IOException due to I/O issues.
      */
     private int assureByteAlignement() throws IOException {
         int skippedBitsVal = 0;
@@ -172,8 +172,8 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
     /**
      * decodeMPEGFrame.
      * @return {@link MPEGAudioFrame}
-     * @throws IOException
-     * @throws MPEGAudioCodecException
+     * @throws IOException due to I/O issues,
+     * @throws MPEGAudioCodecException if decoder encounters issues during decoding.
      */
     private MPEGAudioFrame decodeMPEGFrame() throws IOException, MPEGAudioCodecException {
         try {
@@ -298,7 +298,7 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
      *
      * @param mp3Frame
      *            {@link MPEGAudioFrame}
-     * @throws IOException
+     * @throws IOException due to I/O issues.
      */
     private void readCrcIfNeeded(final MPEGAudioFrame mp3Frame) throws IOException {
         if (mp3Frame.isErrorProtected()) {
@@ -404,7 +404,6 @@ public class MPEGAudioFrameInputStream extends BitInputStream {
      *
      * @throws IOException
      *             in case of bad IO situations.
-     * @throws MPEGAudioCodecException if the end of the stream has been reached.
      */
     SyncResult sync() throws IOException {
         int skippedBitsVal = 0;

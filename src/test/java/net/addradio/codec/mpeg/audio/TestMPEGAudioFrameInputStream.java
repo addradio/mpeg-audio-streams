@@ -32,7 +32,7 @@ import net.addradio.codec.mpeg.audio.tools.MP3TestFiles;
 public class TestMPEGAudioFrameInputStream extends TestCase {
 
     /**
-     * {@link byte[]} BYTES_WITH_SYNC_BYTES.
+     * {@code byte[]} BYTES_WITH_SYNC_BYTES.
      *
      * <pre>
      *     F0       7F       F5        FF       EF

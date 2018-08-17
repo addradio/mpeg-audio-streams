@@ -55,7 +55,7 @@ public class MPEGAudioFrame implements MPEGAudioContent {
     /** {@link BitRate} bitRate. */
     private BitRate bitRate;
 
-    /** {@link boolean} copyright. */
+    /** {@code boolean} copyright. */
     private boolean copyright = false;
 
     /** {@code byte[]} crc. */

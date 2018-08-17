@@ -42,7 +42,7 @@ public class TestBitInputStream extends TestCase {
      * setUp.
      *
      * @see junit.framework.TestCase#setUp()
-     * @throws Exception
+     * @throws Exception TBD.
      */
     @Override
     protected void setUp() throws Exception {

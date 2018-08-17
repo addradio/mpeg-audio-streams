@@ -44,7 +44,7 @@ public class TestIntegrationReadWrite extends TestCase {
     /**
      * assertByteWiseReencodedFile.
      * @param fileName {@link String}
-     * @throws IOException
+     * @throws IOException due to I/O issues.
      */
     private static void assertByteWiseReencodedFile(final String fileName) throws IOException {
         final File in = new File(fileName);

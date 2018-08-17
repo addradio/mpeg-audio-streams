@@ -23,7 +23,7 @@ import net.addradio.codec.id3.model.v2.ID3v2Tag;
  */
 public class ID3v220Tag extends ID3v2Tag {
 
-    /** {@link boolean} compressed. */
+    /** {@code boolean} compressed. */
     private boolean compressed;
 
     /**

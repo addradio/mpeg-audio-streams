@@ -20,16 +20,16 @@ package net.addradio.codec.id3.model.v2.v230;
  */
 public class ExtendedHeader {
 
-    /** {@link int} crc32. */
+    /** {@code int} crc32. */
     private int crc32;
 
-    /** {@link boolean} crcDataIsPresent. */
+    /** {@code boolean} crcDataIsPresent. */
     private boolean crcDataIsPresent;
 
-    /** {@link int} paddingSize. */
+    /** {@code int} paddingSize. */
     private int paddingSize;
 
-    /** {@link int} size. */
+    /** {@code int} size. */
     private int size;
 
     /**

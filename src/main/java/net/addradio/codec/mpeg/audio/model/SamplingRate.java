@@ -50,10 +50,10 @@ public enum SamplingRate {
     /** {@link SamplingRate} COMMENT. */
     reserved(-1, -1f);
 
-    /** {@link int} COMMENT. */
+    /** {@code int} COMMENT. */
     private int valueInHz;
 
-    /** {@link float} valueInKHz */
+    /** {@code float} valueInKHz */
     private float valueInKHz;
 
     /**
@@ -89,7 +89,7 @@ public enum SamplingRate {
     }
 
     /**
-     * @param valueInKHzVal {@link float} the valueInKHz to set
+     * @param valueInKHzVal {@code float} the valueInKHz to set
      */
     private void setValueInKHz(final float valueInKHzVal) {
         this.valueInKHz = valueInKHzVal;

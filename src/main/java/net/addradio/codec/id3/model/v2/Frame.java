@@ -26,7 +26,7 @@ public class Frame {
     /** {@link String} payload. */
     private String payload;
 
-    /** {@link int} size. */
+    /** {@code int} size. */
     private int size;
 
     /**

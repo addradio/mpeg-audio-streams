@@ -34,7 +34,7 @@ public class MPEGAudioContentCollectorHandler implements MPEGAudioContentHandler
     /** {@link List}{@code <}{@link MPEGAudioFrame}{@code >} audioFramesOnly */
     final List<MPEGAudioFrame> audioFramesOnly = new LinkedList<>();
 
-    /** {@link float} averageBitRate */
+    /** {@code float} averageBitRate */
     private transient float averageBitRate = 0;
 
     /** {@code long} durationMillis. */

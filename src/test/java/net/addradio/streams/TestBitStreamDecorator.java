@@ -27,10 +27,10 @@ import junit.framework.TestCase;
  */
 public class TestBitStreamDecorator extends TestCase {
 
-    /** {@link byte[]} IN_BUF */
+    /** {@code byte[]} IN_BUF */
     private static final byte[] IN_BUF = new byte[] { 0, 0, 0, 0, 0, 0, 0, 0 };
 
-    /** {@link byte[]} OUT_BUF */
+    /** {@code byte[]} OUT_BUF */
     private static final byte[] OUT_BUF = new byte[] { 0, 1, 0, 16, 0, 0, 3, 0 };
 
     /**

@@ -42,13 +42,13 @@ import net.addradio.codec.id3.model.v2.ID3v2Tag;
  */
 public class ID3v240Tag extends ID3v2Tag {
 
-    /** {@link boolean} experimental. */
+    /** {@code boolean} experimental. */
     private boolean experimental;
 
     /** {@link ExtendedHeader} extendedHeader. */
     private ExtendedHeader extendedHeader;
 
-    /** {@link boolean} footer. */
+    /** {@code boolean} footer. */
     private boolean footer;
 
     /**

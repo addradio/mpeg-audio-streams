@@ -22,7 +22,7 @@ import java.io.IOException;
  */
 public class EndOfStreamException extends IOException {
 
-    /** {@link long} serialVersionUID. */
+    /** {@code long} serialVersionUID. */
     private static final long serialVersionUID = 904809690272752990L;
 
 }
