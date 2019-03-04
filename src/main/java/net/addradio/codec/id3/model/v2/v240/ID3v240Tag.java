@@ -80,7 +80,9 @@ public class ID3v240Tag extends ID3v2Tag {
      */
     @Override
     public String getTitleSongnameContentDescription() {
-        return ID3CodecTools.getSavePayload(this, "TIT2"); //$NON-NLS-1$
+        // (20190304 saw) since some encoders use old v220 tags in v230 and v240 tags as well, we need to look
+        //                for them just in case.
+        return ID3CodecTools.getSavePayload(this, "TIT2", "TT2"); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     /**
