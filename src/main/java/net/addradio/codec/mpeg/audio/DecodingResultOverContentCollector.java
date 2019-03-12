@@ -18,7 +18,6 @@ package net.addradio.codec.mpeg.audio;
 import java.util.List;
 
 import net.addradio.codec.id3.model.ID3Tag;
-import net.addradio.codec.mpeg.audio.model.MPEGAudioContent;
 import net.addradio.codec.mpeg.audio.model.MPEGAudioFrame;
 import net.addradio.codec.mpeg.audio.tools.MPEGAudioContentCollectorHandler;
 
@@ -38,18 +37,19 @@ public class DecodingResultOverContentCollector implements DecodingResult {
      * @param skippedBitsVal {@code long}
      * @param delegateRef {@link MPEGAudioContentCollectorHandler}
      */
-    public DecodingResultOverContentCollector(final long skippedBitsVal, final MPEGAudioContentCollectorHandler delegateRef) {
+    public DecodingResultOverContentCollector(final long skippedBitsVal,
+            final MPEGAudioContentCollectorHandler delegateRef) {
         this.skippedBits = skippedBitsVal;
         this.delegate = delegateRef;
     }
 
     /**
      * {@inheritDoc}
-     * @see net.addradio.codec.mpeg.audio.DecodingResult#getAudioFramesOnly()
+     * @see net.addradio.codec.mpeg.audio.DecodingResult#getAudioFrames()
      * @see net.addradio.codec.mpeg.audio.tools.MPEGAudioContentCollectorHandler#getAudioFramesOnly()
      */
     @Override
-    public List<MPEGAudioFrame> getAudioFramesOnly() {
+    public List<MPEGAudioFrame> getAudioFrames() {
         return this.delegate.getAudioFramesOnly();
     }
 
@@ -64,15 +64,6 @@ public class DecodingResultOverContentCollector implements DecodingResult {
 
     /**
      * {@inheritDoc}
-     * @see net.addradio.codec.mpeg.audio.DecodingResult#getContent()
-     */
-    @Override
-    public List<MPEGAudioContent> getContent() {
-        return this.delegate.getAllContents();
-    }
-
-    /**
-     * {@inheritDoc}
      * @see net.addradio.codec.mpeg.audio.DecodingResult#getDurationMillis()
      */
     @Override
@@ -82,11 +73,11 @@ public class DecodingResultOverContentCollector implements DecodingResult {
 
     /**
      * {@inheritDoc}
-     * @see net.addradio.codec.mpeg.audio.DecodingResult#getId3TagsOnly()
+     * @see net.addradio.codec.mpeg.audio.DecodingResult#getId3Tags()
      * @see net.addradio.codec.mpeg.audio.tools.MPEGAudioContentCollectorHandler#getId3TagsOnly()
      */
     @Override
-    public List<ID3Tag> getId3TagsOnly() {
+    public List<ID3Tag> getId3Tags() {
         return this.delegate.getId3TagsOnly();
     }
 

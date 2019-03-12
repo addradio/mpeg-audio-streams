@@ -21,7 +21,6 @@ import java.io.IOException;
 import junit.framework.TestCase;
 import net.addradio.codec.mpeg.audio.model.BitRate;
 import net.addradio.codec.mpeg.audio.model.Layer;
-import net.addradio.codec.mpeg.audio.model.MPEGAudioContent;
 import net.addradio.codec.mpeg.audio.model.MPEGAudioFrame;
 import net.addradio.codec.mpeg.audio.model.SamplingRate;
 import net.addradio.codec.mpeg.audio.model.Version;
@@ -65,15 +64,15 @@ public class TestMPEGAudio extends TestCase {
     private static final void assertMPEGFileIntegrity(final String fileName, final int numberOfMPEGAudioFrames)
             throws IOException {
         final DecodingResult dr = MPEGAudio.decode(fileName, MPEGAudioContentFilter.MPEG_AUDIO_FRAMES);
-        assertEquals(numberOfMPEGAudioFrames, dr.getContent().size());
+        assertEquals(numberOfMPEGAudioFrames, dr.getAudioFrames().size());
         assertEquals(0, dr.getSkippedBits());
         MPEGAudioFrame firstFrame = null;
-        for (final MPEGAudioContent frame : dr.getContent()) {
+        for (final MPEGAudioFrame frame : dr.getAudioFrames()) {
             if (firstFrame == null) {
-                firstFrame = (MPEGAudioFrame) frame;
+                firstFrame = frame;
                 continue;
             }
-            assertCommonFramesProperties(firstFrame, (MPEGAudioFrame) frame);
+            assertCommonFramesProperties(firstFrame, frame);
         }
     }
 

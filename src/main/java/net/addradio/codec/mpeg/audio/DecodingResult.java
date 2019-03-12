@@ -19,7 +19,6 @@ package net.addradio.codec.mpeg.audio;
 import java.util.List;
 
 import net.addradio.codec.id3.model.ID3Tag;
-import net.addradio.codec.mpeg.audio.model.MPEGAudioContent;
 import net.addradio.codec.mpeg.audio.model.MPEGAudioFrame;
 
 /**
@@ -30,18 +29,12 @@ public interface DecodingResult {
     /**
      * @return {@link List}{@code <}{@link MPEGAudioFrame}{@code >}
      */
-    List<MPEGAudioFrame> getAudioFramesOnly();
+    List<MPEGAudioFrame> getAudioFrames();
 
     /**
      * @return the {@code float} averageBitRate or {@code -1} if average bitrate has not been calculated so far.
      */
     float getAverageBitRate();
-
-    /**
-     * getContent.
-     * @return {@link List}{@code <}{@link MPEGAudioContent}{@code >} the content
-     */
-    List<MPEGAudioContent> getContent();
 
     /**
      * getDurationMillis.
@@ -52,7 +45,7 @@ public interface DecodingResult {
     /**
      * @return {@link List}{@code <}{@link ID3Tag}{@code >}
      */
-    List<ID3Tag> getId3TagsOnly();
+    List<ID3Tag> getId3Tags();
 
     /**
      * getNumberOfDecodedBytes.

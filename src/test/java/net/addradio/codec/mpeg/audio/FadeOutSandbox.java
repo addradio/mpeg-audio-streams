@@ -19,7 +19,6 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.Iterator;
 
-import net.addradio.codec.mpeg.audio.model.MPEGAudioContent;
 import net.addradio.codec.mpeg.audio.model.MPEGAudioFrame;
 import net.addradio.codec.mpeg.audio.tools.MPEGAudioContentFilter;
 
@@ -73,16 +72,16 @@ public class FadeOutSandbox {
         System.out.println("dro contents count: " + dro.getNumberOfDecodedContents());
 
         //        final List<MPEGAudioContent> content = dro.getContent();
-        final Iterator<MPEGAudioContent> droIterator = dro.getContent().iterator();
+        final Iterator<MPEGAudioFrame> droIterator = dro.getAudioFrames().iterator();
         // remove APE header
         droIterator.next();
-        final Iterator<MPEGAudioContent> drfoIterator = drfo.getContent().iterator();
+        final Iterator<MPEGAudioFrame> drfoIterator = drfo.getAudioFrames().iterator();
         int frameCount = 0;
         int diffCount = 0;
         while (droIterator.hasNext() && drfoIterator.hasNext()) {
 
-            final MPEGAudioFrame droNext = (MPEGAudioFrame) droIterator.next();
-            final MPEGAudioFrame drfoNext = (MPEGAudioFrame) drfoIterator.next();
+            final MPEGAudioFrame droNext = droIterator.next();
+            final MPEGAudioFrame drfoNext = drfoIterator.next();
 
             if (!Arrays.equals(droNext.getPayload(), drfoNext.getPayload())) {
                 System.out.println("fc: " + frameCount + ", droLength: " + droNext.getPayload().length

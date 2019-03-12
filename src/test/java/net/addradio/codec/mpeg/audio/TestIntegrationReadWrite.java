@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import junit.framework.TestCase;
 import net.addradio.codec.id3.model.ID3Tag;
-import net.addradio.codec.mpeg.audio.model.MPEGAudioContent;
+import net.addradio.codec.mpeg.audio.model.MPEGAudioFrame;
 import net.addradio.codec.mpeg.audio.tools.MP3TestFiles;
 import net.addradio.codec.mpeg.audio.tools.MPEGAudioContentFilter;
 
@@ -61,7 +61,7 @@ public class TestIntegrationReadWrite extends TestCase {
             TestIntegrationReadWrite.LOG.info("Created tmp file [" + out.getAbsolutePath() + "]"); //$NON-NLS-1$ //$NON-NLS-2$
         }
         try (FileOutputStream fos = new FileOutputStream(out)) {
-            MPEGAudio.encode(dr.getContent(), fos, true);
+            MPEGAudio.encode(dr.getAudioFrames(), fos, true);
         }
         // SEBASTIAN since we do not encode ID3Tags until now, those bytes we have less in our result
         final int id3TagSize = firstID3Tag != null ? firstID3Tag.getOverallSize() : 0;
@@ -84,9 +84,9 @@ public class TestIntegrationReadWrite extends TestCase {
         }
 
         final DecodingResult drreencoded = MPEGAudio.decode(out, MPEGAudioContentFilter.MPEG_AUDIO_FRAMES);
-        final List<MPEGAudioContent> content = dr.getContent();
-        final Iterator<MPEGAudioContent> iterator = content.iterator();
-        final Iterator<MPEGAudioContent> iterator2 = drreencoded.getContent().iterator();
+        final List<MPEGAudioFrame> content = dr.getAudioFrames();
+        final Iterator<MPEGAudioFrame> iterator = content.iterator();
+        final Iterator<MPEGAudioFrame> iterator2 = drreencoded.getAudioFrames().iterator();
         while (iterator.hasNext() && iterator2.hasNext()) {
             assertEquals(iterator.next(), iterator2.next());
         }
