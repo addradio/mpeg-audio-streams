@@ -46,6 +46,26 @@ public class MPEGAudioFrame implements MPEGAudioContent {
     /** {@code int} SYNC_WORD_PATTERN */
     public static final int SYNC_WORD_PATTERN = 0x7FF;
 
+    /**
+     * calculateAverageBitRate.
+     * @param durationMillisVal {@code long}
+     * @param payloadLengthInBytes {@code long}
+     * @return {@code double}
+     */
+    public static final double calculateAverageBitRate(final long durationMillisVal, final long payloadLengthInBytes) {
+        return (payloadLengthInBytes * 8d * 1000) / durationMillisVal;
+    }
+
+    /**
+     * calculateDuration.
+     * @param bitRateInBps {@code int}
+     * @param payloadLengthInBytes {@code int}
+     * @return {@code double}
+     */
+    public static final double calculateDuration(final int bitRateInBps, final int payloadLengthInBytes) {
+        return (payloadLengthInBytes * 8d * 1000) / bitRateInBps;
+    }
+
     /** {@code boolean} _private. */
     private boolean _private = false;
 
@@ -113,19 +133,7 @@ public class MPEGAudioFrame implements MPEGAudioContent {
         if (frameLength < 0) {
             return -1;
         }
-        return (frameLength * 8 * 1000) / getBitRate().getValueInBps();
-    }
-
-    /**
-     * calculateDurationMillisDoublePrecision.
-     * @return {@code double}
-     */
-    public double calculateDurationMillisDoublePrecision() {
-        final int frameLength = getFrameLength();
-        if (frameLength < 0) {
-            return -1;
-        }
-        return (frameLength * 8 * 1000) / (double) getBitRate().getValueInBps();
+        return Math.round(calculateDuration(getBitRate().getValueInBps(), frameLength));
     }
 
     /**
