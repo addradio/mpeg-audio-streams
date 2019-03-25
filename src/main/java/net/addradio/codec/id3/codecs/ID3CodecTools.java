@@ -100,6 +100,9 @@ public final class ID3CodecTools {
      */
     public static final String readStringFromStream(final BitInputStream bis, final int length)
             throws IOException, UnsupportedEncodingException {
+        if (length < 0) {
+            throw new IllegalArgumentException("length MUST BE >= 0, was " + length); //$NON-NLS-1$
+        }
         final byte[] buffer = new byte[length];
         bis.readFully(buffer);
         return new String(buffer, "ISO-8859-1").trim(); //$NON-NLS-1$
@@ -109,7 +112,7 @@ public final class ID3CodecTools {
      * readSyncSafeInt.
      * @param bis {@link BitInputStream}
      * @return {@code int}
-     * @throws IOException due to IO problems.
+     * @throws IOException due to IO problems.   
      */
     public static final int readSyncSafeInt(final BitInputStream bis) throws IOException {
         int size = 0;
