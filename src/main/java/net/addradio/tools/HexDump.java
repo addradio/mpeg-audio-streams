@@ -14,7 +14,7 @@
  * (c) Sebastian A. Weiss, nacamar GmbH 2014 - All rights reserved.
  */
 
-package net.addradio.io;
+package net.addradio.tools;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
