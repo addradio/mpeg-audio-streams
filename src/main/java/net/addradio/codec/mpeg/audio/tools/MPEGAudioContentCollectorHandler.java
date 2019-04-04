@@ -28,6 +28,18 @@ import net.addradio.codec.mpeg.audio.model.MPEGAudioFrame;
  */
 public class MPEGAudioContentCollectorHandler implements MPEGAudioContentHandler {
 
+    /**
+     * DurationCallback.
+     */
+    public static interface DurationCallback {
+        /**
+         * durationChanged.
+         * @param parentCollector {@link MPEGAudioContentCollectorHandler}
+         * @param newDuration {@code long}
+         */
+        void durationChanged(MPEGAudioContentCollectorHandler parentCollector, long newDuration);
+    }
+
     /** {@link List}{@code <}{@link MPEGAudioContent}{@code >} allContents */
     final List<MPEGAudioContent> allContents = new LinkedList<>();
 
@@ -49,10 +61,21 @@ public class MPEGAudioContentCollectorHandler implements MPEGAudioContentHandler
     /** {@code int} mpegaFrameCount */
     private transient int mpegaFrameCount = 0;
 
+    /** {@link DurationCallback} durationCallback. */
+    private DurationCallback durationCallback;
+
     /**
      * MPEGAudioContentCollectorHandler constructor.
      */
     public MPEGAudioContentCollectorHandler() {
+    }
+
+    /**
+     * MPEGAudioContentCollectorHandler constructor.
+     * @param durationCallbackRef {@link DurationCallback}
+     */
+    public MPEGAudioContentCollectorHandler(final DurationCallback durationCallbackRef) {
+        this.durationCallback = durationCallbackRef;
     }
 
     /**
@@ -119,6 +142,9 @@ public class MPEGAudioContentCollectorHandler implements MPEGAudioContentHandler
                     this.numberOfCollectedBytes += mpegAudioFrame.getFrameLength();
                     this.averageBitRate = ((this.averageBitRate * (this.mpegaFrameCount - 1))
                             + mpegAudioFrame.getBitRate().getValueInBps()) / this.mpegaFrameCount;
+                    if (this.durationCallback != null) {
+                        this.durationCallback.durationChanged(this, this.durationMillis);
+                    }
                 }
             } else if (MPEGAudioContentFilter.ID3_TAGS.accept(content)) {
                 this.allContents.add(content);
@@ -130,6 +156,19 @@ public class MPEGAudioContentCollectorHandler implements MPEGAudioContentHandler
             }
         }
         return false;
+    }
+
+    /**
+     * reset.
+     */
+    public void reset() {
+        this.allContents.clear();
+        this.audioFramesOnly.clear();
+        this.id3TagsOnly.clear();
+        this.averageBitRate = 0;
+        this.durationMillis = 0;
+        this.mpegaFrameCount = 0;
+        this.numberOfCollectedBytes = 0;
     }
 
 }
