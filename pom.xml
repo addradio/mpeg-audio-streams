@@ -175,12 +175,16 @@
             </plugin>
         </plugins>
     </build>
-
     <distributionManagement>
         <repository>
             <id>github-nacamar</id>
-            <name>GitHub nacamar Apache Maven Packages</name>
+            <name>GitHub addradio Apache Maven Packages</name>
             <url>https://maven.pkg.github.com/addradio/mpeg-audio-streams</url>
         </repository>
+        <snapshotRepository>
+            <id>github-nacamar</id>
+            <name>GitHub addradio Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/addradio/mpeg-audio-streams</url>
+        </snapshotRepository>
     </distributionManagement>
 </project>
