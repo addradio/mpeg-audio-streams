@@ -124,35 +124,35 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
-<!--             <plugin> -->
-<!--                 <groupId>org.apache.maven.plugins</groupId> -->
-<!--                 <artifactId>maven-source-plugin</artifactId> -->
-<!--                 <version>3.0.1</version> -->
-<!--                 <executions> -->
-<!--                     <execution> -->
-<!--                         <id>attach-sources</id> -->
-<!--                         <goals> -->
-<!--                             <goal>jar</goal> -->
-<!--                         </goals> -->
-<!--                     </execution> -->
-<!--                 </executions> -->
-<!--             </plugin> -->
-<!--             <plugin> -->
-<!--                 <groupId>org.apache.maven.plugins</groupId> -->
-<!--                 <artifactId>maven-javadoc-plugin</artifactId> -->
-<!--                 <version>3.0.0-M1</version> -->
-<!--                 <configuration> -->
-<!--                     <failOnError>false</failOnError> -->
-<!--                 </configuration> -->
-<!--                 <executions> -->
-<!--                     <execution> -->
-<!--                         <id>attach-javadocs</id> -->
-<!--                         <goals> -->
-<!--                             <goal>jar</goal> -->
-<!--                         </goals> -->
-<!--                     </execution> -->
-<!--                 </executions> -->
-<!--             </plugin> -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.0.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.0.0-M1</version>
+                <configuration>
+                    <failOnError>false</failOnError>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 			<!-- code coverage -->
             <plugin>
                 <groupId>org.eluder.coveralls</groupId>
@@ -175,16 +175,4 @@
             </plugin>
         </plugins>
     </build>
-    <distributionManagement>
-        <repository>
-            <id>github-nacamar</id>
-            <name>GitHub addradio Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/addradio/mpeg-audio-streams</url>
-        </repository>
-        <snapshotRepository>
-            <id>github-nacamar</id>
-            <name>GitHub addradio Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/addradio/mpeg-audio-streams</url>
-        </snapshotRepository>
-    </distributionManagement>
 </project>
