@@ -6,7 +6,7 @@ Decodes MPEG audio byte streams such as mp3 into Java code readable frames. Enco
 
 ## Maven Integration
 
-In order to use 'mpeg-audio-stream' in your project, you need to add the following 'repository' to the 'repositories' section of your project's pom:
+In order to use `mpeg-audio-stream` in your project, you need to add the following `repository` to the `repositories` section of your project's pom:
 ```xml
     ...
     <repositories>
@@ -27,6 +27,7 @@ In order to use 'mpeg-audio-stream' in your project, you need to add the followi
     </repositories>
     ...
 ```
+
 Then you also need to add the following dependency:
 ```xml
         <dependency>
@@ -34,9 +35,7 @@ Then you also need to add the following dependency:
             <artifactId>mpeg-audio-streams</artifactId>
             <version>1.0.1-SNAPSHOT</version>
         </dependency>
-</dependency>
 ```
-
 
 ## Copyright
 Copyright (c) 2017-2018 AddRadio - a division of nacamar GmbH, Germany. See [GNU Affero General Public License v3.0](LICENSE) for details.
