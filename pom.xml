@@ -5,7 +5,7 @@
 
     <groupId>net.addradio.codec</groupId>
     <artifactId>mpeg-audio-streams</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.2-SNAPSHOT</version>
 
     <name>mpeg-audio-streams</name>
     <url>https://github.com/addradio/mpeg-audio-streams</url>
