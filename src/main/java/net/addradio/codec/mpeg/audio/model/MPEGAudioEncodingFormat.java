@@ -21,7 +21,7 @@ package net.addradio.codec.mpeg.audio.model;
 public class MPEGAudioEncodingFormat implements EncodingFormat {
 
     /** {@link String} MPEG_ENCODING_FORMAT_NAME. */
-    private static final String MPEG_ENCODING_FORMAT_NAME = "MPEG Audio"; //$NON-NLS-1$
+    private static final String MPEG_ENCODING_FORMAT_NAME = "MPEG-Audio"; //$NON-NLS-1$
 
     /** {@code boolean} _private. */
     private boolean _private = false;
@@ -365,6 +365,26 @@ public class MPEGAudioEncodingFormat implements EncodingFormat {
      */
     public void setVersion(final Version versionRef) {
         this.version = versionRef;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see net.addradio.codec.mpeg.audio.model.EncodingFormat#toLongForm()
+     */
+    @Override
+    public String toLongForm() {
+        // SEBASTIAN implement
+        return toShortForm();
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see net.addradio.codec.mpeg.audio.model.EncodingFormat#toShortForm()
+     */
+    @Override
+    public String toShortForm() {
+        return String.format("%s [%s-%s/%s/%s/%s]", getName(), getVersion().name(), getLayer().name(), getMode().name(), //$NON-NLS-1$
+                getSamplingRate().name(), getBitRate().name());
     }
 
     /**

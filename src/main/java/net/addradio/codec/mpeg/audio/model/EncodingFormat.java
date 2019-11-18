@@ -38,4 +38,15 @@ public interface EncodingFormat {
      */
     String getName();
 
+    /**
+     * toLongForm.
+     * @return {@link String}
+     */
+    String toLongForm();
+
+    /**
+     * toShortForm.
+     * @return {@link String}
+     */
+    String toShortForm();
 }
