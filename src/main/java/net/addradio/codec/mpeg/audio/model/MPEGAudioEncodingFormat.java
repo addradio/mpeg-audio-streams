@@ -383,8 +383,10 @@ public class MPEGAudioEncodingFormat implements EncodingFormat {
      */
     @Override
     public String toShortForm() {
-        return String.format("%s [%s-%s/%s/%s/%s]", getName(), getVersion().name(), getLayer().name(), getMode().name(), //$NON-NLS-1$
-                getSamplingRate().name(), getBitRate().name());
+        return String.format("%s [%s-%s/%s/%s/%s]", getName(), getVersion() != null ? getVersion().name() : null, //$NON-NLS-1$
+                getLayer() != null ? getLayer().name() : null, getMode() != null ? getMode().name() : null,
+                getSamplingRate() != null ? getSamplingRate().name() : null,
+                getBitRate() != null ? getBitRate().name() : null);
     }
 
     /**
