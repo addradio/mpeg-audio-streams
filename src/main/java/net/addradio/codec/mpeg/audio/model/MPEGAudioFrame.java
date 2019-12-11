@@ -123,6 +123,62 @@ public class MPEGAudioFrame implements MPEGAudioContent {
     /** {@link Version} version. */
     private Version version;
 
+    /** {@link int} numberOfSlots. */
+    private int numberOfSlots = -1;
+
+    /**
+     * getNumberOfSlots.
+     * @return int the numberOfSlots
+     */
+    public int getNumberOfSlots() {
+        if (this.numberOfSlots < 0) {
+            this.numberOfSlots = 0;
+            switch (getLayer()) {
+            case III:
+                switch (getVersion()) {
+                case MPEG_1:
+                    switch (getMode()) {
+                    case SingleChannel:
+                        this.numberOfSlots = getPayload().length - 17;
+                        break;
+                    case DualChannel:
+                    case JointStereo:
+                    case Stereo:
+                    default:
+                        this.numberOfSlots = getPayload().length - 32;
+                        break;
+                    }
+                    break;
+                case MPEG_2_5:
+                case MPEG_2_LSF:
+                    switch (getMode()) {
+                    case SingleChannel:
+                        this.numberOfSlots = getPayload().length - 9;
+                        break;
+                    case DualChannel:
+                    case JointStereo:
+                    case Stereo:
+                    default:
+                        this.numberOfSlots = getPayload().length - 17;
+                        break;
+                    }
+                    break;
+                case reserved:
+                default:
+                    break;
+                }
+                break;
+            case I:
+            case II:
+            case reserved:
+            default:
+                break;
+            }
+
+        }
+        return this.numberOfSlots;
+    }
+
     /**
      * calculateDurationMillis.
      * @return {@code long} duration of frame in milliseconds or
@@ -213,6 +269,22 @@ public class MPEGAudioFrame implements MPEGAudioContent {
      */
     public BitRate getBitRate() {
         return this.bitRate;
+    }
+
+    /**
+     * getChannels.
+     * @return {@code int} number of channels.
+     */
+    public int getChannels() {
+        switch (getMode()) {
+        case SingleChannel:
+            return 1;
+        case DualChannel:
+        case JointStereo:
+        case Stereo:
+        default:
+            return 2;
+        }
     }
 
     /**
