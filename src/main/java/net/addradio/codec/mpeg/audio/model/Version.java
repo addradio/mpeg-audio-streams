@@ -21,38 +21,51 @@ package net.addradio.codec.mpeg.audio.model;
 public enum Version implements BitMaskFlag {
 
     /** {@link Version} MPEG Version 1. */
-    MPEG_1(0b11),
+    MPEG_1(0b11, 2),
 
     /** {@link Version} MPEG Version 2. */
-    MPEG_2_LSF(0b10),
+    MPEG_2_LSF(0b10, 1),
 
     /** {@link Version} MPEG Version 2.5. */
-    MPEG_2_5(0b00),
+    MPEG_2_5(0b00, 1),
 
     /** {@link Version} reserved. */
-    reserved(0b01);
+    reserved(0b01, -1);
 
     /** {@code int} bitMask. */
     private int bitMask;
 
+    /** {@link int} maxNumberOfGranules. */
+    private int maxNumberOfGranules;
+
     /**
      * Version constructor.
-     * 
+     *
      * @param bitmaskVal
      *            {@code int}
+     * @param maxNumberOfGranulesVal {@code int}
      */
-    private Version(final int bitmaskVal) {
+    private Version(final int bitmaskVal, final int maxNumberOfGranulesVal) {
         this.bitMask = bitmaskVal;
+        this.maxNumberOfGranules = maxNumberOfGranulesVal;
     }
 
     /**
      * getBitMask.
-     * 
+     *
      * @return the bitMask
      */
     @Override
     public int getBitMask() {
         return this.bitMask;
+    }
+
+    /**
+     * getMaxNumberOfGranules.
+     * @return int the maxNumberOfGranules
+     */
+    public int getMaxNumberOfGranules() {
+        return this.maxNumberOfGranules;
     }
 
 }
