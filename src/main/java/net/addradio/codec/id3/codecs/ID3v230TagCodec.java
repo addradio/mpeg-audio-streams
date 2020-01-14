@@ -64,28 +64,32 @@ public final class ID3v230TagCodec {
 
         int bytesLeft = id3v230Tag.getPayloadSize();
         if (id3v230Tag.getExtendedHeader() != null) {
-            id3v230Tag.getExtendedHeader().setSize(bis.readInt(4));
+            id3v230Tag.getExtendedHeader().setSize(ID3CodecTools.saveReadInt(bis, 4, bytesLeft));
             bytesLeft -= 4;
+            if (bytesLeft < 1) {
+                return id3v230Tag;
+            }
             id3v230Tag.getExtendedHeader().setCrcDataIsPresent(bis.isNextBitOne());
             bis.readBits(7);
             bytesLeft--;
             if (id3v230Tag.getExtendedHeader().isCrcDataIsPresent()) {
-                id3v230Tag.getExtendedHeader().setCrc32(bis.readInt(4));
+                id3v230Tag.getExtendedHeader().setCrc32(ID3CodecTools.saveReadInt(bis, 4, bytesLeft));
                 bytesLeft -= 4;
             }
         }
         while (bytesLeft > 0) {
             final Frame e = new Frame();
-            e.setFrameId(ID3CodecTools.readStringFromStream(bis, 4));
+            e.setFrameId(ID3CodecTools.readStringFromStream(bis, 4, bytesLeft));
             bytesLeft -= 4;
-            e.setSize(bis.readInt(4));
+            final int numOfBytes = 4;
+            e.setSize(ID3CodecTools.saveReadInt(bis, numOfBytes, bytesLeft));
             bytesLeft -= 4;
             // SEBASTIAN decode flags
-            bis.read();
+            ID3CodecTools.saveRead(bis, bytesLeft);
             bytesLeft--;
-            bis.read();
+            ID3CodecTools.saveRead(bis, bytesLeft);
             bytesLeft--;
-            e.setPayload(ID3CodecTools.readStringFromStream(bis, e.getSize()));
+            e.setPayload(ID3CodecTools.readStringFromStream(bis, e.getSize(), bytesLeft));
             bytesLeft -= e.getSize();
             id3v230Tag.getFrames().put(e.getFrameId(), e);
         }

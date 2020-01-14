@@ -94,16 +94,24 @@ public final class ID3CodecTools {
      * readStringFromStream.
      * @param bis {@link BitInputStream}
      * @param length {@code int}
+     * @param maxLengthPossibleToRead {@code int}
      * @return {@link String}
      * @throws IOException due to IO problems.
      * @throws UnsupportedEncodingException while byte to string conversion.
      */
-    public static final String readStringFromStream(final BitInputStream bis, final int length)
-            throws IOException, UnsupportedEncodingException {
+    public static final String readStringFromStream(final BitInputStream bis, final int length,
+            final int maxLengthPossibleToRead) throws IOException, UnsupportedEncodingException {
+        if (maxLengthPossibleToRead < 1) {
+            return ""; //$NON-NLS-1$
+        }
         if (length < 0) {
             throw new IllegalArgumentException("length MUST BE >= 0, was " + length); //$NON-NLS-1$
         }
-        final byte[] buffer = new byte[length];
+        int newLength = length;
+        if (newLength > maxLengthPossibleToRead) {
+            newLength = maxLengthPossibleToRead;
+        }
+        final byte[] buffer = new byte[newLength];
         bis.readFully(buffer);
         return new String(buffer, "ISO-8859-1").trim(); //$NON-NLS-1$
     }
@@ -131,6 +139,36 @@ public final class ID3CodecTools {
      * Hidden ID3CodecTools constructor.
      */
     private ID3CodecTools() {
+    }
+
+    /**
+     * saveRead.
+     * @param bis {@link BitInputStream}
+     * @param maxLength {@code int}
+     * @return {@code int}
+     * @throws IOException TBD
+     */
+    public static int saveRead(final BitInputStream bis, final int maxLength) throws IOException {
+        if (maxLength < 1) {
+            return 0;
+        }
+        return bis.read();
+    }
+
+    /**
+     * saveReadInt.
+     * @param bis {@link BitInputStream}
+     * @param numOfBytes {@code int}
+     * @param maxLength {@code int}
+     * @return {@code int}
+     * @throws IOException TBD
+     */
+    public static int saveReadInt(final BitInputStream bis, final int numOfBytes, final int maxLength)
+            throws IOException {
+        if (numOfBytes > maxLength) {
+            return 0;
+        }
+        return bis.readInt(numOfBytes);
     }
 
 }

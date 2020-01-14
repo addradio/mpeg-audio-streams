@@ -66,12 +66,12 @@ public final class ID3v220TagCodec {
         int bytesLeft = id3v220Tag.getPayloadSize();
         while (bytesLeft > 0) {
             final Frame e = new Frame();
-            e.setFrameId(ID3CodecTools.readStringFromStream(bis, 3));
+            e.setFrameId(ID3CodecTools.readStringFromStream(bis, 3, bytesLeft));
             bytesLeft -= 3;
-            e.setSize(bis.readInt(3));
+            e.setSize(ID3CodecTools.saveReadInt(bis, 3, bytesLeft));
             bytesLeft -= 3;
             // SEBASTIAN decode payload
-            e.setPayload(ID3CodecTools.readStringFromStream(bis, e.getSize()));
+            e.setPayload(ID3CodecTools.readStringFromStream(bis, e.getSize(), bytesLeft));
             bytesLeft -= e.getSize();
             id3v220Tag.getFrames().put(e.getFrameId(), e);
         }

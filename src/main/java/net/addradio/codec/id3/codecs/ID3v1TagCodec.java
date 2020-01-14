@@ -41,13 +41,13 @@ public final class ID3v1TagCodec {
     public static final ID3v1Tag decodeID3v1Tag(final BitInputStream bis)
             throws IOException, UnsupportedEncodingException, MPEGAudioCodecException {
         final ID3v1Tag tag = new ID3v1Tag();
-        tag.setTitle(ID3CodecTools.readStringFromStream(bis, 30));
-        tag.setArtist(ID3CodecTools.readStringFromStream(bis, 30));
-        tag.setAlbum(ID3CodecTools.readStringFromStream(bis, 30));
-        tag.setTitle(ID3CodecTools.readStringFromStream(bis, 30));
-        final String readStringFromStream = ID3CodecTools.readStringFromStream(bis, 4);
+        tag.setTitle(ID3CodecTools.readStringFromStream(bis, 30, Integer.MAX_VALUE));
+        tag.setArtist(ID3CodecTools.readStringFromStream(bis, 30, Integer.MAX_VALUE));
+        tag.setAlbum(ID3CodecTools.readStringFromStream(bis, 30, Integer.MAX_VALUE));
+        tag.setTitle(ID3CodecTools.readStringFromStream(bis, 30, Integer.MAX_VALUE));
+        final String readStringFromStream = ID3CodecTools.readStringFromStream(bis, 4, Integer.MAX_VALUE);
         tag.setYear(saveParseInt(readStringFromStream));
-        tag.setComment(ID3CodecTools.readStringFromStream(bis, 30));
+        tag.setComment(ID3CodecTools.readStringFromStream(bis, 30, Integer.MAX_VALUE));
         tag.setGenre((Genre) BitMaskFlagCodec.decode(bis.read(), Genre.class));
         return tag;
     }

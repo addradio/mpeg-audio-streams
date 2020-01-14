@@ -137,7 +137,7 @@ public final class ID3v240TagCodec {
         try {
             while (bytesLeft >= 10) {
                 final Frame e = new Frame();
-                e.setFrameId(ID3CodecTools.readStringFromStream(bis, 4));
+                e.setFrameId(ID3CodecTools.readStringFromStream(bis, 4, bytesLeft));
                 bytesLeft -= 4;
                 e.setSize(ID3CodecTools.readSyncSafeInt(bis));
                 bytesLeft -= 4;
@@ -147,7 +147,7 @@ public final class ID3v240TagCodec {
                 bis.read();
                 bytesLeft--;
                 final int saveLength = ID3CodecTools.getSaveLength(e.getSize(), bytesLeft);
-                e.setPayload(ID3CodecTools.readStringFromStream(bis, saveLength));
+                e.setPayload(ID3CodecTools.readStringFromStream(bis, saveLength, bytesLeft));
                 bytesLeft -= saveLength;
                 if (!e.getFrameId().isEmpty()) {
                     id3v240Tag.getFrames().put(e.getFrameId(), e);
