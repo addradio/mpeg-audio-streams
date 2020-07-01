@@ -38,4 +38,4 @@ Then you also need to add the following dependency:
 ```
 
 ## Copyright
-Copyright (c) 2017-2019 AddRadio - a division of nacamar GmbH, Germany. See [GNU Affero General Public License v3.0](LICENSE) for details.
+Copyright (c) 2017-2020 AddRadio - a division of nacamar GmbH, Germany. See [GNU Affero General Public License v3.0](LICENSE) for details.
