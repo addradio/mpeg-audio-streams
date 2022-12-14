@@ -98,6 +98,10 @@ public enum BitRate {
     /** {@link BitRate} reserved */
     reserved(-1, -1);
 
+    /** {@link BitRate}{@code []} ORDERED_BIT_RATES. */
+    public final static BitRate[] ORDERED_BIT_RATES = new BitRate[] { _8, _16, _24, _32, _40, _48, _56, _64, _80, _96,
+            _112, _128, _144, _160, _176, _192, _224, _256, _288, _320, _352, _384, _416, _448 };
+
     /**
      * getBitRateforBps.
      * @param bps {@code int}
@@ -111,6 +115,24 @@ public enum BitRate {
             }
         }
         return BitRate.free;
+    }
+
+    /**
+     * getNextHigherBitRate.
+     * @param bitRate {@link BitRate}
+     * @return {@link BitRate}
+     */
+    public static BitRate getNextHigherBitRate(final BitRate bitRate) {
+        boolean selectNextOne = false;
+        for (final BitRate br : ORDERED_BIT_RATES) {
+            if (selectNextOne) {
+                return br;
+            }
+            if (br.equals(bitRate)) {
+                selectNextOne = true;
+            }
+        }
+        return null;
     }
 
     /** {@code int} valueInBps */
