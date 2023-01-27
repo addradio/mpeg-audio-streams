@@ -118,6 +118,18 @@ public enum BitRate {
     }
 
     /**
+     * getBitRateforBps.
+     * @param bps {@link Integer}
+     * @return {@link BitRate}
+     */
+    public static BitRate getBitRateforBps(final Integer bps) {
+        if (bps != null) {
+            return getBitRateforBps(bps.intValue());
+        }
+        return BitRate.free;
+    }
+
+    /**
      * getNextHigherBitRate.
      * @param bitRate {@link BitRate}
      * @return {@link BitRate}
@@ -157,6 +169,15 @@ public enum BitRate {
      */
     public int getValueInBps() {
         return this.valueInBps;
+    }
+
+    /**
+     * getValueInBpsInteger.
+     * @return {@link Integer}
+     */
+    public Integer getValueInBpsInteger() {
+        return this.valueInBps;
+
     }
 
     /**

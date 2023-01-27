@@ -156,6 +156,15 @@ public class MPEGAudioEncodingFormat implements EncodingFormat {
     }
 
     /**
+     * {@inheritDoc}
+     * @see net.addradio.codec.mpeg.audio.model.EncodingFormat#getBitRateInBpsInteger()
+     */
+    @Override
+    public Integer getBitRateInBpsInteger() {
+        return this.bitRate.getValueInBpsInteger();
+    }
+
+    /**
      * getEmphasis.
      * @return Emphasis the emphasis
      */

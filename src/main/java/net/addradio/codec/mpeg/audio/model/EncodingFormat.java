@@ -33,6 +33,12 @@ public interface EncodingFormat {
     int getBitRateInBps();
 
     /**
+     * getBitRateInBps.
+     * @return {@link Integer}
+     */
+    Integer getBitRateInBpsInteger();
+
+    /**
      * getName.
      * @return {@link String}
      */
